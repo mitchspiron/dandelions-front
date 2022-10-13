@@ -1,0 +1,23 @@
+$primary: #015FC9;
+$secondary: #0DD3F1;
+$light: #F6F7FC;
+$dark: #15233C;
+$blue: #0DCAF0;
+$purple: purple;
+$success: #1c7c54;
+$info: #ffee99;
+$warning: #ff9500;
+$danger: #e71d36;
+
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
+  "blue": $blue,
+  "purple": $purple,
+);
