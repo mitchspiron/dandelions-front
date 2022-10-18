@@ -10,13 +10,17 @@
           <div class="comment-body">
             <div class="meta-data">
               <Popper placement="auto" hover="true"
-                ><span class="commented-person-name">{{ comment.name }}</span>
+                ><span class="commented-person-name"
+                  ><router-link to="/enterprise/name" class="text-dark">{{
+                    comment.name
+                  }}</router-link></span
+                >
 
                 <template #content>
                   <div class="card border-0 shadow-lg" style="max-width: 540px">
                     <div class="media">
                       <router-link
-                        to="/article"
+                        to="/enterprise/name"
                         class="d-flex align-items-center"
                       >
                         <img
@@ -33,14 +37,14 @@
                           <p class="mb-0 small text-dark">
                             {{ comment.content }}
                           </p>
-                          <div class="content">
+                          <!-- <div class="content">
                             <router-link
                               to="/article/slug"
                               class="read-more-btn"
                               href=""
                               >Read Full Article -></router-link
                             >
-                          </div>
+                          </div> -->
                         </div>
                       </router-link>
                     </div>
@@ -70,9 +74,11 @@
               <div class="comment-body">
                 <div class="meta-data">
                   <Popper placement="auto" hover="true"
-                    ><span class="commented-person-name">{{
-                      comment.reply.name
-                    }}</span>
+                    ><span class="commented-person-name"
+                      ><router-link to="/enterprise/name" class="text-dark">{{
+                        comment.reply.name
+                      }}</router-link></span
+                    >
 
                     <template #content>
                       <div
@@ -81,7 +87,7 @@
                       >
                         <div class="media">
                           <router-link
-                            to="/article"
+                            to="/enterprise/name"
                             class="d-flex align-items-center"
                           >
                             <img
@@ -93,19 +99,19 @@
                             />
                             <div class="media-body">
                               <h3 style="margin-top: -5px">
-                                {{ comment.name }}
+                                {{ comment.reply.name }}
                               </h3>
                               <p class="mb-0 small text-dark">
-                                {{ comment.content }}
+                                {{ comment.reply.content }}
                               </p>
-                              <div class="content">
+                              <!-- <div class="content">
                                 <router-link
                                   to="/article/slug"
                                   class="read-more-btn"
                                   href=""
                                   >Read Full Article -></router-link
                                 >
-                              </div>
+                              </div> -->
                             </div>
                           </router-link>
                         </div>
