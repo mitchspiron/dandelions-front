@@ -4,27 +4,56 @@
       <span>02 Comments</span>
     </h3>
     <ul class="all-comments">
-      <li>
+      <li v-for="(comment, i) in comments" :key="i">
         <div class="comment">
-          <img
-            class="commented-person"
-            alt=""
-            src="../../../assets/img/profile.jpg"
-          />
+          <img class="commented-person" alt="" :src="comment.img" />
           <div class="comment-body">
             <div class="meta-data">
-              <span class="commented-person-name">Jack Anderson</span>
+              <Popper placement="auto" hover="true"
+                ><span class="commented-person-name">{{ comment.name }}</span>
+
+                <template #content>
+                  <div class="card border-0 shadow-lg" style="max-width: 540px">
+                    <div class="media">
+                      <router-link
+                        to="/article"
+                        class="d-flex align-items-center"
+                      >
+                        <img
+                          loading="lazy"
+                          decoding="async"
+                          :src="comment.img"
+                          alt="Post Thumbnail"
+                          class="w-100"
+                        />
+                        <div class="media-body">
+                          <h3 style="margin-top: -5px">
+                            {{ comment.name }}
+                          </h3>
+                          <p class="mb-0 small text-dark">
+                            {{ comment.content }}
+                          </p>
+                          <div class="content">
+                            <router-link
+                              to="/article/slug"
+                              class="read-more-btn"
+                              href=""
+                              >Read Full Article -></router-link
+                            >
+                          </div>
+                        </div>
+                      </router-link>
+                    </div>
+                  </div>
+                </template>
+              </Popper>
               <span class="comment-hour d-block"
-                ><i class="fa fa-clock-o mr-2"></i>February 6, 2019 at 12:20
-                pm</span
+                ><i class="fa fa-clock-o mr-2"></i>{{ comment.datetime }}</span
               >
             </div>
             <div class="comment-content">
               <p>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta
-                perferendis asperiores voluptatum saepe repellat atque obcaecati
-                dolores nulla, explicabo harum inventore sed corrupti molestiae
-                aspernatur.
+                {{ comment.content }}
               </p>
             </div>
             <div class="text-left">
@@ -34,70 +63,76 @@
             </div>
           </div>
         </div>
-        <ul class="comments-reply">
+        <ul class="comments-reply" v-if="comment.reply">
           <li>
             <div class="comment">
-              <img
-                class="commented-person"
-                alt=""
-                src="../../../assets/img/testimonial-1.jpg"
-              />
+              <img class="commented-person" alt="" :src="comment.reply.img" />
               <div class="comment-body">
                 <div class="meta-data">
-                  <span class="commented-person-name">Jhonny American</span>
+                  <Popper placement="auto" hover="true"
+                    ><span class="commented-person-name">{{
+                      comment.reply.name
+                    }}</span>
+
+                    <template #content>
+                      <div
+                        class="card border-0 shadow-lg"
+                        style="max-width: 540px"
+                      >
+                        <div class="media">
+                          <router-link
+                            to="/article"
+                            class="d-flex align-items-center"
+                          >
+                            <img
+                              loading="lazy"
+                              decoding="async"
+                              :src="comment.reply.img"
+                              alt="Post Thumbnail"
+                              class="w-100"
+                            />
+                            <div class="media-body">
+                              <h3 style="margin-top: -5px">
+                                {{ comment.name }}
+                              </h3>
+                              <p class="mb-0 small text-dark">
+                                {{ comment.content }}
+                              </p>
+                              <div class="content">
+                                <router-link
+                                  to="/article/slug"
+                                  class="read-more-btn"
+                                  href=""
+                                  >Read Full Article -></router-link
+                                >
+                              </div>
+                            </div>
+                          </router-link>
+                        </div>
+                      </div>
+                    </template>
+                  </Popper>
                   <span class="comment-hour d-block"
-                    ><i class="fa fa-clock-o mr-2"></i>March 9, 2019 at 12:20
-                    pm</span
+                    ><i class="fa fa-clock-o mr-2"></i
+                    >{{ comment.reply.datetime }}</span
                   >
                 </div>
                 <div class="comment-content">
                   <p>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Qui expedita magnam ea tempora consectetur fugit dolorum
-                    numquam at obcaecati voluptatibus.
+                    {{ comment.reply.content }}
                   </p>
                 </div>
               </div>
             </div>
           </li>
         </ul>
-        <div class="comment last">
-          <img
-            class="commented-person"
-            alt=""
-            src="../../../assets/img/testimonial-2.jpg"
-          />
-          <div class="comment-body">
-            <div class="meta-data">
-              <span class="commented-person-name">Vicky Fong</span>
-              <span class="comment-hour d-block"
-                ><i class="fa fa-clock-o mr-2"></i>June 6, 2019 at 12:20
-                pm</span
-              >
-            </div>
-            <div class="comment-content">
-              <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error,
-                ipsa dolor exercitationem culpa obcaecati illo veniam voluptatem
-                perferendis hic nisi tempora omnis, mollitia unde doloribus.
-              </p>
-            </div>
-            <div class="text-left">
-              <a class="comment-reply" href="#"
-                ><i class="fa fa-reply"></i> Reply</a
-              >
-            </div>
-          </div>
-        </div>
       </li>
     </ul>
   </div>
 
   <div class="comment-form">
     <h3 class="title-normal">Leave a Reply</h3>
-    <p class="mb-4">
-      Your email address will not be published. Required fields are marked *
-    </p>
+    <p class="mb-4">Your email address will not be published.</p>
     <form role="form">
       <div class="row">
         <div class="col-md-12">
@@ -125,12 +160,75 @@
   </div>
 </template>
 <script>
+import Popper from "vue3-popper";
+
 export default {
   name: "Comment",
-  components: {},
+  components: {
+    Popper,
+  },
+  data() {
+    return {
+      comments: [
+        {
+          img: require("../../../assets/img/profile.jpg"),
+          name: "Jack Anderson",
+          datetime: "February 6, 2019 at 12:20 pm",
+          content: `Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Qui expedita magnam ea tempora consectetur fugit dolorum
+                    numquam at obcaecati voluptatibus.`,
+          reply: {
+            img: require("../../../assets/img/testimonial-1.jpg"),
+            name: "Jhonny American",
+            datetime: "March 9, 2019 at 12:20 pm",
+            content: `Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Qui expedita magnam ea tempora consectetur fugit dolorum
+                    numquam at obcaecati voluptatibus.`,
+          },
+        },
+        {
+          img: require("../../../assets/img/testimonial-2.jpg"),
+          name: "Bob McDonald",
+          datetime: "February 6, 2019 at 12:20 pm",
+          content: `Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Qui expedita magnam ea tempora consectetur fugit dolorum
+                    numquam at obcaecati voluptatibus.`,
+        },
+      ],
+    };
+  },
 };
 </script>
 <style scoped>
+.content a {
+  float: right;
+  margin-right: 10px;
+  color: #2c122b;
+  display: inline;
+  text-decoration: none;
+  background-position: 0% 110%;
+  background-repeat: no-repeat;
+  background-size: 100% 3px;
+  transition: 0.3s;
+}
+.read-more-btn {
+  font-family: "Neuton", serif;
+  font-size: 15px;
+}
+.media {
+  width: 410px;
+}
+.media img {
+  height: 170px;
+  width: 130px !important;
+  -o-object-fit: cover;
+  object-fit: cover;
+  border-radius: 5px 0 0 5px;
+}
+
+.media-body {
+  margin-left: 15px;
+}
 .comments-block {
   margin: 40px 0;
 }
@@ -170,11 +268,6 @@ export default {
   margin-bottom: 20px;
   display: flex;
 }
-.all-comments .comment.last {
-  border-bottom: 0;
-  padding-bottom: 0;
-  margin-bottom: 0;
-}
 .all-comments img.commented-person {
   height: 80px;
   margin-right: 20px;
@@ -194,7 +287,7 @@ export default {
 
 .comments-reply {
   list-style: none;
-  margin: 0 0 0 70px;
+  margin: 0 0 0 40px;
 }
 
 a {

@@ -46,7 +46,12 @@
                       {{ article.text }}
                     </p>
                     <div class="content">
-                      <a class="read-more-btn" href="">Read Full Article</a>
+                      <router-link
+                        to="/article/slug"
+                        class="read-more-btn"
+                        href=""
+                        >Read Full Article</router-link
+                      >
                     </div>
                   </div>
                 </article>
