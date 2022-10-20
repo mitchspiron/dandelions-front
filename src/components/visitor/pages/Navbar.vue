@@ -25,7 +25,9 @@
           >Home</router-link
         >
         <a href="#" class="nav-item nav-link">Menu 1</a>
-        <a href="#" class="nav-item nav-link">Menu 2</a>
+        <router-link to="/enterprise" class="nav-item nav-link"
+          >Enterprises</router-link
+        >
         <router-link to="/contact" class="nav-item nav-link"
           >Contact</router-link
         >
