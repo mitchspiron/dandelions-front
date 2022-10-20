@@ -6,6 +6,7 @@ import ArticleBySlug from "../views/visitor/ArticleBySlug.vue";
 import Login from "../views/visitor/Login.vue";
 import EnterpriseProfil from "../views/visitor/EnterpriseProfil.vue";
 import Contact from "../views/visitor/Contact.vue";
+import Enterprises from "../views/visitor/Enterprises.vue";
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: "/contact",
     name: "Contact",
     component: Contact,
+  },
+  {
+    path: "/enterprise",
+    name: "Enterprises",
+    component: Enterprises,
   },
 ];
 
