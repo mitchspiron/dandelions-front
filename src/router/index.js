@@ -5,6 +5,7 @@ import ArticleLists from "../views/visitor/ArticleLists.vue";
 import ArticleBySlug from "../views/visitor/ArticleBySlug.vue";
 import Login from "../views/visitor/Login.vue";
 import EnterpriseProfil from "../views/visitor/EnterpriseProfil.vue";
+import Contact from "../views/visitor/Contact.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: "/enterprise/name",
     name: "EnterpriseProfil",
     component: EnterpriseProfil,
+  },
+  {
+    path: "/contact",
+    name: "Contact",
+    component: Contact,
   },
 ];
 

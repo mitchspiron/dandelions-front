@@ -26,7 +26,9 @@
         >
         <a href="#" class="nav-item nav-link">Menu 1</a>
         <a href="#" class="nav-item nav-link">Menu 2</a>
-        <a href="#" class="nav-item nav-link">Menu 3</a>
+        <router-link to="/contact" class="nav-item nav-link"
+          >Contact</router-link
+        >
       </div>
     </div>
     <router-link

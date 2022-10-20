@@ -23,23 +23,23 @@
                 <form class="mb-3 mt-md-4">
                   <h2 class="fw-bold mb-2 text-uppercase">Lorem ipsum</h2>
                   <p class="mb-3">Please enter your login and password!</p>
-                  <div class="mb-3">
-                    <label for="email" class="form-label">Email address</label>
+                  <div class="col-12 form-floating mb-3">
                     <input
                       type="email"
                       class="form-control"
                       id="email"
-                      placeholder="name@example.com"
+                      placeholder="email address"
                     />
+                    <label for="email" class="form-label">Email address</label>
                   </div>
-                  <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
+                  <div class="col-12 form-floating mb-3">
                     <input
                       type="password"
                       class="form-control"
-                      id="password"
-                      placeholder="*******"
+                      id="firstname"
+                      placeholder="********"
                     />
+                    <label for="firstname" class="form-label">Password</label>
                   </div>
                   <p class="small">
                     <a class="text-primary" @click="showForgotPassword()"

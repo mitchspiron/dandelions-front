@@ -28,16 +28,16 @@
                     </p>
                   </div>
                   <form>
-                    <div class="mb-3">
-                      <label for="email" class="form-label">Email</label>
+                    <div class="col-12 form-floating mb-3">
                       <input
                         type="email"
-                        id="email"
                         class="form-control"
-                        name="email"
-                        placeholder="Enter Your Email"
-                        required=""
+                        id="email"
+                        placeholder="email address"
                       />
+                      <label for="email" class="form-label"
+                        >Email address</label
+                      >
                     </div>
                     <div class="mb-3 d-grid">
                       <button class="btn btn-outline-dark" type="submit">

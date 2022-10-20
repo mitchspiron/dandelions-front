@@ -51,9 +51,7 @@
                   </div>
                 </template>
               </Popper>
-              <span class="comment-hour d-block"
-                ><i class="fa fa-clock-o mr-2"></i>{{ comment.datetime }}</span
-              >
+              <span class="comment-hour d-block">{{ comment.datetime }}</span>
             </div>
             <div class="comment-content">
               <p>
@@ -118,10 +116,9 @@
                       </div>
                     </template>
                   </Popper>
-                  <span class="comment-hour d-block"
-                    ><i class="fa fa-clock-o mr-2"></i
-                    >{{ comment.reply.datetime }}</span
-                  >
+                  <span class="comment-hour d-block">{{
+                    comment.reply.datetime
+                  }}</span>
                 </div>
                 <div class="comment-content">
                   <p>

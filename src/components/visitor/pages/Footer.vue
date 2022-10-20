@@ -39,9 +39,11 @@
         </div>
         <div class="col-lg-3 col-md-6">
           <h5 class="text-light mb-4">Quick Links</h5>
-          <a class="btn btn-link" href="">Menu 1</a>
+          <router-link to="/" class="btn btn-link" href="">Home</router-link>
           <a class="btn btn-link" href="">Menu 2</a>
-          <a class="btn btn-link" href="">Menu 3</a>
+          <router-link to="/contact" class="btn btn-link" href=""
+            >Contact</router-link
+          >
           <a class="btn btn-link" href="">Terms & Condition</a>
           <a class="btn btn-link" href="">Support</a>
         </div>
