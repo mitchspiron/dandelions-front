@@ -7,6 +7,7 @@ import Login from "../views/visitor/Login.vue";
 import EnterpriseProfil from "../views/visitor/EnterpriseProfil.vue";
 import Contact from "../views/visitor/Contact.vue";
 import Enterprises from "../views/visitor/Enterprises.vue";
+import Me from "../views/visitor/Me.vue";
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: "/enterprise",
     name: "Enterprises",
     component: Enterprises,
+  },
+  {
+    path: "/me",
+    name: "Me",
+    component: Me,
   },
 ];
 

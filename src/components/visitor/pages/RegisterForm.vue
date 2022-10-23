@@ -180,13 +180,6 @@ export default {
 };
 </script>
 <style scoped>
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
 #avatar {
   background-image: url("../../../assets/img/avatar.png");
   background-repeat: no-repeat;
