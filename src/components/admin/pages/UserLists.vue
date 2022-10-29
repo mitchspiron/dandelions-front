@@ -1,5 +1,26 @@
 <template>
-  <div class="card border-0 shadow-sm mt-5">
+  <div class="d-flex justify-content-end gap-5">
+    <div class="col-3 card border-0 shadow-sm">
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon1"
+          ><i class="fa fa-search"></i
+        ></span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Username"
+          aria-label="Username"
+          aria-describedby="basic-addon1"
+        />
+      </div>
+    </div>
+    <div class="">
+      <router-link to="/utilisateur/nouveau" class="btn btn-outline-secondary"
+        ><i class="fa-solid fa-plus"></i
+      ></router-link>
+    </div>
+  </div>
+  <div class="card border-0 shadow-sm mt-3">
     <table class="table align-middle mb-0 bg-white">
       <thead class="bg-light text-center">
         <tr>

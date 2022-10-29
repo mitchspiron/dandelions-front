@@ -1,5 +1,62 @@
 <template>
-  <div class="card border-0 shadow-sm mt-5">
+  <div class="d-flex justify-content-end gap-5">
+    <div class="col-3 card border-0 shadow-sm">
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon1"
+          ><i class="fa fa-search"></i
+        ></span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Titre"
+          aria-label="Titre"
+          aria-describedby="basic-addon1"
+        />
+      </div>
+    </div>
+    <div class="col-3 card border-0 shadow-sm">
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon1"
+          ><i class="fa fa-search"></i
+        ></span>
+        <select class="form-select" aria-label="Default select example">
+          <option value="" selected disabled>Catégorie</option>
+          <option value="1">Tech</option>
+          <option value="2">News</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-1 card border shadow-sm">
+      <div class="form-check form-switch m-auto">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckDefault"
+        />
+        <label class="form-check-label" for="flexSwitchCheckDefault">Top</label>
+      </div>
+    </div>
+    <div class="col-2 card border shadow-sm">
+      <div class="form-check form-switch m-auto">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckDefault"
+        />
+        <label class="form-check-label" for="flexSwitchCheckDefault"
+          >Recommandé</label
+        >
+      </div>
+    </div>
+    <div class="">
+      <a href="" class="btn btn-outline-secondary"
+        ><i class="fa-solid fa-plus"></i
+      ></a>
+    </div>
+  </div>
+  <div class="card border-0 shadow-sm mt-3">
     <table class="table align-middle mb-0 bg-white text-center">
       <thead class="bg-light">
         <tr>
