@@ -20,6 +20,7 @@ import EnterprisesAdmin from "../views/admin/EnterprisesAdmin.vue";
 import UserNew from "../views/admin/UserNew.vue";
 import CategoryNew from "../views/admin/CategoryNew.vue";
 import EnterpriseNew from "../views/admin/EnterpriseNew.vue";
+import ArticleNew from "../views/admin/ArticleNew.vue";
 
 const routes = [
   {
@@ -77,6 +78,11 @@ const routes = [
     path: "/admin/article",
     name: "Articles",
     component: Articles,
+  },
+  {
+    path: "/admin/article/nouveau",
+    name: "ArticleNew",
+    component: ArticleNew,
   },
   {
     path: "/header",
