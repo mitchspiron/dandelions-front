@@ -8,8 +8,8 @@
         <input
           type="text"
           class="form-control"
-          placeholder="Username"
-          aria-label="Username"
+          placeholder="Nom complet"
+          aria-label="fullname"
           aria-describedby="basic-addon1"
         />
       </div>

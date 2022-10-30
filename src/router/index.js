@@ -18,6 +18,8 @@ import Headers from "../views/admin/Headers.vue";
 import Categories from "../views/admin/Categories.vue";
 import EnterprisesAdmin from "../views/admin/EnterprisesAdmin.vue";
 import UserNew from "../views/admin/UserNew.vue";
+import CategoryNew from "../views/admin/CategoryNew.vue";
+import EnterpriseNew from "../views/admin/EnterpriseNew.vue";
 
 const routes = [
   {
@@ -97,9 +99,19 @@ const routes = [
     component: Categories,
   },
   {
+    path: "/admin/article/category/nouveau",
+    name: "CategoryNew",
+    component: CategoryNew,
+  },
+  {
     path: "/admin/enterprise",
     name: "EnterprisesAdmin",
     component: EnterprisesAdmin,
+  },
+  {
+    path: "/admin/enterprise/nouveau",
+    name: "EnterpriseNew",
+    component: EnterpriseNew,
   },
 ];
 

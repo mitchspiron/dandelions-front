@@ -57,11 +57,6 @@
               </p>
               <div class="mt-4 pt-4">
                 <div class="d-flex align-items-center">
-                  <img
-                    class="flex-shrink-0 rounded-circle me-3"
-                    src="../../assets/img/profile.jpg"
-                    alt=""
-                  />
                   <h5 class="mb-0">
                     Contact us: +012 345 6789 / info@example.com
                   </h5>

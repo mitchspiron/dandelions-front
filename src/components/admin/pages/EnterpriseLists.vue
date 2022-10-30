@@ -15,9 +15,11 @@
       </div>
     </div>
     <div class="">
-      <a href="" class="btn btn-outline-secondary"
+      <router-link
+        to="/admin/enterprise/nouveau"
+        class="btn btn-outline-secondary"
         ><i class="fa-solid fa-plus"></i
-      ></a>
+      ></router-link>
     </div>
   </div>
   <div class="card border-0 shadow-sm mt-3">
@@ -37,9 +39,9 @@
           <td class="text-muted mb-0">{{ enterprise.email }}</td>
           <td>
             <div class="d-flex justify-content-center gap-4">
-              <a type="button">
+              <router-link to="/enterprise/name" type="button">
                 <i class="fa-regular fa-eye"></i>
-              </a>
+              </router-link>
               <a type="button">
                 <i class="fa-regular fa-pen-to-square"></i>
               </a>
@@ -75,4 +77,12 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+a {
+  text-decoration: none;
+  color: black;
+}
+a:hover {
+  color: black;
+}
+</style>

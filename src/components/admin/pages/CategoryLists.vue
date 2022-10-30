@@ -1,5 +1,14 @@
 <template>
-  <div class="card border-0 shadow-sm mt-5">
+  <div class="d-flex justify-content-end gap-5">
+    <div class="">
+      <router-link
+        to="/admin/article/category/nouveau"
+        class="btn btn-outline-secondary"
+        ><i class="fa-solid fa-plus"></i
+      ></router-link>
+    </div>
+  </div>
+  <div class="card border-0 shadow-sm mt-3">
     <table class="table align-middle mb-0 bg-white text-center">
       <thead class="bg-light">
         <tr>
