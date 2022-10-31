@@ -56,7 +56,9 @@
           </td>
           <td>
             <div class="d-flex justify-content-center gap-4">
-              <a type="button"><i class="fa-solid fa-list"></i></a>
+              <router-link to="/evenement/slug/subscriber" type="button"
+                ><i class="fa-solid fa-list"></i
+              ></router-link>
               <router-link to="/evenement/slug" type="button">
                 <i class="fa-regular fa-eye"></i>
               </router-link>

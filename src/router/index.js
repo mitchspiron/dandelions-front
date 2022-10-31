@@ -18,6 +18,7 @@ import Users from "../views/admin/Users.vue";
 import Articles from "../views/admin/Articles.vue";
 import Events from "../views/admin/Events.vue";
 import EventNew from "../views/admin/EventNew.vue";
+import EventSubscribers from "../views/admin/EventSubscribers.vue";
 import Categories from "../views/admin/Categories.vue";
 import EnterprisesAdmin from "../views/admin/EnterprisesAdmin.vue";
 import UserNew from "../views/admin/UserNew.vue";
@@ -50,6 +51,11 @@ const routes = [
     path: "/evenement/slug",
     name: "EventBySlug",
     component: EventBySlug,
+  },
+  {
+    path: "/evenement/slug/subscriber",
+    name: "EventSubscribers",
+    component: EventSubscribers,
   },
   {
     path: "/login",
