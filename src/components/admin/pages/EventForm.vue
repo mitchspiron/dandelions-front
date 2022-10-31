@@ -57,17 +57,12 @@
               </div>
               <div class="col-3 form-floating">
                 <input
-                  type="text"
+                  type="date"
                   class="form-control"
-                  id="category exampleDataList"
-                  list="datalistOptions"
+                  id="deadline"
                   placeholder=""
                 />
-                <label for="category" class="form-label">Catégorie</label>
-                <datalist id="datalistOptions">
-                  <option value="Tech"></option>
-                  <option value="News"></option>
-                </datalist>
+                <label for="deadline" class="form-label">Date limite</label>
               </div>
               <div class="col-3 form-floating">
                 <textarea class="form-control" value=""></textarea>
@@ -89,7 +84,7 @@
       <div class="card-footer py-2 px-3">
         <div class="col-md-12">
           <div class="d-flex align-items-center">
-            <h4 class="mb-0">Ajout article</h4>
+            <h4 class="mb-0">Ajout événement</h4>
             <button
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"

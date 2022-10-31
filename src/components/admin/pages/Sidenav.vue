@@ -20,9 +20,9 @@
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/header" class="nav-link collapsed">
+        <router-link to="/admin/evenement" class="nav-link collapsed">
           <i class="bi bi-card-heading"></i>
-          <span>Headers</span>
+          <span>Evénements</span>
         </router-link>
       </li>
       <li class="nav-item">

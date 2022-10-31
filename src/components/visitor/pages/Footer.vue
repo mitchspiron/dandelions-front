@@ -40,6 +40,10 @@
         <div class="col-lg-3 col-md-6">
           <h5 class="text-light mb-4">Quick Links</h5>
           <router-link to="/" class="btn btn-link" href="">Home</router-link>
+          <router-link to="/article" class="btn btn-link">Articles</router-link>
+          <router-link to="/evenement" class="btn btn-link"
+            >Evénements</router-link
+          >
           <router-link to="/enterprise" class="btn btn-link"
             >Enterprises</router-link
           >

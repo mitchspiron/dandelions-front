@@ -5,11 +5,10 @@
         <div class="container">
           <div class="row no-gutters-lg">
             <div class="col-lg-8 mb-5 mb-lg-0">
-              <ArticleContent />
-              <Comment />
+              <EventContent />
             </div>
             <div class="col-lg-4">
-              <ArticleSide />
+              <EventSide />
             </div>
           </div>
         </div>
@@ -20,16 +19,14 @@
 
 <script>
 import HomeLayout from "../../components/visitor/layout/HomeLayout.vue";
-import ArticleContent from "../../components/visitor/pages/ArticleContent.vue";
-import ArticleSide from "../../components/visitor/pages/ArticleSide.vue";
-import Comment from "../../components/visitor/pages/Comment.vue";
+import EventContent from "../../components/visitor/pages/EventContent.vue";
+import EventSide from "../../components/visitor/pages/EventSide.vue";
 export default {
-  name: "ArticleBySlug",
+  name: "EventBySlug",
   components: {
     HomeLayout,
-    ArticleContent,
-    ArticleSide,
-    Comment,
+    EventContent,
+    EventSide,
   },
 };
 </script>

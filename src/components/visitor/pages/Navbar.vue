@@ -24,7 +24,12 @@
         <router-link to="/" href="#" class="nav-item nav-link active"
           >Home</router-link
         >
-        <a href="#" class="nav-item nav-link">Menu 1</a>
+        <router-link to="/article" class="nav-item nav-link"
+          >Articles</router-link
+        >
+        <router-link to="/evenement" class="nav-item nav-link"
+          >Evénements</router-link
+        >
         <router-link to="/enterprise" class="nav-item nav-link"
           >Enterprises</router-link
         >
