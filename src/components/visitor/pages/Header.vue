@@ -22,7 +22,7 @@
                     />
                     <div class="col-12 d-flex justify-content-center">
                       <router-link
-                        to="/article/slug"
+                        to="/evenement/slug"
                         class="btn btn-lg mt-4 text-light"
                         style="background-color: #582456"
                       >

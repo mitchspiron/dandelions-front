@@ -23,7 +23,7 @@
                   <div class="col-md-12">
                     <div class="card-body">
                       <h5>
-                        <router-link to="/enterprise/name" class="post-title">{{
+                        <router-link to="/evenement/slug" class="post-title">{{
                           event.titre
                         }}</router-link>
                       </h5>
