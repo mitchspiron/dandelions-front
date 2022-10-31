@@ -103,6 +103,9 @@
               <router-link to="/article/slug" type="button">
                 <i class="fa-regular fa-eye"></i>
               </router-link>
+              <router-link to="/article/slug/commentaire"
+                ><i class="fa-regular fa-comments"></i
+              ></router-link>
               <a type="button">
                 <i class="fa-regular fa-pen-to-square"></i>
               </a>

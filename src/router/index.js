@@ -16,6 +16,7 @@ import Me from "../views/visitor/Me.vue";
 import HomeAdmin from "../views/admin/HomeAdmin.vue";
 import Users from "../views/admin/Users.vue";
 import Articles from "../views/admin/Articles.vue";
+import ArticleComment from "../views/admin/ArticleComment.vue";
 import Events from "../views/admin/Events.vue";
 import EventNew from "../views/admin/EventNew.vue";
 import EventSubscribers from "../views/admin/EventSubscribers.vue";
@@ -46,6 +47,11 @@ const routes = [
     path: "/article/slug",
     name: "ArticleBySlug",
     component: ArticleBySlug,
+  },
+  {
+    path: "/article/slug/commentaire",
+    name: "ArticleComment",
+    component: ArticleComment,
   },
   {
     path: "/evenement/slug",

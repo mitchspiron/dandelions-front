@@ -147,7 +147,7 @@ export default {
 </script>
 <style scoped>
 #avatar {
-  background-image: url("../../../assets/img/avatar.png");
+  background-image: url("../../../assets/img/article.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   height: 100px;

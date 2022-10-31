@@ -2,28 +2,33 @@
   <AdminLayout>
     <main id="main" class="main">
       <div class="pagetitle">
-        <h1>Evénement</h1>
+        <h1>Article</h1>
         <nav>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item">Evénement</li>
-            <li class="breadcrumb-item">Event-Name</li>
-            <li class="breadcrumb-item active">Liste inscrit</li>
+            <li class="breadcrumb-item">Article</li>
+            <li class="breadcrumb-item">Article-Name</li>
+            <li class="breadcrumb-item active">Commentaires</li>
           </ol>
         </nav>
       </div>
-      <!-- <h1 class="text-center p-5">Categories</h1> -->
-      <ArticleCommentForm /></main
-  ></AdminLayout>
+      <!-- <h1 class="text-center p-5">Articles</h1> -->
+      <ArticleCommentForm />
+    </main>
+  </AdminLayout>
 </template>
 
 <script>
 import AdminLayout from "../../components/admin/layouts/AdminLayout.vue";
 import ArticleCommentForm from "../../components/admin/pages/ArticleCommentForm.vue";
 export default {
-  name: "ArticleComment",
+  name: "Articles",
   components: {
     AdminLayout,
     ArticleCommentForm,
   },
+  data() {
+    return {};
+  },
 };
 </script>
+<style scoped></style>
