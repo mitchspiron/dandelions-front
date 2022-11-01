@@ -76,7 +76,16 @@
             </div>
             <div class="mb-3">
               <div class="d-flex justify-content-between mb-4 gap-1">
-                <div class="col-4 form-floating">
+                <div class="col-3 form-floating">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="slug"
+                    placeholder=""
+                  />
+                  <label for="slug" class="form-label">Slug</label>
+                </div>
+                <div class="col-3 form-floating">
                   <input
                     type="text"
                     class="form-control"
@@ -87,7 +96,7 @@
                     >Année de création</label
                   >
                 </div>
-                <div class="col-4 form-floating">
+                <div class="col-3 form-floating">
                   <input
                     type="text"
                     class="form-control"
@@ -96,7 +105,7 @@
                   />
                   <label for="site" class="form-label">URL site web</label>
                 </div>
-                <div class="col-4 form-floating">
+                <div class="col-3 form-floating">
                   <input
                     type="text"
                     class="form-control"
