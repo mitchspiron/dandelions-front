@@ -87,13 +87,17 @@
         </div>
         <div class="modal-body">
           <div class="col-12 form-floating mb-2">
+            <input type="text" class="form-control" id="nom" placeholder="" />
+            <label for="nom" class="form-label">Nom</label>
+          </div>
+          <div class="col-12 form-floating mb-2">
             <input
               type="text"
               class="form-control"
-              id="fullname"
+              id="prenom"
               placeholder=""
             />
-            <label for="fullname" class="form-label">Nom complet</label>
+            <label for="prenom" class="form-label">Prénom</label>
           </div>
           <div class="col-12 form-floating mb-2">
             <input

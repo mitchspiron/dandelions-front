@@ -21,6 +21,7 @@
         <tr>
           <th>ID</th>
           <th>Nom</th>
+          <th>Prénom</th>
           <th>E-mail</th>
           <th>Téléphone</th>
         </tr>
@@ -29,6 +30,7 @@
         <tr v-for="(subscriber, id) in subscribers" :key="id">
           <td>{{ subscriber.id }}</td>
           <td class="text-muted">{{ subscriber.name }}</td>
+          <td class="text-muted">{{ subscriber.firstname }}</td>
           <td class="text-muted">{{ subscriber.email }}</td>
           <td class="text-muted">{{ subscriber.phone }}</td>
         </tr>
@@ -45,7 +47,8 @@ export default {
       subscribers: [
         {
           id: 1,
-          name: "Technology",
+          name: "Edward",
+          firstname: "Jean",
           email: "jeanedward@mail.com",
           phone: "0323565956",
         },

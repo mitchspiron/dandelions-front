@@ -12,18 +12,18 @@
         </nav>
       </div>
       <!-- <h1 class="text-center p-5">Categories</h1> -->
-      <ArticleCommentForm /></main
+      <EventSubscriberLists /></main
   ></AdminLayout>
 </template>
 
 <script>
 import AdminLayout from "../../components/admin/layouts/AdminLayout.vue";
-import ArticleCommentForm from "../../components/admin/pages/ArticleCommentForm.vue";
+import EventSubscriberLists from "../../components/admin/pages/EventSubscriberLists.vue";
 export default {
   name: "ArticleComment",
   components: {
     AdminLayout,
-    ArticleCommentForm,
+    EventSubscriberLists,
   },
 };
 </script>
