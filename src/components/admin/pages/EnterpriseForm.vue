@@ -78,7 +78,7 @@
               <div class="d-flex justify-content-between mb-4 gap-1">
                 <div class="col-4 form-floating">
                   <input
-                    type="date"
+                    type="text"
                     class="form-control"
                     id="annee"
                     placeholder=""
