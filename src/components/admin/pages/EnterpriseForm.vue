@@ -76,18 +76,18 @@
             </div>
             <div class="mb-3">
               <div class="d-flex justify-content-between mb-4 gap-1">
-                <div class="col-3 form-floating">
+                <div class="col-4 form-floating">
                   <input
-                    type="number"
+                    type="date"
                     class="form-control"
                     id="annee"
                     placeholder=""
                   />
                   <label for="annee" class="form-label"
-                    >Année d'expérience</label
+                    >Année de création</label
                   >
                 </div>
-                <div class="col-3 form-floating">
+                <div class="col-4 form-floating">
                   <input
                     type="text"
                     class="form-control"
@@ -96,25 +96,19 @@
                   />
                   <label for="site" class="form-label">URL site web</label>
                 </div>
-                <div class="col-3 form-floating">
+                <div class="col-4 form-floating">
                   <input
-                    type="password"
+                    type="text"
                     class="form-control"
-                    id="password"
-                    placeholder="*******"
+                    id="redactor exampleDataList"
+                    list="datalistOptions"
+                    placeholder=""
                   />
-                  <label for="password" class="form-label">Mot de passe</label>
-                </div>
-                <div class="col-3 form-floating">
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password-repeat"
-                    placeholder="*******"
-                  />
-                  <label for="password-repeat" class="form-label"
-                    >Resaisir mot de passe</label
-                  >
+                  <label for="redactor" class="form-label">Rédacteur</label>
+                  <datalist id="datalistOptions">
+                    <option value="Mk-redacteur"></option>
+                    <option value="NgT-redacteur"></option>
+                  </datalist>
                 </div>
               </div>
             </div>
