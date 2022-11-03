@@ -11,6 +11,7 @@ import Contact from "../views/visitor/Contact.vue";
 import Enterprises from "../views/visitor/Enterprises.vue";
 import Event from "../views/visitor/Event.vue";
 import Me from "../views/visitor/Me.vue";
+import NotFound from "../views/visitor/404NotFound.vue";
 
 /* admin */
 import HomeAdmin from "../views/admin/HomeAdmin.vue";
@@ -32,6 +33,11 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/:pathMatch(.*)",
+    name: "NotFound",
+    component: NotFound,
   },
   {
     path: "/article/category",
