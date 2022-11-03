@@ -12,6 +12,7 @@ import Enterprises from "../views/visitor/Enterprises.vue";
 import Event from "../views/visitor/Event.vue";
 import Me from "../views/visitor/Me.vue";
 import NotFound from "../views/visitor/404NotFound.vue";
+import ResetPassword from "../views/visitor/ResetPassword.vue";
 
 /* admin */
 import HomeAdmin from "../views/admin/HomeAdmin.vue";
@@ -98,6 +99,11 @@ const routes = [
     path: "/me",
     name: "Me",
     component: Me,
+  },
+  {
+    path: "/recuperer-mot-de-passe/token",
+    name: "ResetPassword",
+    component: ResetPassword,
   },
   /* Admin */
   {
