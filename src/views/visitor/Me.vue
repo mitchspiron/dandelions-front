@@ -8,7 +8,7 @@
         <h1 class="display-4 animated slideInDown mb-4">About me</h1>
       </div>
     </div>
-    <div class="container-fluid py-4">
+    <div class="container-fluid py-3">
       <div class="row d-flex justify-content-center gap-5">
         <MeProfileCard />
         <MeForm />

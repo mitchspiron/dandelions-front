@@ -55,7 +55,7 @@
                       </p>
                     </div>
                   </div>
-                  <div class="d-flex justify-content-between mb-3 gap-2">
+                  <div class="d-flex justify-content-center mb-3 gap-2">
                     <div class="col-6 form-floating">
                       <input
                         type="text"
@@ -77,7 +77,7 @@
                       <label for="lastname" class="form-label">Lastname</label>
                     </div>
                   </div>
-                  <div class="d-flex justify-content-between mb-3 gap-2">
+                  <div class="d-flex justify-content-center mb-3 gap-2">
                     <div class="col-6 form-floating">
                       <input
                         type="email"
@@ -100,7 +100,7 @@
                     </div>
                   </div>
                   <div class="mb-3">
-                    <div class="d-flex justify-content-between mb-4 gap-2">
+                    <div class="d-flex justify-content-center gap-2">
                       <div class="col-6 form-floating">
                         <input
                           type="password"
@@ -121,6 +121,18 @@
                         />
                         <label for="password-repeat" class="form-label"
                           >Password repeat</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-center">
+                      <div class="col-12 form-floating">
+                        <textarea class="form-control" value=""></textarea>
+                        <label
+                          for="example-text-input"
+                          class="form-control-label"
+                          >About me</label
                         >
                       </div>
                     </div>

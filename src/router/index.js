@@ -96,7 +96,7 @@ const routes = [
     component: Event,
   },
   {
-    path: "/me",
+    path: "/mon-espace",
     name: "Me",
     component: Me,
   },

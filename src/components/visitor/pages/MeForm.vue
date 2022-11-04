@@ -3,8 +3,8 @@
     <div class="card border-0">
       <div class="card-body">
         <div class="col-md-12">
-          <form class="mb-3 mt-md-1">
-            <h2 class="fw-bold text-uppercase">Lorem ipsum</h2>
+          <form>
+            <h2 class="fw-bold text-uppercase">Information</h2>
             <div
               class="d-flex align-items-start align-items-sm-center mb-3 gap-4"
             >
@@ -80,71 +80,7 @@
                 <label for="phone" class="form-label">Number phone</label>
               </div>
             </div>
-            <div class="mb-3">
-              <div class="d-flex justify-content-between mb-4 gap-2">
-                <div class="col-6 form-floating">
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    placeholder="*******"
-                  />
-                  <label for="password" class="form-label">Password</label>
-                </div>
-                <div class="col-6 form-floating">
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password-repeat"
-                    placeholder="*******"
-                  />
-                  <label for="password-repeat" class="form-label"
-                    >Password repeat</label
-                  >
-                </div>
-              </div>
-            </div>
           </form>
-        </div>
-        <hr class="horizontal dark" />
-        <p class="text-uppercase text-sm">Contact Information</p>
-        <div class="row">
-          <div class="col-md-12 mb-3">
-            <div class="form-group form-floating">
-              <input
-                class="form-control"
-                type="text"
-                value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-              />
-              <label for="example-text-input" class="form-control-label"
-                >Address</label
-              >
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="form-group form-floating">
-              <input class="form-control" type="text" value="New York" />
-              <label for="example-text-input" class="form-control-label"
-                >City</label
-              >
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="form-group form-floating">
-              <input class="form-control" type="text" value="United States" />
-              <label for="example-text-input" class="form-control-label"
-                >Country</label
-              >
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="form-group form-floating">
-              <input class="form-control" type="text" value="437300" />
-              <label for="example-text-input" class="form-control-label"
-                >Postal code</label
-              >
-            </div>
-          </div>
         </div>
         <hr class="horizontal dark" />
         <p class="text-uppercase text-sm">About me</p>
@@ -164,10 +100,72 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga corrupti minus nam
           </div>
         </div>
       </div>
-      <div class="card-footer py-3 px-3">
+      <div class="card-footer bg-white py-2 px-3">
         <div class="col-md-12">
           <div class="d-flex align-items-center">
-            <h4 class="mb-0">Edit Profile</h4>
+            <h4 class="mb-0">Edit information profile</h4>
+            <button
+              class="btn btn-primary btn-lg ms-auto border-0"
+              style="background-color: #582456"
+            >
+              Update
+            </button>
+          </div>
+        </div>
+      </div>
+      <hr class="horizontal dark mt-0" />
+    </div>
+    <!-- ---------- -->
+    <div class="card border-0">
+      <div class="card-body">
+        <div class="col-md-12">
+          <form class="">
+            <h2 class="fw-bold text-uppercase">Mot de passe</h2>
+            <div class="d-flex justify-content-center gap-2">
+              <div class="col-4 form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="old-pwd"
+                  placeholder=""
+                  value="********"
+                />
+                <label for="old-pwd" class="form-label"
+                  >Mot de passe actuel</label
+                >
+              </div>
+              <div class="col-4 form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="new-pwd"
+                  placeholder=""
+                  value="********"
+                />
+                <label for="new-pwd" class="form-label"
+                  >Nouveau mot de passe</label
+                >
+              </div>
+              <div class="col-4 form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="confirm-new-pwd"
+                  placeholder="name@example.com"
+                  value="name@example.com"
+                />
+                <label for="confirm-new-pwd" class="form-label"
+                  >Confirmer nouveau mot de passe</label
+                >
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="card-footer py-3 px-3 bg-white">
+        <div class="col-md-12">
+          <div class="d-flex align-items-center">
+            <h4 class="mb-0">Edit password</h4>
             <button
               class="btn btn-primary btn-lg ms-auto border-0"
               style="background-color: #582456"
