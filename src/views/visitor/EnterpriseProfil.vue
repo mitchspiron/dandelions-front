@@ -22,7 +22,7 @@
             >
               <img
                 class="position-absolute w-100 h-100"
-                src="../../assets/img/about.jpg"
+                src="../../assets/img/company/microsoft.jpg"
                 alt=""
                 style="object-fit: cover"
               />
@@ -70,7 +70,7 @@
     <!-- About End -->
 
     <!-- Facts Start -->
-    <div class="container-fluid overflow-hidden px-lg-0">
+    <!-- <div class="container-fluid overflow-hidden px-lg-0">
       <div class="container facts px-lg-0">
         <div class="row g-0 mx-lg-0">
           <div class="col-lg-6 facts-text wow fadeIn" data-wow-delay="0.1s">
@@ -110,6 +110,30 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="py-14 bg-cto">
+      <div class="container">
+        <div class="row">
+          <div class="offset-lg-2 col-lg-8 col-md-12 col-12 text-center">
+            <!-- heading  -->
+            <h4 class="display-3 mt-2 mb-2 text-white fw-bold">
+              To know more about us
+            </h4>
+            <!-- para  -->
+            <p class="lead text-white-50 px-lg-8 mb-6">
+              Designed for modern companies looking to launch a simple, premium
+              and modern website and apps.
+            </p>
+            <a
+              href=""
+              class="align-center btn py-3 px-5 text-light mb-5"
+              style="background: #582456"
+              >Visite us here <i class="bi bi-arrow-right-square-fill"></i
+            ></a>
           </div>
         </div>
       </div>
@@ -176,6 +200,10 @@ export default {
   background: linear-gradient(to left, #582456, #b377b1),
     url(../../assets/img/carousel-1.jpg) center right no-repeat;
   background-size: cover;
+}
+
+.bg-cto {
+  background: linear-gradient(to left, #582456, #b377b1);
 }
 
 .container.facts .facts-counter {

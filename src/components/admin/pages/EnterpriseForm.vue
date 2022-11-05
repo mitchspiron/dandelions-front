@@ -156,46 +156,6 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12 mb-1 mt-2 d-flex justify-content-center gap-2">
-            <div class="col-md-3 form-group form-floating">
-              <input
-                type="number"
-                class="form-control"
-                id="stat1"
-                placeholder=""
-              />
-              <label for="stat1" class="form-label">Stat 1</label>
-            </div>
-            <div class="col-md-3 form-group form-floating">
-              <input
-                type="number"
-                class="form-control"
-                id="stat2"
-                placeholder=""
-              />
-              <label for="stat2" class="form-label">Stat 2</label>
-            </div>
-            <div class="col-md-3 form-group form-floating">
-              <input
-                type="number"
-                class="form-control"
-                id="stat3"
-                placeholder=""
-              />
-              <label for="stat3" class="form-label">Stat 3</label>
-            </div>
-            <div class="col-md-3 form-group form-floating">
-              <input
-                type="number"
-                class="form-control"
-                id="stat4"
-                placeholder=""
-              />
-              <label for="stat4" class="form-label">Stat 4</label>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="card-footer py-2 px-3">
         <div class="col-md-12">
