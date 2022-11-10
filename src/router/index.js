@@ -34,76 +34,105 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+    meta: {
+      title: "DANDELIONS",
+    },
   },
   {
     path: "/:pathMatch(.*)",
     name: "NotFound",
     component: NotFound,
+    meta: {
+      title: "Page introuvable!",
+    },
   },
   {
     path: "/article/category",
     name: "ArticleListByCategory",
     component: ArticleListByCategory,
+    meta: {
+      title: "Détails d'article",
+    },
   },
   {
     path: "/article",
     name: "ArticleLists",
     component: ArticleLists,
+    meta: {
+      title: "Liste d'article",
+    },
   },
   {
     path: "/article/slug",
     name: "ArticleBySlug",
     component: ArticleBySlug,
-  },
-  {
-    path: "/article/slug/commentaire",
-    name: "ArticleComment",
-    component: ArticleComment,
+    meta: {
+      title: "Liste d'article par catégorie",
+    },
   },
   {
     path: "/evenement/slug",
     name: "EventBySlug",
     component: EventBySlug,
-  },
-  {
-    path: "/evenement/slug/subscriber",
-    name: "EventSubscribers",
-    component: EventSubscribers,
+    meta: {
+      title: "Détails d'événement",
+    },
   },
   {
     path: "/login",
     name: "Login",
     component: Login,
+    meta: {
+      title: "Login",
+    },
   },
   {
     path: "/enterprise/name",
     name: "EnterpriseProfil",
     component: EnterpriseProfil,
+    meta: {
+      title: "Détails d'entreprise",
+    },
   },
   {
     path: "/contact",
     name: "Contact",
     component: Contact,
+    meta: {
+      title: "Contact",
+    },
   },
   {
     path: "/enterprise",
     name: "Enterprises",
     component: Enterprises,
+    meta: {
+      title: "Liste d'entreprise",
+    },
   },
   {
     path: "/evenement",
     name: "Event",
     component: Event,
+    meta: {
+      title: "Liste d'événement",
+    },
   },
   {
     path: "/mon-espace",
     name: "Me",
     component: Me,
+    meta: {
+      title: "Espace personnel",
+    },
   },
   {
     path: "/recuperer-mot-de-passe/token",
     name: "ResetPassword",
     component: ResetPassword,
+    meta: {
+      title: "Récuperation de mot de passe",
+    },
   },
   /* Admin */
   {
@@ -122,9 +151,19 @@ const routes = [
     component: ArticleNew,
   },
   {
+    path: "/article/slug/commentaire",
+    name: "ArticleComment",
+    component: ArticleComment,
+  },
+  {
     path: "/admin/evenement",
     name: "Events",
     component: Events,
+  },
+  {
+    path: "/evenement/slug/subscriber",
+    name: "EventSubscribers",
+    component: EventSubscribers,
   },
   {
     path: "/admin/evenement/nouveau",
