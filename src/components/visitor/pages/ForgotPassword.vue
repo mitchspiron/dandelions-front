@@ -20,32 +20,46 @@
               </div>
 
               <div class="col-lg-5">
-                <form class="mb-3 mt-md-4">
+                <div class="mb-3 mt-md-4">
                   <div class="mb-4">
                     <h2 class="fw-bold mb-2 text-uppercase">Lorem ipsum</h2>
                     <p class="mb-2">
                       Enter your registered email ID to reset the password
                     </p>
                   </div>
-                  <form>
+                  <form @submit.prevent="confirm">
                     <div class="col-12 form-floating mb-3">
                       <input
                         type="email"
                         class="form-control"
                         id="email"
                         placeholder="email address"
+                        v-model="form.email"
                       />
                       <label for="email" class="form-label"
                         >Email address</label
                       >
                     </div>
                     <div class="mb-3 d-grid">
-                      <button class="btn btn-outline-dark" type="submit">
+                      <button
+                        v-if="loading"
+                        class="btn btn-outline-dark"
+                        type="button"
+                        disabled
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Loading...
+                      </button>
+                      <button v-else class="btn btn-outline-dark" type="submit">
                         Reset Password
                       </button>
                     </div>
                   </form>
-                </form>
+                </div>
                 <div>
                   <p class="mb-0 text-center">
                     Do you have an account?
@@ -63,10 +77,39 @@
   </div>
 </template>
 <script>
+import { useToast } from "vue-toastification";
+import { forgotPassword } from "../../../api/auth-user";
 export default {
   name: "RegisterForm",
   props: ["register", "login", "showLogin"],
   components: {},
+  data() {
+    return {
+      form: {
+        email: "",
+      },
+      loading: false,
+    };
+  },
+  methods: {
+    confirm() {
+      const toast = useToast();
+      this.loading = true;
+      forgotPassword(this.form)
+        .then(() => {
+          this.loading = false;
+          this.$swal(
+            "Email de récupération envoyé!",
+            "Vérifier votre courriel",
+            "success"
+          );
+        })
+        .catch((e) => {
+          this.loading = false;
+          toast.info(e.response.data.message);
+        });
+    },
+  },
 };
 </script>
 <style scoped>

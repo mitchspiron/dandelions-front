@@ -1,6 +1,29 @@
 <template>
-  <router-view />
+  <div id="app">
+    <router-view />
+  </div>
 </template>
+<script>
+//import { isLoggedIn } from "./api/auth-user";
+export default {
+  name: "App",
+  components: {},
+  mounted() {
+    /* isLoggedIn()
+      .then(() => {
+        console.log("Vous êtes connecté");
+      })
+      .catch(() => {
+        console.log("Vous êtes deconnecté!");
+      }); */
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters["userStore/isLoggedIn"];
+    },
+  },
+};
+</script>
 
 <style lang="scss">
 p {

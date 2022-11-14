@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
+import store from "../store/index";
+import { decodeToken } from "../utils/decodeToken";
+
 /* visitor */
 import Home from "../views/visitor/Home.vue";
 import ArticleListByCategory from "../views/visitor/ArticleListByCategory.vue";
@@ -28,6 +31,16 @@ import UserNew from "../views/admin/UserNew.vue";
 import CategoryNew from "../views/admin/CategoryNew.vue";
 import EnterpriseNew from "../views/admin/EnterpriseNew.vue";
 import ArticleNew from "../views/admin/ArticleNew.vue";
+
+try {
+  const decode = decodeToken(localStorage.getItem("dandelions_token"));
+  if (decode) {
+    store.dispatch("userStore/setUser", decode);
+    store.dispatch("userStore/setConnected");
+  }
+} catch (err) {
+  //console.log(err);
+}
 
 const routes = [
   {
@@ -127,7 +140,7 @@ const routes = [
     },
   },
   {
-    path: "/recuperer-mot-de-passe/token",
+    path: "/recuperer-mot-de-passe/:token",
     name: "ResetPassword",
     component: ResetPassword,
     meta: {

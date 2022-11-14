@@ -20,7 +20,7 @@
               </div>
 
               <div class="col-lg-5">
-                <form class="mb-3 mt-md-4">
+                <form @submit.prevent="submit" class="mb-3 mt-md-4">
                   <h2 class="fw-bold mb-2 text-uppercase">Lorem ipsum</h2>
                   <p class="mb-3">Please enter your login and password!</p>
                   <div class="col-12 form-floating mb-3">
@@ -29,6 +29,7 @@
                       class="form-control"
                       id="email"
                       placeholder="email address"
+                      v-model="form.email"
                     />
                     <label for="email" class="form-label">Email address</label>
                   </div>
@@ -38,6 +39,7 @@
                       class="form-control"
                       id="firstname"
                       placeholder="********"
+                      v-model="form.motDePasse"
                     />
                     <label for="firstname" class="form-label">Password</label>
                   </div>
@@ -69,10 +71,38 @@
   </div>
 </template>
 <script>
+import { signin } from "../../../api/auth-user";
+import { useToast } from "vue-toastification";
 export default {
   name: "LoginForm",
   props: ["register", "login", "showRegister", "showForgotPassword"],
   components: {},
+  data() {
+    return {
+      form: {
+        email: "",
+        motDePasse: "",
+      },
+    };
+  },
+  methods: {
+    async submit() {
+      const toast = useToast();
+      await signin(this.form)
+        .then((result) => {
+          localStorage.setItem("dandelions_token", result.data[1].access_token);
+          this.$store.dispatch("userStore/setUser", result.data[0]);
+          this.$store.dispatch("userStore/setConnected");
+          toast.success(
+            "Bienvenu" + " " + result.data[0].nom + " " + result.data[0].prenom
+          );
+          this.$router.push(this.$route.query.redirect || "/");
+        })
+        .catch((e) => {
+          toast.info(e.response.data.message);
+        });
+    },
+  },
 };
 </script>
 <style scoped>

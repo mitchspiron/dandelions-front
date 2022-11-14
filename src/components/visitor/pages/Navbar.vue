@@ -36,26 +36,109 @@
         <router-link to="/contact" class="nav-item nav-link"
           >Contact</router-link
         >
+        <router-link
+          to="/admin"
+          v-if="[1, 2].includes(me.roleUser || me.role)"
+          class="nav-item nav-link"
+        >
+          <div class="position-relative">
+            <span
+              class="position-absolute top-0 start-100 translate-end p-1 bg-success border border-0 rounded-circle"
+            >
+            </span>
+          </div>
+          Administration
+        </router-link>
       </div>
     </div>
     <router-link
+      v-if="!isLoggedIn"
       to="/login"
       class="btn text-light"
       style="background-color: #582456"
     >
       Login
     </router-link>
+    <a
+      v-if="isLoggedIn"
+      class="nav-link nav-profile d-flex align-items-center pe-3"
+      href="#"
+      data-bs-toggle="dropdown"
+    >
+      <img
+        :src="PROFIL_IMAGE + (me.illustrationUser || me.illustration)"
+        style="width: 40px; height: 40px"
+        class="rounded-circle img-thumbnail border-0"
+      />
+      <span class="d-none d-md-block dropdown-toggle ps-2">{{
+        me.prenomUser || me.prenom
+      }}</span>
+    </a>
+    <ul
+      class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile me-5"
+    >
+      <li>
+        <router-link
+          to="/mon-espace"
+          class="dropdown-item d-flex align-items-center"
+        >
+          <i class="bi bi-person"></i>
+          <span>Mon espace</span>
+        </router-link>
+      </li>
+      <li>
+        <hr class="dropdown-divider" />
+      </li>
+      <li>
+        <a class="dropdown-item d-flex align-items-center" @click="disconnect">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Se déconnecter</span>
+        </a>
+      </li>
+    </ul>
   </nav>
 </template>
 
 <script>
+import { PROFIL_IMAGE } from "../../../configs/index";
+import { useToast } from "vue-toastification";
 export default {
   name: "Navbar",
   components: {},
+  data() {
+    return {
+      PROFIL_IMAGE: PROFIL_IMAGE,
+    };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters["userStore/isLoggedIn"];
+    },
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+  },
+  methods: {
+    redirectToProfil() {
+      this.$router.push(`/mon-espace/`);
+    },
+    disconnect() {
+      const toast = useToast();
+      localStorage.removeItem("dandelions_token");
+      this.$store.dispatch("userStore/setUser", {});
+      this.$store.dispatch("userStore/setDisconnected");
+      this.$router.push(this.$route.query.redirect || "/");
+      toast.info("Vous êtes déconnecté");
+    },
+  },
 };
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
 .navbar.sticky-top {
   top: -100px;
   transition: 0.5s;

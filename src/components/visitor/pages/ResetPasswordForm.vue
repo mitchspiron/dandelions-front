@@ -25,13 +25,14 @@
                     <h2 class="fw-bold mb-2 text-uppercase">Lorem ipsum</h2>
                     <p class="mb-2">Enter your new password to reset it</p>
                   </div>
-                  <div>
+                  <form @submit.prevent="submit">
                     <div class="col-12 form-floating mb-3">
                       <input
                         type="password"
                         class="form-control"
                         id="password"
                         placeholder="email address"
+                        v-model="form.motDePasse"
                       />
                       <label for="password" class="form-label"
                         >Nouveau mot de passe</label
@@ -53,7 +54,7 @@
                         Reset Password
                       </button>
                     </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
@@ -64,9 +65,35 @@
   </div>
 </template>
 <script>
+import { resetPassword } from "../../../api/auth-user";
+import { useToast } from "vue-toastification";
 export default {
   name: "ResetPasswordForm",
   components: {},
+  data() {
+    return {
+      form: {
+        motDePasse: "",
+      },
+    };
+  },
+  methods: {
+    submit() {
+      const toast = useToast();
+      resetPassword(this.form, this.$route.params.token)
+        .then(() => {
+          this.$swal(
+            "Mot de passe changé avec succès!",
+            "Vous pouvez maintenant vous reconnecter",
+            "success"
+          );
+          this.$router.push(`/login`);
+        })
+        .catch((e) => {
+          toast.info(e.response.data.message);
+        });
+    },
+  },
 };
 </script>
 <style scoped>

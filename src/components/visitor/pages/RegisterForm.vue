@@ -20,10 +20,10 @@
               </div>
 
               <div class="col-lg-6">
-                <form class="mb-3 mt-md-4">
+                <form class="mb-3 mt-md-4" @submit.prevent="submit">
                   <h2 class="fw-bold text-uppercase">Lorem ipsum</h2>
                   <p class="mb-3">Please enter your login and password!</p>
-                  <div
+                  <!-- <div
                     class="d-flex align-items-start align-items-sm-center mb-3 gap-4"
                   >
                     <div
@@ -54,7 +54,7 @@
                         Allowed JPG, GIF or PNG. Max size of 800K
                       </p>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="d-flex justify-content-center mb-3 gap-2">
                     <div class="col-6 form-floating">
                       <input
@@ -62,6 +62,7 @@
                         class="form-control"
                         id="firstname"
                         placeholder="Don Andres"
+                        v-model="form.prenom"
                       />
                       <label for="firstname" class="form-label"
                         >Firstname</label
@@ -73,6 +74,7 @@
                         class="form-control"
                         id="lastname"
                         placeholder="Iniesta"
+                        v-model="form.nom"
                       />
                       <label for="lastname" class="form-label">Lastname</label>
                     </div>
@@ -84,6 +86,7 @@
                         class="form-control"
                         id="email"
                         placeholder="name@example.com"
+                        v-model="form.email"
                       />
                       <label for="email" class="form-label"
                         >Email address</label
@@ -95,6 +98,7 @@
                         class="form-control"
                         id="phone"
                         placeholder="+26100000000"
+                        v-model="form.telephone"
                       />
                       <label for="phone" class="form-label">Number phone</label>
                     </div>
@@ -107,6 +111,7 @@
                           class="form-control"
                           id="password"
                           placeholder="*******"
+                          v-model="form.motDePasse"
                         />
                         <label for="password" class="form-label"
                           >Password</label
@@ -118,6 +123,7 @@
                           class="form-control"
                           id="password-repeat"
                           placeholder="*******"
+                          v-model="form.confirmMotDePasse"
                         />
                         <label for="password-repeat" class="form-label"
                           >Password repeat</label
@@ -128,7 +134,10 @@
                   <div class="mb-3">
                     <div class="d-flex justify-content-center">
                       <div class="col-12 form-floating">
-                        <textarea class="form-control" value=""></textarea>
+                        <textarea
+                          v-model="form.aPropos"
+                          class="form-control"
+                        ></textarea>
                         <label
                           for="example-text-input"
                           class="form-control-label"
@@ -138,7 +147,20 @@
                     </div>
                   </div>
                   <div class="d-grid">
-                    <button class="btn btn-outline-dark" type="submit">
+                    <button
+                      v-if="loading"
+                      class="btn btn-outline-dark"
+                      type="button"
+                      disabled
+                    >
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Loading...
+                    </button>
+                    <button v-else class="btn btn-outline-dark" type="submit">
                       Register
                     </button>
                   </div>
@@ -161,15 +183,28 @@
 </template>
 
 <script>
+import { signup } from "../../../api/auth-user";
+import { useToast } from "vue-toastification";
 export default {
   name: "RegisterForm",
   props: ["register", "login", "showLogin"],
   components: {},
   data() {
-    return {};
+    return {
+      form: {
+        nom: "",
+        prenom: "",
+        email: "",
+        telephone: "",
+        aPropos: "",
+        motDePasse: "",
+        confirmMotDePasse: "",
+      },
+      loading: false,
+    };
   },
   methods: {
-    avatar() {
+    /* avatar() {
       const FILE_INPUT = document.querySelector("input[type=file]");
       const AVATAR = document.getElementById("avatar");
 
@@ -184,15 +219,33 @@ export default {
           AVATAR.style.background = `url(${reader.result}) center center/cover`;
         };
       });
+    }, */
+
+    submit() {
+      const toast = useToast();
+      this.loading = true;
+      signup(this.form)
+        .then(() => {
+          this.loading = false;
+          this.$swal(
+            "Email de confirmation envoyé!",
+            "Vérifier votre courriel",
+            "success"
+          );
+        })
+        .catch((e) => {
+          this.loading = false;
+          toast.info(e.response.data.message);
+        });
     },
   },
   mounted() {
-    this.avatar();
+    //this.avatar();
   },
 };
 </script>
 <style scoped>
-#avatar {
+/* #avatar {
   background-image: url("../../../assets/img/avatar.png");
   background-repeat: no-repeat;
   background-size: cover;
@@ -201,7 +254,7 @@ export default {
   border: 3px solid #582456;
   border-radius: 50%;
   transition: background ease-out 200ms;
-}
+} */
 
 /* ---- */
 a {
