@@ -1,10 +1,10 @@
 <template>
   <div class="col-md-8 shadow-lg border-0">
-    <div class="card border-0">
+    <form class="card border-0">
       <div class="card-body">
         <div class="col-md-12">
-          <form>
-            <h2 class="fw-bold text-uppercase">Information</h2>
+          <div>
+            <h3 class="fw-bold text-uppercase">Illustration de profil</h3>
             <div
               class="d-flex align-items-start align-items-sm-center mb-3 gap-4"
             >
@@ -37,6 +37,30 @@
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer bg-white py-2 px-3">
+        <div class="col-md-12">
+          <div class="d-flex align-items-center">
+            <h4 class="mb-0">Modifification l'illustration de profile</h4>
+            <button
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+            >
+              Modifier
+            </button>
+          </div>
+        </div>
+      </div>
+      <hr class="horizontal dark mt-0" />
+    </form>
+    <!-- -------------------- -->
+    <form @submit.prevent="confirmInfo" class="card border-0">
+      <div class="card-body">
+        <div class="col-md-12">
+          <div>
+            <h3 class="fw-bold text-uppercase">Information</h3>
             <div class="d-flex justify-content-between mb-3 gap-2">
               <div class="col-6 form-floating">
                 <input
@@ -44,9 +68,9 @@
                   class="form-control"
                   id="firstname"
                   placeholder="Don Andres"
-                  value="Don Andres"
+                  v-model="infos.prenom"
                 />
-                <label for="firstname" class="form-label">Firstname</label>
+                <label for="firstname" class="form-label">Prénom</label>
               </div>
               <div class="col-6 form-floating">
                 <input
@@ -54,9 +78,9 @@
                   class="form-control"
                   id="lastname"
                   placeholder="Iniesta"
-                  value="Iniesta"
+                  v-model="infos.nom"
                 />
-                <label for="lastname" class="form-label">Lastname</label>
+                <label for="lastname" class="form-label">Nom</label>
               </div>
             </div>
             <div class="d-flex justify-content-between mb-3 gap-2">
@@ -66,9 +90,9 @@
                   class="form-control"
                   id="email"
                   placeholder="name@example.com"
-                  value="name@example.com"
+                  v-model="infos.email"
                 />
-                <label for="email" class="form-label">Email address</label>
+                <label for="email" class="form-label">Adresse email</label>
               </div>
               <div class="col-6 form-floating">
                 <input
@@ -76,26 +100,21 @@
                   class="form-control"
                   id="phone"
                   placeholder="+26100000000"
+                  v-model="infos.telephone"
                 />
-                <label for="phone" class="form-label">Number phone</label>
+                <label for="phone" class="form-label">Téléphone</label>
               </div>
             </div>
-          </form>
-        </div>
-        <hr class="horizontal dark" />
-        <p class="text-uppercase text-sm">About me</p>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group form-floating">
-              <textarea
-                class="form-control"
-                value="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source."
-              >
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga corrupti minus nam ducimus mollitia praesentium. Voluptate saepe nisi nesciunt obcaecati autem, nostrum sunt sequi officiis expedita dolorum minima totam eligendi!</textarea
-              >
-              <label for="example-text-input" class="form-control-label"
-                >About me</label
-              >
+            <div class="d-flex justify-content-between">
+              <div class="col-12 form-group form-floating">
+                <textarea
+                  class="form-control"
+                  v-model="infos.aPropos"
+                ></textarea>
+                <label for="example-text-input" class="form-control-label"
+                  >A propos</label
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -103,24 +122,28 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga corrupti minus nam
       <div class="card-footer bg-white py-2 px-3">
         <div class="col-md-12">
           <div class="d-flex align-items-center">
-            <h4 class="mb-0">Edit information profile</h4>
+            <h4 class="mb-0">Modifification information</h4>
             <button
-              class="btn btn-primary btn-lg ms-auto border-0"
+              class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
-              Update
+              Modifier
             </button>
           </div>
         </div>
       </div>
       <hr class="horizontal dark mt-0" />
-    </div>
+    </form>
     <!-- ---------- -->
-    <div class="card border-0">
+    <form
+      @submit.prevent="confirmPassword"
+      class="card border-0"
+      autocomplete="off"
+    >
       <div class="card-body">
         <div class="col-md-12">
-          <form class="">
-            <h2 class="fw-bold text-uppercase">Mot de passe</h2>
+          <div class="">
+            <h3 class="fw-bold text-uppercase">Mot de passe</h3>
             <div class="d-flex justify-content-center gap-2">
               <div class="col-4 form-floating">
                 <input
@@ -128,7 +151,8 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga corrupti minus nam
                   class="form-control"
                   id="old-pwd"
                   placeholder=""
-                  value="********"
+                  autocomplete="new-password"
+                  v-model="password.ancienMotDePasse"
                 />
                 <label for="old-pwd" class="form-label"
                   >Mot de passe actuel</label
@@ -140,7 +164,8 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga corrupti minus nam
                   class="form-control"
                   id="new-pwd"
                   placeholder=""
-                  value="********"
+                  autocomplete="new-password"
+                  v-model="password.nouveauMotDePasse"
                 />
                 <label for="new-pwd" class="form-label"
                   >Nouveau mot de passe</label
@@ -152,36 +177,72 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga corrupti minus nam
                   class="form-control"
                   id="confirm-new-pwd"
                   placeholder="name@example.com"
-                  value="name@example.com"
+                  autocomplete="new-password"
                 />
                 <label for="confirm-new-pwd" class="form-label"
                   >Confirmer nouveau mot de passe</label
                 >
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
-      <div class="card-footer py-3 px-3 bg-white">
+      <div class="card-footer py-2 px-3 bg-white">
         <div class="col-md-12">
           <div class="d-flex align-items-center">
-            <h4 class="mb-0">Edit password</h4>
+            <h4 class="mb-0">Modifification mot de passe</h4>
             <button
-              class="btn btn-primary btn-lg ms-auto border-0"
+              class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
-              Update
+              Modifier
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 <script>
+import { useToast } from "vue-toastification";
+import {
+  updateUsersInfoById,
+  updateUsersPasswordById,
+} from "../../../api/users";
+import { decodeToken } from "../../../utils/decodeToken";
 export default {
   name: "MeForm",
   components: {},
+  data() {
+    return {
+      infos: {
+        nom: "",
+        prenom: "",
+        email: "",
+        telephone: "",
+        aPropos: "",
+        role: null,
+      },
+      password: {
+        ancienMotDePasse: "",
+        nouveauMotDePasse: "",
+      },
+    };
+  },
+  computed: {
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+  },
+  mounted() {
+    this.avatar();
+    this.infos.nom = this.me.nomUser || this.me.nom;
+    this.infos.prenom = this.me.prenomUser || this.me.prenom;
+    this.infos.email = this.me.emailUser || this.me.email;
+    this.infos.telephone = this.me.telephoneUser || this.me.telephone;
+    this.infos.aPropos = this.me.aProposUser || this.me.aPropos;
+    this.infos.role = this.me.roleUser || this.me.role;
+  },
   methods: {
     avatar() {
       const FILE_INPUT = document.querySelector("input[type=file]");
@@ -199,9 +260,46 @@ export default {
         };
       });
     },
-  },
-  mounted() {
-    this.avatar();
+    confirmInfo() {
+      const toast = useToast();
+      updateUsersInfoById(this.me.sub || this.me.id, this.infos)
+        .then((result) => {
+          localStorage.setItem("dandelions_token", result.data[1].access_token);
+          const decodeV = decodeToken(result.data[1].access_token);
+          this.$store.dispatch("userStore/setUser", decodeV);
+          toast.success("Modification information réussi");
+          result.data[0].illustration =
+            this.me.illustrationUser || this.me.illustration;
+          this.$store.dispatch("userStore/setUser", result.data[0]);
+          this.$store.dispatch("userStore/setConnected");
+          this.$router.push(this.$route.query.redirect || "/mon-espace");
+        })
+        .catch((e) => {
+          toast.info(e.response.data.message);
+        });
+    },
+    confirmPassword() {
+      const toast = useToast();
+      updateUsersPasswordById(this.me.sub || this.me.id, this.password)
+        .then(() => {
+          toast.success("Modification mot de passe réussi");
+          /* result.data[0].illustration =
+            this.me.illustrationUser || this.me.illustration;
+          result.data[0].nom = this.me.nomUser || this.me.nom;
+          result.data[0].prenom = this.me.prenomUser || this.me.prenom;
+          result.data[0].aPropos = this.me.aProposUser || this.me.aPropos;
+          result.data[0].email = this.me.emailUser || this.me.email;
+          result.data[0].telephone = this.me.telephoneUser || this.me.telephone;
+          result.data[0].role = this.me.roleUser || this.me.role;
+          result.data[0].id = this.me.sub || this.me.id;
+          this.$store.dispatch("userStore/setUser", result.data[0]); */
+          //this.$store.dispatch("userStore/setConnected");
+          this.$router.push(this.$route.query.redirect || "/mon-espace");
+        })
+        .catch((e) => {
+          toast.info(e.response.data.message);
+        });
+    },
   },
 };
 </script>

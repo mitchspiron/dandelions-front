@@ -30,3 +30,30 @@ export const createUsers = (data) => {
     },
   });
 };
+
+export const updateUsersInfoById = (id, data) => {
+  return axios.put(`${URL}/info/${id}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const updateUsersPasswordById = (id, data) => {
+  return axios.put(`${URL}/password/${id}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const getUsersById = (id) => {
+  return axios.get(`${URL}/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

@@ -5,29 +5,42 @@
         class="card-custom-img"
         style="background: linear-gradient(to right, #582456, #b377b1)"
       ></div>
-      <div class="card-custom-avatar">
+      <div v-if="isLoggedIn" class="card-custom-avatar">
         <img
-          class="img-fluid"
-          src="../../../assets/img/profile.jpg"
+          class="img-fluid img-thumbnail border-0"
+          :src="PROFIL_IMAGE + (me.illustrationUser || me.illustration)"
           alt="Avatar"
         />
       </div>
       <div class="card-body" style="overflow-y: auto">
-        <h4 class="card-title">Jack Anderson</h4>
+        <h4 class="card-title">
+          {{ (me.prenomUser || me.prenom) + " " + (me.nomUser || me.nom) }}
+        </h4>
         <p class="card-text">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates
-          ipsum voluptatem facere, minus dolores distinctio sequi consequuntur
-          tempore architecto magni fugit. Ab veritatis obcaecati qui natus at
-          corrupti soluta velit.
+          {{ me.aProposUser || me.aPropos }}
         </p>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { PROFIL_IMAGE } from "../../../configs/index";
 export default {
   name: "MeProfileCard",
   components: {},
+  data() {
+    return {
+      PROFIL_IMAGE: PROFIL_IMAGE,
+    };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters["userStore/isLoggedIn"];
+    },
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+  },
 };
 </script>
 <style scoped>
