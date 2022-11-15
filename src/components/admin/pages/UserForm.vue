@@ -1,10 +1,13 @@
 <template>
-  <div class="col-md-12 shadow-lg border-0 mb-5">
-    <div class="card border-0">
+  <div class="col-md-12 shadow-lg border-0">
+    <form @submit.prevent="submit" autocomplete="off" class="card border-0">
       <div class="card-body">
         <div class="col-md-12">
-          <form class="mb-3 mt-md-1">
-            <div
+          <div class="mt-md-1">
+            <p class="text-uppercase text-sm">
+              Formulaire d'ajout d'un nouveu utilisateur
+            </p>
+            <!-- <div
               class="d-flex align-items-start align-items-sm-center mb-3 gap-4"
             >
               <div
@@ -35,7 +38,7 @@
                   Allowed JPG, GIF or PNG. Max size of 800K
                 </p>
               </div>
-            </div>
+            </div> -->
             <div class="d-flex justify-content-between mb-3 gap-1">
               <div class="col-3 form-floating">
                 <input
@@ -43,6 +46,8 @@
                   class="form-control"
                   id="prenom"
                   placeholder="Don Andres"
+                  autocomplete="off"
+                  v-model="form.prenom"
                 />
                 <label for="prenom" class="form-label">Prénom</label>
               </div>
@@ -52,6 +57,8 @@
                   class="form-control"
                   id="nom"
                   placeholder="Iniesta"
+                  autocomplete="off"
+                  v-model="form.nom"
                 />
                 <label for="nom" class="form-label">Nom</label>
               </div>
@@ -61,6 +68,8 @@
                   class="form-control"
                   id="email"
                   placeholder="name@example.com"
+                  autocomplete="off"
+                  v-model="form.email"
                 />
                 <label for="email" class="form-label">Adresse email</label>
               </div>
@@ -70,40 +79,41 @@
                   class="form-control"
                   id="phone"
                   placeholder="+26100000000"
+                  autocomplete="off"
+                  v-model="form.telephone"
                 />
                 <label for="phone" class="form-label">Téléphone</label>
               </div>
             </div>
-            <div class="mb-3">
-              <div class="d-flex justify-content-between mb-4 gap-1">
+            <div class="mb-0">
+              <div class="d-flex justify-content-between gap-1">
                 <div class="col-3 form-floating">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="type exampleDataList"
-                    list="datalistOptions"
-                    placeholder="*******"
-                  />
-                  <label for="role" class="form-label">Rôle</label>
-                  <datalist id="datalistOptions">
-                    <option value="Administrateur"></option>
-                    <option value="Rédacteur"></option>
-                    <option value="Visiteur"></option>
-                  </datalist>
+                  <select
+                    class="form-select"
+                    id="floatingSelect"
+                    aria-label="Floating label select example"
+                    autocomplete="off"
+                    v-model="form.role"
+                  >
+                    <option value="1">Administrateur</option>
+                    <option value="2">Rédacteur</option>
+                    <option value="3">Visiteur</option>
+                  </select>
+                  <label for="floatingSelect"
+                    >Séléctionner le rôle de l'utilisateur</label
+                  >
                 </div>
                 <div class="col-3 form-floating">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="type exampleDataList"
-                    list="datalistOptions2"
-                    placeholder="*******"
-                  />
-                  <label for="type" class="form-label">Type</label>
-                  <datalist id="datalistOptions2">
-                    <option value="Particulier"></option>
-                    <option value="Entreprise"></option>
-                  </datalist>
+                  <div class="form-floating">
+                    <textarea
+                      class="form-control"
+                      placeholder="Leave a comment here"
+                      id="floatingTextarea"
+                      autocomplete="off"
+                      v-model="form.aPropos"
+                    ></textarea>
+                    <label for="floatingTextarea">A propos</label>
+                  </div>
                 </div>
                 <div class="col-3 form-floating">
                   <input
@@ -111,6 +121,8 @@
                     class="form-control"
                     id="password"
                     placeholder="*******"
+                    autocomplete="new-password"
+                    v-model="form.motDePasse"
                   />
                   <label for="password" class="form-label">Mot de passe</label>
                 </div>
@@ -120,6 +132,7 @@
                     class="form-control"
                     id="password-repeat"
                     placeholder="*******"
+                    autocomplete="off"
                   />
                   <label for="password-repeat" class="form-label"
                     >Resaisir mot de passe</label
@@ -127,28 +140,13 @@
                 </div>
               </div>
             </div>
-          </form>
-        </div>
-        <hr class="horizontal dark" />
-        <p class="text-uppercase text-sm">A propos</p>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group form-floating">
-              <textarea
-                class="form-control"
-                value="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source."
-              ></textarea>
-              <label for="example-text-input" class="form-control-label"
-                >à propos</label
-              >
-            </div>
           </div>
         </div>
       </div>
       <div class="card-footer py-2 px-3">
         <div class="col-md-12">
           <div class="d-flex align-items-center">
-            <h4 class="mb-0">Ajout utilisateur</h4>
+            <h4>Ajout utilisateur</h4>
             <button
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
@@ -158,15 +156,30 @@
           </div>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 <script>
+import { useToast } from "vue-toastification";
+import { createUsers } from "../../../api/users";
 export default {
   name: "UserForm",
   components: {},
+  data() {
+    return {
+      form: {
+        nom: "",
+        prenom: "",
+        email: "",
+        telephone: "",
+        role: "",
+        aPropos: "",
+        motDePasse: "",
+      },
+    };
+  },
   methods: {
-    avatar() {
+    /* avatar() {
       const FILE_INPUT = document.querySelector("input[type=file]");
       const AVATAR = document.getElementById("avatar");
 
@@ -181,15 +194,26 @@ export default {
           AVATAR.style.background = `url(${reader.result}) center center/cover`;
         };
       });
+    }, */
+    submit() {
+      const toast = useToast();
+      createUsers(this.form)
+        .then((result) => {
+          toast.success(result.data.nom + " " + result.data.prenom + " ajouté");
+          this.$router.push(this.$route.query.redirect || "/utilisateur");
+        })
+        .catch((e) => {
+          toast.info(e.response.data.message);
+        });
     },
   },
   mounted() {
-    this.avatar();
+    //this.avatar();
   },
 };
 </script>
 <style scoped>
-#avatar {
+/* #avatar {
   background-image: url("../../../assets/img/avatar.png");
   background-repeat: no-repeat;
   background-size: cover;
@@ -198,5 +222,5 @@ export default {
   border: 3px solid #582456;
   border-radius: 50%;
   transition: background ease-out 200ms;
-}
+} */
 </style>

@@ -38,32 +38,45 @@
       <thead class="bg-light text-center">
         <tr>
           <th>ID</th>
-          <th>Nom Complet / E-mail</th>
+          <th>Profil</th>
+          <th>Nom Complet</th>
+          <th>Email</th>
           <th>Rôle</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td class="text-center">1</td>
+        <tr class="text-center" v-for="user in users" :key="user.id">
+          <td>{{ user.id }}</td>
           <td>
-            <div class="d-flex justify-content-center">
-              <img
-                src="../../../assets/img/profile.jpg"
-                class="rounded-circle"
-                alt=""
-                style="width: 45px; height: 45px"
-              />
-              <div class="ms-3">
-                <p class="fw-bold mb-1">Kate Hunington</p>
-                <p class="text-muted mb-0">kate.hunington@gmail.com</p>
-              </div>
-            </div>
+            <img
+              :src="PROFIL_IMAGE + user.illustration"
+              class="rounded-circle img-thumbnail"
+              alt=""
+              style="width: 40px; height: 40px"
+            />
+          </td>
+          <td>
+            <p class="fw-bold mb-1">{{ user.nom + " " + user.prenom }}</p>
+          </td>
+          <td>
+            <p class="text-muted mb-0">{{ user.email }}</p>
           </td>
           <td class="col-md-1">
             <span
+              v-if="user.role_utilisateur.id == 1"
               class="d-flex justify-content-center badge bg-success rounded-pill d-inline"
-              >Administrateur</span
+              >{{ user.role_utilisateur.nomRole }}</span
+            >
+            <span
+              v-else-if="user.role_utilisateur.id == 2"
+              class="d-flex justify-content-center badge bg-info rounded-pill d-inline"
+              >{{ user.role_utilisateur.nomRole }}</span
+            >
+            <span
+              v-else
+              class="d-flex justify-content-center badge bg-secondary rounded-pill d-inline"
+              >{{ user.role_utilisateur.nomRole }}</span
             >
           </td>
           <td>
@@ -85,11 +98,27 @@
   </div>
 </template>
 <script>
+import { getUsers } from "../../../api/users";
+import { PROFIL_IMAGE } from "../../../configs";
+
 export default {
   name: "UserLists",
   components: {},
   data() {
-    return {};
+    return {
+      users: [],
+      PROFIL_IMAGE: PROFIL_IMAGE,
+    };
+  },
+  methods: {
+    fetch() {
+      getUsers().then((result) => {
+        this.users = result.data;
+      });
+    },
+  },
+  mounted() {
+    this.fetch();
   },
 };
 </script>
