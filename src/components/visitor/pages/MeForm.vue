@@ -1,6 +1,10 @@
 <template>
   <div class="col-md-8 shadow-lg border-0">
-    <form class="card border-0">
+    <form
+      @submit.prevent="confirmIllustration"
+      enctype="multipart/form-data"
+      class="card border-0"
+    >
       <div class="card-body">
         <div class="col-md-12">
           <div>
@@ -23,7 +27,9 @@
                   ></span>
                   <input
                     type="file"
+                    ref="file"
                     class="form-control"
+                    @change="onSelect"
                     name="image"
                     id="image"
                     accept="image/*"
@@ -208,6 +214,8 @@ import { useToast } from "vue-toastification";
 import {
   updateUsersInfoById,
   updateUsersPasswordById,
+  updateIllustrationById,
+  uploadedFile,
 } from "../../../api/users";
 import { decodeToken } from "../../../utils/decodeToken";
 export default {
@@ -226,6 +234,10 @@ export default {
       password: {
         ancienMotDePasse: "",
         nouveauMotDePasse: "",
+      },
+      file: "",
+      image: {
+        illustration: "",
       },
     };
   },
@@ -298,6 +310,37 @@ export default {
         })
         .catch((e) => {
           toast.info(e.response.data.message);
+        });
+    },
+    onSelect() {
+      const file = this.$refs.file.files[0];
+      this.file = file;
+    },
+    confirmIllustration() {
+      const toast = useToast();
+      let formData = new FormData();
+      formData.append("file", this.file);
+      uploadedFile(formData)
+        .then((result) => {
+          this.image.illustration = result.data.filename;
+          updateIllustrationById(this.me.sub || this.me.id, this.image)
+            .then((res) => {
+              localStorage.setItem(
+                "dandelions_token",
+                res.data[1].access_token
+              );
+              const decodeV = decodeToken(res.data[1].access_token);
+              this.$store.dispatch("userStore/setUser", decodeV);
+              this.$store.dispatch("userStore/setConnected");
+              toast.success("Modification illustration profil réussi");
+              this.$router.push(this.$route.query.redirect || "/mon-espace");
+            })
+            .catch((e) => {
+              toast.info(e.response.data.message);
+            });
+        })
+        .catch((e) => {
+          console.log("erreur", e);
         });
     },
   },

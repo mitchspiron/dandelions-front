@@ -57,3 +57,22 @@ export const getUsersById = (id) => {
     },
   });
 };
+
+export const uploadedFile = (data) => {
+  return axios.post(`${URL}/upload-illustration`, data, {
+    withCredentials: true,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const updateIllustrationById = (id, data) => {
+  return axios.put(`${URL}/update-illustration/${id}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
