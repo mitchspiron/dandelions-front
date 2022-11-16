@@ -95,6 +95,7 @@
                     autocomplete="off"
                     v-model="form.role"
                   >
+                    <option value="" selected disabled>Rôle</option>
                     <option value="1">Administrateur</option>
                     <option value="2">Rédacteur</option>
                     <option value="3">Visiteur</option>
@@ -199,8 +200,14 @@ export default {
       const toast = useToast();
       createUsers(this.form)
         .then((result) => {
-          toast.success(result.data.nom + " " + result.data.prenom + " ajouté");
-          this.$router.push(this.$route.query.redirect || "/utilisateur");
+          if (result) {
+            toast.success(
+              result.data.nom + " " + result.data.prenom + " ajouté"
+            );
+            this.$router.push(this.$route.query.redirect || "/utilisateur");
+          } else {
+            toast.danger("Une erreur est survevue!");
+          }
         })
         .catch((e) => {
           toast.info(e.response.data.message);

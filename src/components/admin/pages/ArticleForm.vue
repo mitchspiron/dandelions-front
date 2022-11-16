@@ -1,5 +1,10 @@
 <template>
-  <div class="col-md-12 shadow-lg border-0 mb-5">
+  <form
+    @submit.prevent="confirm"
+    enctype="multipart/form-data"
+    autocomplete="off"
+    class="col-md-12 shadow-lg border-0 mb-5"
+  >
     <div class="card border-0">
       <div class="card-body">
         <div class="col-md-12">
@@ -22,6 +27,8 @@
                   ></span>
                   <input
                     type="file"
+                    ref="file"
+                    @change="onSelect"
                     class="form-control"
                     name="image"
                     id="image"
@@ -37,40 +44,38 @@
               </div>
             </div>
             <div class="d-flex justify-content-between mb-3 gap-1">
-              <div class="col-3 form-floating">
+              <div class="col-4 form-floating">
                 <input
                   type="text"
                   class="form-control"
                   id="titre"
                   placeholder=""
+                  v-model="form.titre"
                 />
                 <label for="titre" class="form-label">Titre</label>
               </div>
-              <div class="col-3 form-floating">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="slug"
-                  placeholder=""
-                />
-                <label for="slug" class="form-label">Slug</label>
+              <div class="col-4 form-floating">
+                <select
+                  class="form-select"
+                  id="floatingSelect"
+                  aria-label="Floating label select example"
+                  autocomplete="off"
+                  v-model="form.idCategorie"
+                >
+                  <option value="" selected disabled>Catégorie</option>
+                  <option value="1">Sport</option>
+                  <option value="2">Technologie</option>
+                  <option value="3">Cinéma</option>
+                </select>
+                <label for="floatingSelect"
+                  >Séléctionner la catégorie de l'article</label
+                >
               </div>
-              <div class="col-3 form-floating">
-                <input
-                  type="text"
+              <div class="col-4 form-floating">
+                <textarea
                   class="form-control"
-                  id="category exampleDataList"
-                  list="datalistOptions"
-                  placeholder=""
-                />
-                <label for="category" class="form-label">Catégorie</label>
-                <datalist id="datalistOptions">
-                  <option value="Tech"></option>
-                  <option value="News"></option>
-                </datalist>
-              </div>
-              <div class="col-3 form-floating">
-                <textarea class="form-control" value=""></textarea>
+                  v-model="form.description"
+                ></textarea>
                 <label for="example-text-input" class="form-control-label"
                   >Déscription</label
                 >
@@ -82,7 +87,13 @@
         <p class="text-uppercase text-sm">Contenu</p>
         <div class="row">
           <div class="col-md-12" style="margin-bottom: 100px">
-            <QuillEditor :modules="modules" theme="snow" toolbar="full" />
+            <QuillEditor
+              v-model:content="form.contenu"
+              contentType="html"
+              :modules="modules"
+              theme="snow"
+              toolbar="full"
+            />
           </div>
         </div>
       </div>
@@ -91,6 +102,20 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Ajout article</h4>
             <button
+              v-if="loading"
+              class="btn btn-primary btn-md ms-auto border-0"
+              disabled
+              style="background-color: #582456"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
@@ -100,17 +125,30 @@
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 <script>
 import { QuillEditor } from "@vueup/vue-quill";
 import BlotFormatter from "quill-blot-formatter";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
+import { useToast } from "vue-toastification";
+import { createPost, uploadedFile } from "../../../api/post";
 export default {
   name: "ArticleForm",
   components: { QuillEditor },
   data() {
-    return {};
+    return {
+      form: {
+        idRedacteur: "",
+        idCategorie: "",
+        titre: "",
+        description: "",
+        illustration: "",
+        contenu: "",
+      },
+      file: "",
+      loading: false,
+    };
   },
   setup: () => {
     const modules = {
@@ -121,6 +159,11 @@ export default {
       },
     };
     return { modules };
+  },
+  computed: {
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
   },
   methods: {
     avatar() {
@@ -138,6 +181,42 @@ export default {
           AVATAR.style.background = `url(${reader.result}) center center/cover`;
         };
       });
+    },
+    onSelect() {
+      const file = this.$refs.file.files[0];
+      this.file = file;
+    },
+    confirm() {
+      const toast = useToast();
+      this.loading = true;
+      let formData = new FormData();
+      formData.append("file", this.file);
+      uploadedFile(formData)
+        .then((result) => {
+          this.form.idRedacteur = this.me.sub || this.me.id;
+          this.form.illustration = result.data.filename;
+          this.form.idCategorie = Number(this.form.idCategorie);
+          createPost(this.form)
+            .then(() => {
+              this.loading = false;
+              this.$store.dispatch("userStore/setConnected");
+              toast.success("Article ajouté illustration profil réussi");
+              this.$swal(
+                "Article ajouté avec succès",
+                "L'article sera publié après approbation de l'admiistrateur",
+                "success"
+              );
+              this.$router.push(this.$route.query.redirect || "/admin/article");
+            })
+            .catch((e) => {
+              this.loading = false;
+              toast.info(e.response.data.message);
+            });
+        })
+        .catch((e) => {
+          this.loading = false;
+          console.log("erreur", e);
+        });
     },
   },
   mounted() {
