@@ -65,22 +65,16 @@
           <th>Catégorie</th>
           <th>Top</th>
           <th>Recommandé</th>
-          <th>Publier</th>
           <th>Etat</th>
           <th>Nb.Commentaire</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td class="fw-bold">Marvel Comics</td>
-          <td class="text-muted">News</td>
-          <td>
-            <div class="form-check form-switch d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" />
-            </div>
-          </td>
+        <tr v-for="post in posts" :key="post.id">
+          <td>{{ post.id }}</td>
+          <td class="fw-bold">{{ post.titre }}</td>
+          <td class="text-muted">{{ post.categorie_article.nomCategorie }}</td>
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
               <input class="form-check-input" type="checkbox" />
@@ -93,14 +87,38 @@
           </td>
           <td>
             <span
-              class="badge bg-success rounded-pill d-inline d-flex justify-content-center"
-              >publié</span
+              v-if="post.etat_article.id == 1"
+              class="badge bg-primary rounded-pill d-inline"
+              >{{ post.etat_article.nomEtat }}</span
+            >
+            <span
+              v-if="post.etat_article.id == 2"
+              class="badge bg-info rounded-pill d-inline"
+              >{{ post.etat_article.nomEtat }}</span
+            >
+            <span
+              v-if="post.etat_article.id == 3"
+              class="badge bg-warning rounded-pill d-inline"
+              >{{ post.etat_article.nomEtat }}</span
+            >
+            <span
+              v-if="post.etat_article.id == 4"
+              class="badge bg-danger rounded-pill d-inline"
+              >{{ post.etat_article.nomEtat }}</span
+            >
+            <span
+              v-if="post.etat_article.id == 5"
+              class="badge bg-success rounded-pill d-inline"
+              >{{ post.etat_article.nomEtat }}</span
             >
           </td>
           <td class="text-muted">5</td>
           <td>
             <div class="d-flex justify-content-center gap-4">
-              <router-link to="/article/slug" type="button">
+              <router-link
+                :to="{ name: 'ArticleBySlug', params: { slug: post.slug } }"
+                type="button"
+              >
                 <i class="fa-regular fa-eye"></i>
               </router-link>
               <router-link to="/article/slug/commentaire"
@@ -120,11 +138,24 @@
   </div>
 </template>
 <script>
+import { getPost } from "../../../api/post";
 export default {
   name: "ArticleLists",
   components: {},
   data() {
-    return {};
+    return {
+      posts: [],
+    };
+  },
+  methods: {
+    fetch() {
+      getPost().then((result) => {
+        this.posts = result.data;
+      });
+    },
+  },
+  mounted() {
+    this.fetch();
   },
 };
 </script>

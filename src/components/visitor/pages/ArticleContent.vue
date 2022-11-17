@@ -4,9 +4,9 @@
       <img
         loading="lazy"
         decoding="async"
-        src="../../../assets/img/post/post-4.jpg"
+        :src="illustration"
         alt="Post Thumbnail"
-        class="w-100"
+        class="w-100 img-thumbnail"
         style=""
       />
       <ul class="post-meta mb-2 mt-4">
@@ -30,93 +30,19 @@
               d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"
             />
           </svg>
-          <span>29 May, 2021</span>
+          <span>{{ posts.createdAt }}</span>
         </li>
       </ul>
-      <h1 class="my-3">Top 7 Reasons to Visit Denver this Summer</h1>
+      <h1 class="my-3">{{ posts.titre }}</h1>
       <ul class="post-meta mb-4">
-        <li><a href="">destination</a></li>
+        <li>
+          <router-link to="/article/category">{{
+            categorie_article
+          }}</router-link>
+        </li>
       </ul>
       <div class="content text-left">
-        <h1 id="heading">Heading</h1>
-        <p>
-          Here is example of hedings. You can use this heading by following
-          markdownify rules. For example: use
-          <code>#</code> for heading 1 and use <code>######</code> for heading
-          6.
-        </p>
-        <h2 id="emphasis">Emphasis</h2>
-        <p>
-          Emphasis, aka italics, with <em>asterisks</em> or
-          <em>underscores</em>.
-        </p>
-        <p>
-          Strong emphasis, aka bold, with <strong>asterisks</strong> or
-          <strong>underscores</strong>.
-        </p>
-        <p>
-          Combined emphasis with
-          <strong>asterisks and <em>underscores</em></strong
-          >.
-        </p>
-        <p>Strikethrough uses two tildes. <del>Scratch this.</del></p>
-        <!-- table of content -->
-        <h2 id="link">Link</h2>
-        <p><a href="">I&rsquo;m an inline-style link</a></p>
-        <p>
-          <a href="" title="Google's Homepage"
-            >I&rsquo;m an inline-style link with title</a
-          >
-        </p>
-        <p>
-          <a href="https://www.themefisher.com"
-            >I&rsquo;m a reference-style link</a
-          >
-        </p>
-        <p>
-          <a href="#!">I&rsquo;m a relative reference to a repository file</a>
-        </p>
-        <p>
-          <a href="https://gethugothemes.com"
-            >You can use numbers for reference-style link definitions</a
-          >
-        </p>
-        <p>
-          Or leave it empty and use the
-          <a href="https://www.getjekyllthemes.com">link text itself</a>.
-        </p>
-        <p>
-          URLs and URLs in angle brackets will automatically get turned into
-          links.
-          <a href="http://www.example.com">http://www.example.com</a> or
-          <a href="http://www.example.com">http://www.example.com</a>
-          and sometimes example.com (but not on Github, for example).
-        </p>
-        <p>Some text to show that the reference links can follow later.</p>
-        <hr />
-        <h2 id="paragraph">Paragraph</h2>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam nihil
-          enim maxime corporis cumque totam aliquid nam sint inventore optio
-          modi neque laborum officiis necessitatibus, facilis placeat pariatur!
-          Voluptatem, sed harum pariatur adipisci voluptates voluptatum cumque,
-          porro sint minima similique magni perferendis fuga! Optio vel ipsum
-          excepturi tempore reiciendis id quidem? Vel in, doloribus debitis
-          nesciunt fugit sequi magnam accusantium modi neque quis, vitae velit,
-          pariatur harum autem a! Velit impedit atque maiores animi possimus
-          asperiores natus repellendus excepturi sint architecto eligendi non,
-          omnis nihil. Facilis, doloremque illum. Fugit optio laborum minus
-          debitis natus illo perspiciatis corporis voluptatum rerum laboriosam.
-        </p>
-        <hr />
-        <h2 id="ordered-list">Ordered List</h2>
-        <ol>
-          <li>List item</li>
-          <li>List item</li>
-          <li>List item</li>
-          <li>List item</li>
-          <li>List item</li>
-        </ol>
+        <div v-html="posts.contenu"></div>
       </div>
     </article>
   </div>
@@ -124,9 +50,30 @@
 </template>
 
 <script>
+import { getPostBySlug } from "../../../api/post";
+import { PROFIL_IMAGE } from "../../../configs";
 export default {
   name: "ArticleContent",
   components: {},
+  data() {
+    return {
+      posts: [],
+      categorie_article: "",
+      illustration: "",
+    };
+  },
+  created() {
+    this.fetch();
+  },
+  methods: {
+    fetch() {
+      getPostBySlug(this.$route.params.slug).then((result) => {
+        this.posts = result.data;
+        this.categorie_article = result.data.categorie_article.nomCategorie;
+        this.illustration = PROFIL_IMAGE + result.data.illustration;
+      });
+    },
+  },
 };
 </script>
 <style scoped>

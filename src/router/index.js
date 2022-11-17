@@ -76,7 +76,7 @@ const routes = [
     },
   },
   {
-    path: "/article/slug",
+    path: "/article/:slug",
     name: "ArticleBySlug",
     component: ArticleBySlug,
     meta: {

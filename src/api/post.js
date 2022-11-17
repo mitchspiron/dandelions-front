@@ -12,6 +12,15 @@ export const getPost = () => {
   });
 };
 
+export const getPostBySlug = (slug) => {
+  return axios.get(`${URL}/${slug}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const createPost = (data) => {
   const newPost = {
     idRedacteur: data.idRedacteur,

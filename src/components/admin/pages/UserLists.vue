@@ -65,12 +65,12 @@
           <td class="col-md-1">
             <span
               v-if="user.role_utilisateur.id == 1"
-              class="d-flex justify-content-center badge bg-success rounded-pill d-inline"
+              class="badge bg-success rounded-pill d-inline"
               >{{ user.role_utilisateur.nomRole }}</span
             >
             <span
               v-else-if="user.role_utilisateur.id == 2"
-              class="d-flex justify-content-center badge bg-info rounded-pill d-inline"
+              class="badge bg-info rounded-pill d-inline"
               >{{ user.role_utilisateur.nomRole }}</span
             >
             <span
