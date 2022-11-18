@@ -206,7 +206,7 @@ export default {
             );
             this.$router.push(this.$route.query.redirect || "/utilisateur");
           } else {
-            toast.danger("Une erreur est survevue!");
+            toast.error("Une erreur est survevue!");
           }
         })
         .catch((e) => {

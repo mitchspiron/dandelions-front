@@ -74,3 +74,12 @@ export const updatePostBySlug = (slug, data) => {
     },
   });
 };
+
+export const updateStateBySlug = (slug, data) => {
+  return axios.put(`${URL}/state/${slug}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

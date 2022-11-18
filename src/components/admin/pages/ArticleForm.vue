@@ -215,7 +215,7 @@ export default {
         })
         .catch((e) => {
           this.loading = false;
-          toast.danger(e.response.data.message);
+          toast.error(e.response.data.message);
         });
     },
   },

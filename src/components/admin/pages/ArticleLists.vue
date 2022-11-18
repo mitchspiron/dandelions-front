@@ -130,6 +130,39 @@
               >
                 <i class="fa-regular fa-pen-to-square"></i>
               </router-link>
+              <a type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-three-dots-vertical"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a
+                    class="btn dropdown-item"
+                    @click="updateStatus(post.slug, (article.etat = 2))"
+                    >en cours d'éxamen</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="btn dropdown-item"
+                    @click="updateStatus(post.slug, (article.etat = 3))"
+                    >à corriger</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="btn dropdown-item"
+                    @click="updateStatus(post.slug, (article.etat = 4))"
+                    >réfusé</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="btn dropdown-item"
+                    @click="updateStatus(post.slug, (article.etat = 5))"
+                    >publié</a
+                  >
+                </li>
+              </ul>
               <a type="button">
                 <i class="bi bi-trash"></i>
               </a>
@@ -141,13 +174,15 @@
   </div>
 </template>
 <script>
-import { getPost } from "../../../api/post";
+import { useToast } from "vue-toastification";
+import { getPost, updateStateBySlug } from "../../../api/post";
 export default {
   name: "ArticleLists",
   components: {},
   data() {
     return {
       posts: [],
+      article: { etat: null },
     };
   },
   methods: {
@@ -155,6 +190,18 @@ export default {
       getPost().then((result) => {
         this.posts = result.data;
       });
+    },
+    updateStatus(slug, etat) {
+      const toast = useToast();
+      etat = this.article;
+      updateStateBySlug(slug, etat)
+        .then(() => {
+          toast.success("Article modifié");
+          this.fetch();
+        })
+        .catch(() => {
+          toast.error("Une erreur est survenue!");
+        });
     },
   },
   mounted() {
