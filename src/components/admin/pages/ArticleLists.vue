@@ -195,8 +195,8 @@ export default {
       const toast = useToast();
       etat = this.article;
       updateStateBySlug(slug, etat)
-        .then(() => {
-          toast.success("Article modifié");
+        .then((result) => {
+          toast.success("Article " + result.data.etat_article.nomEtat);
           this.fetch();
         })
         .catch(() => {
