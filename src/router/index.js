@@ -31,6 +31,7 @@ import UserNew from "../views/admin/UserNew.vue";
 import CategoryNew from "../views/admin/CategoryNew.vue";
 import EnterpriseNew from "../views/admin/EnterpriseNew.vue";
 import ArticleNew from "../views/admin/ArticleNew.vue";
+import ArticleEdit from "../views/admin/ArticleEdit.vue";
 
 try {
   const decode = decodeToken(localStorage.getItem("dandelions_token"));
@@ -162,6 +163,11 @@ const routes = [
     path: "/admin/article/nouveau",
     name: "ArticleNew",
     component: ArticleNew,
+  },
+  {
+    path: "/admin/article/:slug",
+    name: "ArticleEdit",
+    component: ArticleEdit,
   },
   {
     path: "/article/slug/commentaire",

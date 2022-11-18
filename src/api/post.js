@@ -47,3 +47,30 @@ export const uploadedFile = (data) => {
     },
   });
 };
+
+export const updateIllustrationBySlug = (slug, data) => {
+  return axios.put(`${URL}/update-illustration/${slug}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const updatePostTitleBySlug = (slug, data) => {
+  return axios.put(`${URL}/title/${slug}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const updatePostBySlug = (slug, data) => {
+  return axios.put(`${URL}/${slug}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

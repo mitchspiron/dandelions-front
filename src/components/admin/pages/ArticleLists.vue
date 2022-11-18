@@ -124,9 +124,12 @@
               <router-link to="/article/slug/commentaire"
                 ><i class="fa-regular fa-comments"></i
               ></router-link>
-              <a type="button">
+              <router-link
+                :to="{ name: 'ArticleEdit', params: { slug: post.slug } }"
+                type="button"
+              >
                 <i class="fa-regular fa-pen-to-square"></i>
-              </a>
+              </router-link>
               <a type="button">
                 <i class="bi bi-trash"></i>
               </a>
