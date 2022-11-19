@@ -36,7 +36,7 @@
                   <div class="card-body px-0 pb-0">
                     <ul class="post-meta mb-2">
                       <li>
-                        <router-link to="/article/category">{{
+                        <router-link to="/article/categorie">{{
                           article.category
                         }}</router-link>
                       </li>

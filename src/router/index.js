@@ -29,6 +29,7 @@ import Categories from "../views/admin/Categories.vue";
 import EnterprisesAdmin from "../views/admin/EnterprisesAdmin.vue";
 import UserNew from "../views/admin/UserNew.vue";
 import CategoryNew from "../views/admin/CategoryNew.vue";
+import CategoryEdit from "../views/admin/CategoryEdit.vue";
 import EnterpriseNew from "../views/admin/EnterpriseNew.vue";
 import ArticleNew from "../views/admin/ArticleNew.vue";
 import ArticleEdit from "../views/admin/ArticleEdit.vue";
@@ -61,7 +62,7 @@ const routes = [
     },
   },
   {
-    path: "/article/category",
+    path: "/article/categorie",
     name: "ArticleListByCategory",
     component: ArticleListByCategory,
     meta: {
@@ -200,14 +201,19 @@ const routes = [
     component: UserNew,
   },
   {
-    path: "/admin/article/category",
+    path: "/admin/article/categorie",
     name: "Categories",
     component: Categories,
   },
   {
-    path: "/admin/article/category/nouveau",
+    path: "/admin/article/categorie/nouveau",
     name: "CategoryNew",
     component: CategoryNew,
+  },
+  {
+    path: "/admin/article/categorie/:id",
+    name: "CategoryEdit",
+    component: CategoryEdit,
   },
   {
     path: "/admin/enterprise",

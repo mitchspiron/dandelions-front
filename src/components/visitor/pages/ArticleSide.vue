@@ -103,7 +103,7 @@
           <div class="widget-body">
             <ul class="widget-list">
               <li v-for="(category, i) in categories" :key="i">
-                <router-link to="/article/category"
+                <router-link to="/article/categorie"
                   >{{ category.name
                   }}<span class="ml-auto"
                     >({{ category.count }})</span

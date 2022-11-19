@@ -63,9 +63,13 @@
                   v-model="form.idCategorie"
                 >
                   <option value="" selected disabled>Catégorie</option>
-                  <option value="1">Sport</option>
-                  <option value="2">Technologie</option>
-                  <option value="3">Cinéma</option>
+                  <option
+                    v-for="category in categories"
+                    :key="category.id"
+                    :value="category.id"
+                  >
+                    {{ category.nomCategorie }}
+                  </option>
                 </select>
                 <label for="floatingSelect"
                   >Séléctionner la catégorie de l'article</label
@@ -133,6 +137,7 @@ import BlotFormatter from "quill-blot-formatter";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { useToast } from "vue-toastification";
 import { createPost, uploadedFile } from "../../../api/post";
+import { getPostCategory } from "../../../api/post-category";
 export default {
   name: "ArticleForm",
   components: { QuillEditor },
@@ -146,6 +151,7 @@ export default {
         illustration: "",
         contenu: "",
       },
+      categories: [],
       file: "",
       loading: false,
     };
@@ -166,6 +172,11 @@ export default {
     },
   },
   methods: {
+    fetch() {
+      getPostCategory().then((result) => {
+        this.categories = result.data;
+      });
+    },
     avatar() {
       const FILE_INPUT = document.querySelector("input[type=file]");
       const AVATAR = document.getElementById("avatar");
@@ -221,6 +232,7 @@ export default {
   },
   mounted() {
     this.avatar();
+    this.fetch();
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-end gap-5">
     <div class="">
       <router-link
-        to="/admin/article/category/nouveau"
+        to="/admin/article/categorie/nouveau"
         class="btn btn-outline-secondary"
         ><i class="fa-solid fa-plus"></i
       ></router-link>
@@ -14,18 +14,23 @@
         <tr>
           <th>ID</th>
           <th>Nom</th>
+          <th>Nombre d'article</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(category, id) in categories" :key="id">
+        <tr v-for="category in categories" :key="category.id">
           <td>{{ category.id }}</td>
-          <td class="text-muted">{{ category.name }}</td>
+          <td class="text-muted">{{ category.nomCategorie }}</td>
+          <td class="text-muted">{{ category._count.article }}</td>
           <td>
             <div class="d-flex justify-content-center gap-4">
-              <a type="button">
+              <router-link
+                :to="{ name: 'CategoryEdit', params: { id: category.id } }"
+                type="button"
+              >
                 <i class="fa-regular fa-pen-to-square"></i>
-              </a>
+              </router-link>
               <a type="button">
                 <i class="bi bi-trash"></i>
               </a>
@@ -37,23 +42,34 @@
   </div>
 </template>
 <script>
+import { getPostCategory } from "../../../api/post-category";
+
 export default {
   name: "CategoryLists",
   components: {},
   data() {
     return {
-      categories: [
-        {
-          id: 1,
-          name: "Technology",
-        },
-        {
-          id: 2,
-          name: "News",
-        },
-      ],
+      categories: [],
     };
+  },
+  methods: {
+    fetch() {
+      getPostCategory().then((result) => {
+        this.categories = result.data;
+      });
+    },
+  },
+  mounted() {
+    this.fetch();
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+a {
+  text-decoration: none;
+  color: black;
+}
+a:hover {
+  color: black;
+}
+</style>

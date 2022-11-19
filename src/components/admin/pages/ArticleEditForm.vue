@@ -141,9 +141,13 @@
                   <option :value="form.idCategorie" selected disabled>
                     {{ categorie_article }}
                   </option>
-                  <option value="1">Sport</option>
-                  <option value="2">Technologie</option>
-                  <option value="3">Cinéma</option>
+                  <option
+                    v-for="category in categories"
+                    :key="category.id"
+                    :value="category.id"
+                  >
+                    {{ category.nomCategorie }}
+                  </option>
                 </select>
                 <label for="floatingSelect"
                   >Séléctionner la catégorie de l'article</label
@@ -219,6 +223,7 @@ import {
   updatePostTitleBySlug,
   uploadedFile,
 } from "../../../api/post";
+import { getPostCategory } from "../../../api/post-category";
 export default {
   name: "ArticleForm",
   components: { QuillEditor },
@@ -231,6 +236,7 @@ export default {
       },
       article: { titre: "" },
       categorie_article: "",
+      categories: [],
       file: "",
       image: {
         illustration: "",
@@ -257,6 +263,11 @@ export default {
     },
   },
   methods: {
+    fetchCategories() {
+      getPostCategory().then((result) => {
+        this.categories = result.data;
+      });
+    },
     fetch() {
       getPostBySlug(this.$route.params.slug).then((result) => {
         this.form = result.data;
@@ -332,6 +343,7 @@ export default {
   mounted() {
     this.avatar();
     this.fetch();
+    this.fetchCategories();
   },
 };
 </script>

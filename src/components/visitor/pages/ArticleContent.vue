@@ -36,7 +36,7 @@
       <h1 class="my-3">{{ posts.titre }}</h1>
       <ul class="post-meta mb-4">
         <li>
-          <router-link to="/article/category">{{
+          <router-link to="/article/categorie">{{
             categorie_article
           }}</router-link>
         </li>

@@ -26,7 +26,7 @@
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/admin/article/category" class="nav-link collapsed">
+        <router-link to="/admin/article/categorie" class="nav-link collapsed">
           <i class="bi bi-tags"></i>
           <span>Categories</span>
         </router-link>

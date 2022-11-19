@@ -18,8 +18,8 @@
       <div class="card-body px-0 pb-1">
         <ul class="post-meta mb-2">
           <li>
-            <router-link to="/article/category" href="#!">travel</router-link>
-            <router-link to="/article/category" href="#!">news</router-link>
+            <router-link to="/article/categorie" href="#!">travel</router-link>
+            <router-link to="/article/categorie" href="#!">news</router-link>
           </li>
         </ul>
         <h2 class="h1">
@@ -61,7 +61,7 @@
         <div class="card-body px-0 pb-0">
           <ul class="post-meta mb-2">
             <li>
-              <router-link to="/article/category">{{
+              <router-link to="/article/categorie">{{
                 article.category
               }}</router-link>
             </li>

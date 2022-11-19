@@ -41,9 +41,12 @@
 </template>
 <script>
 import { useToast } from "vue-toastification";
-import { createPostCategory } from "../../../api/post-category";
+import {
+  getPostCategoryById,
+  updatePostCategoryById,
+} from "../../../api/post-category";
 export default {
-  name: "CategoryForm",
+  name: "CategoryEditForm",
   components: {},
   data() {
     return {
@@ -53,11 +56,16 @@ export default {
     };
   },
   methods: {
+    fetch() {
+      getPostCategoryById(this.$route.params.id).then((result) => {
+        this.form = result.data;
+      });
+    },
     confirm() {
       const toast = useToast();
-      createPostCategory(this.form)
+      updatePostCategoryById(this.$route.params.id, this.form)
         .then(() => {
-          toast.success("Catégorie d'article ajouté");
+          toast.success("Catégorie d'article modifié");
           this.$router.push(
             this.$route.query.redirect || "/admin/article/categorie"
           );
@@ -66,6 +74,9 @@ export default {
           toast.info(e.response.data.message);
         });
     },
+  },
+  mounted() {
+    this.fetch();
   },
 };
 </script>
