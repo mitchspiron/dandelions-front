@@ -83,3 +83,12 @@ export const updateStateBySlug = (slug, data) => {
     },
   });
 };
+
+export const switchToRecommandedBySlug = (slug, data) => {
+  return axios.put(`${URL}/switch-recommanded/${slug}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

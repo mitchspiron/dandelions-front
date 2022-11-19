@@ -82,7 +82,15 @@
           </td>
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" />
+              <input
+                class="form-check-input"
+                type="checkbox"
+                :checked="post.recommadee"
+                @input="(event) => (text = event.target.checked)"
+                @change="
+                  switchToRecommanded(post.slug, post.recommadee, $event)
+                "
+              />
             </div>
           </td>
           <td>
@@ -175,7 +183,11 @@
 </template>
 <script>
 import { useToast } from "vue-toastification";
-import { getPost, updateStateBySlug } from "../../../api/post";
+import {
+  getPost,
+  switchToRecommandedBySlug,
+  updateStateBySlug,
+} from "../../../api/post";
 export default {
   name: "ArticleLists",
   components: {},
@@ -183,6 +195,7 @@ export default {
     return {
       posts: [],
       article: { etat: null },
+      switch: { recommadee: true || false },
     };
   },
   methods: {
@@ -202,6 +215,32 @@ export default {
         .catch(() => {
           toast.error("Une erreur est survenue!");
         });
+    },
+    switchToRecommanded(slug, etat, event) {
+      const toast = useToast();
+      if (event.target.checked) {
+        this.switch.recommadee = true;
+        etat = this.switch;
+        switchToRecommandedBySlug(slug, etat)
+          .then(() => {
+            toast.success("L'article est à recommander");
+            this.fetch();
+          })
+          .catch(() => {
+            toast.error("Une erreur est survenue!");
+          });
+      } else {
+        this.switch.recommadee = false;
+        etat = this.switch;
+        switchToRecommandedBySlug(slug, etat)
+          .then(() => {
+            toast.success("L'article n'est plus recommandé");
+            this.fetch();
+          })
+          .catch(() => {
+            toast.error("Une erreur est survenue!");
+          });
+      }
     },
   },
   mounted() {
