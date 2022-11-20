@@ -25,77 +25,84 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-12 col-md-6">
+      <div
+        v-if="tops.length !== 0 || recommandations.length !== 0"
+        class="col-lg-12 col-md-6"
+      >
         <div class="widget">
           <h2 class="section-title mb-3">Recommended</h2>
           <div class="widget-body">
             <div class="widget-list">
-              <article v-for="top in tops" :key="top.id" class="card mb-4">
-                <div class="card-image">
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    :src="PROFIL_IMAGE + top.illustration"
-                    alt="Post Thumbnail"
-                    class="w-100 img-thumbnail"
-                  />
-                </div>
-                <div class="card-body px-0 pb-1">
-                  <h3>
-                    <router-link
-                      :to="{
-                        name: 'ArticleBySlug',
-                        params: { slug: top.slug },
-                      }"
-                      class="post-title post-title-sm"
-                      href=""
-                      >{{ top.titre }}</router-link
-                    >
-                  </h3>
-                  <p class="card-text description">
-                    {{ top.description }}
-                  </p>
-                  <div class="content">
-                    <router-link
-                      :to="{
-                        name: 'ArticleBySlug',
-                        params: { slug: top.slug },
-                      }"
-                      class="read-more-btn"
-                      href=""
-                      >Read Full Article</router-link
-                    >
+              <div v-if="tops.length !== 0">
+                <article v-for="top in tops" :key="top.id" class="card mb-4">
+                  <div class="card-image">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      :src="PROFIL_IMAGE + top.illustration"
+                      alt="Post Thumbnail"
+                      class="w-100 img-thumbnail"
+                    />
                   </div>
-                </div>
-              </article>
-              <div
-                class="media"
-                v-for="(recommandation, i) in recommandations"
-                :key="i"
-              >
-                <router-link
-                  :to="{
-                    name: 'ArticleBySlug',
-                    params: { slug: recommandation.slug },
-                  }"
-                  class="d-flex align-items-center"
-                >
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    :src="PROFIL_IMAGE + recommandation.illustration"
-                    alt="Post Thumbnail"
-                    class="w-100 img-thumbnail"
-                  />
-                  <div class="media-body">
-                    <h3 style="margin-top: -5px">
-                      {{ recommandation.titre }}
+                  <div class="card-body px-0 pb-1">
+                    <h3>
+                      <router-link
+                        :to="{
+                          name: 'ArticleBySlug',
+                          params: { slug: top.slug },
+                        }"
+                        class="post-title post-title-sm"
+                        href=""
+                        >{{ top.titre }}</router-link
+                      >
                     </h3>
-                    <p class="mb-0 small description">
-                      {{ recommandation.description }}
+                    <p class="card-text description">
+                      {{ top.description }}
                     </p>
+                    <div class="content">
+                      <router-link
+                        :to="{
+                          name: 'ArticleBySlug',
+                          params: { slug: top.slug },
+                        }"
+                        class="read-more-btn"
+                        href=""
+                        >Read Full Article</router-link
+                      >
+                    </div>
                   </div>
-                </router-link>
+                </article>
+              </div>
+              <div v-if="recommandations.length !== 0">
+                <div
+                  class="media"
+                  v-for="(recommandation, i) in recommandations"
+                  :key="i"
+                >
+                  <router-link
+                    :to="{
+                      name: 'ArticleBySlug',
+                      params: { slug: recommandation.slug },
+                    }"
+                    class="d-flex align-items-center"
+                  >
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      :src="PROFIL_IMAGE + recommandation.illustration"
+                      alt="Post Thumbnail"
+                      class="w-100 img-thumbnail"
+                    />
+                    <div class="media-body">
+                      <h3 style="margin-top: -5px">
+                        {{ recommandation.titre }}
+                      </h3>
+                      <p class="mb-0 small description">
+                        {{ recommandation.description }}
+                      </p>
+                    </div>
+                  </router-link>
+                </div>
               </div>
             </div>
           </div>

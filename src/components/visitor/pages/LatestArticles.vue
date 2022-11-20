@@ -1,40 +1,61 @@
 <template>
   <div class="col-12 mb-4">
-    <article class="card article-card">
-      <router-link to="/article/slug">
+    <article
+      v-for="article in first_article"
+      :key="article.id"
+      class="card article-card"
+    >
+      <router-link
+        :to="{
+          name: 'ArticleBySlug',
+          params: { slug: article.slug },
+        }"
+      >
         <div class="card-image">
           <div class="post-info">
-            <span class="text-uppercase">04 Jun 2021</span>
+            <span class="text-uppercase">{{ article.createdAt }}</span>
           </div>
           <img
             loading="lazy"
             decoding="async"
-            src="../../../assets/img/post/post-1.jpg"
+            :src="PROFIL_IMAGE + article.illustration"
             alt="Post Thumbnail"
-            class="w-100"
+            class="first-take w-100"
           />
         </div>
       </router-link>
       <div class="card-body px-0 pb-1">
         <ul class="post-meta mb-2">
           <li>
-            <router-link to="/article/categorie" href="#!">travel</router-link>
-            <router-link to="/article/categorie" href="#!">news</router-link>
+            <router-link
+              :to="{
+                name: 'ArticleListByCategory',
+                params: { slug: article.categorie_article.slug },
+              }"
+              >{{ article.categorie_article.nomCategorie }}</router-link
+            >
           </li>
         </ul>
         <h2 class="h1">
-          <router-link to="/article/slug" class="post-title" href="article.html"
-            >Is it Ethical to Travel Now? With that Freedom Comes
-            Responsibility.</router-link
+          <router-link
+            :to="{
+              name: 'ArticleBySlug',
+              params: { slug: article.slug },
+            }"
+            class="post-title"
+            >{{ article.titre }}</router-link
           >
         </h2>
         <p class="card-text">
-          Heading Here is example of hedings. You can use this heading by
-          following markdownify rules. For example: use # for heading 1 and use
-          ###### for heading 6.
+          {{ article.description }}
         </p>
         <div class="content">
-          <router-link to="/article/slug" class="read-more-btn"
+          <router-link
+            :to="{
+              name: 'ArticleBySlug',
+              params: { slug: article.slug },
+            }"
+            class="read-more-btn"
             >Read Full Article</router-link
           >
         </div>
@@ -42,40 +63,59 @@
     </article>
   </div>
   <div class="row">
-    <div class="col-md-6 mb-4" v-for="(article, i) in articles" :key="i">
+    <div class="col-md-6 mb-4" v-for="article in articles" :key="article.id">
       <article class="card article-card article-card-sm h-100">
-        <router-link to="/article/slug">
+        <router-link
+          :to="{
+            name: 'ArticleBySlug',
+            params: { slug: article.slug },
+          }"
+        >
           <div class="card-image">
             <div class="post-info">
-              <span class="text-uppercase">{{ article.date }}</span>
+              <span class="text-uppercase">{{ article.createdAt }}</span>
             </div>
             <img
               loading="lazy"
               decoding="async"
-              :src="article.img"
+              :src="PROFIL_IMAGE + article.illustration"
               alt="Post Thumbnail"
-              class="w-100"
+              class="img-thumbnail"
             />
           </div>
         </router-link>
         <div class="card-body px-0 pb-0">
           <ul class="post-meta mb-2">
             <li>
-              <router-link to="/article/categorie">{{
-                article.category
-              }}</router-link>
+              <router-link
+                :to="{
+                  name: 'ArticleListByCategory',
+                  params: { slug: article.categorie_article.slug },
+                }"
+                >{{ article.categorie_article.nomCategorie }}</router-link
+              >
             </li>
           </ul>
           <h2>
-            <router-link to="/article/slug" class="post-title">{{
-              article.title
-            }}</router-link>
+            <router-link
+              :to="{
+                name: 'ArticleBySlug',
+                params: { slug: article.slug },
+              }"
+              class="post-title"
+              >{{ article.titre }}</router-link
+            >
           </h2>
-          <p class="card-text">
-            {{ article.text }}
+          <p class="card-text description">
+            {{ article.description }}
           </p>
           <div class="content">
-            <router-link to="/article/slug" class="read-more-btn"
+            <router-link
+              :to="{
+                name: 'ArticleBySlug',
+                params: { slug: article.slug },
+              }"
+              class="read-more-btn"
               >Read Full Article</router-link
             >
           </div>
@@ -91,54 +131,43 @@
 </template>
 
 <script>
+import { skipFirstLastestPost, takeFirstLastestPost } from "../../../api/post";
+import { PROFIL_IMAGE } from "../../../configs";
 export default {
   name: "LatestArticles",
   components: {},
   data() {
     return {
-      articles: [
-        {
-          img: require("../../../assets/img/post/ls-2.jpg"),
-          title: "What to Do in Houston: Ideas for Your Visit",
-          category: "lifestyle",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna
-                …`,
-          date: "02 Jun 2021",
-        },
-        {
-          img: require("../../../assets/img/post/cr-1.jpg"),
-          title: "What to Do in Houston: Ideas for Your Visit",
-          category: "lifestyle",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna
-                …`,
-          date: "02 Jun 2021",
-        },
-        {
-          img: require("../../../assets/img/post/cr-2.jpg"),
-          title: "What to Do in Houston: Ideas for Your Visit",
-          category: "lifestyle",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna
-                …`,
-          date: "02 Jun 2021",
-        },
-        {
-          img: require("../../../assets/img/post/post-4.jpg"),
-          title: "What to Do in Houston: Ideas for Your Visit",
-          category: "lifestyle",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna
-                …`,
-          date: "02 Jun 2021",
-        },
-      ],
+      articles: [],
+      PROFIL_IMAGE: PROFIL_IMAGE,
+      first_article: [],
     };
+  },
+  methods: {
+    fetch() {
+      skipFirstLastestPost().then((result) => {
+        this.articles = result.data;
+      });
+    },
+    fetchFirst() {
+      takeFirstLastestPost().then((result) => {
+        this.first_article = result.data;
+      });
+    },
+  },
+  mounted() {
+    this.fetch();
+    this.fetchFirst();
   },
 };
 </script>
 <style scoped>
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 .btn-outline-primary {
   background: transparent;
   color: #582456;
@@ -248,6 +277,13 @@ h6,
 }
 
 img {
+  vertical-align: middle;
+  border: 0;
+  max-width: 100%;
+  height: 240px;
+}
+
+.first-take {
   vertical-align: middle;
   border: 0;
   max-width: 100%;

@@ -12,6 +12,33 @@ export const getPost = () => {
   });
 };
 
+export const getPublishedPost = () => {
+  return axios.get(`${URL}/published`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const takeFirstLastestPost = () => {
+  return axios.get(`${URL}/take-first-post`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const skipFirstLastestPost = () => {
+  return axios.get(`${URL}/skip-first-post`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const getRecommandedPost = () => {
   return axios.get(`${URL}/recommanded`, {
     withCredentials: true,
