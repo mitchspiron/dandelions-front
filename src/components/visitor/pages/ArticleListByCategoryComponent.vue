@@ -8,48 +8,59 @@
               class="mb-4 d-inline-block"
               style="border-bottom: 1px solid #582456"
             >
-              Travel
+              {{ titre }}
             </h1>
           </div>
           <div class="col-lg-8 mb-5 mb-lg-0">
             <div class="row">
               <div
                 class="col-md-6 mb-4"
-                v-for="(article, i) in articles"
-                :key="i"
+                v-for="article in articles"
+                :key="article.id"
               >
                 <article class="card article-card article-card-sm h-100">
-                  <a href="">
+                  <router-link
+                    :to="{
+                      name: 'ArticleBySlug',
+                      params: { slug: article.slug },
+                    }"
+                  >
                     <div class="card-image">
                       <div class="post-info">
-                        <span class="text-uppercase">{{ article.date }}</span>
+                        <span class="text-uppercase">{{
+                          article.createdAt
+                        }}</span>
                       </div>
                       <img
                         loading="lazy"
                         decoding="async"
-                        :src="article.img"
+                        :src="PROFIL_IMAGE + article.illustration"
                         alt="Post Thumbnail"
-                        class="w-100"
+                        class="img-thumbnail"
                       />
                     </div>
-                  </a>
+                  </router-link>
                   <div class="card-body px-0 pb-0">
-                    <ul class="post-meta mb-2">
-                      <li>
-                        <a href="">{{ article.category }}</a>
-                      </li>
-                    </ul>
                     <h2>
-                      <a class="post-title" href="">{{ article.title }}</a>
+                      <router-link
+                        :to="{
+                          name: 'ArticleBySlug',
+                          params: { slug: article.slug },
+                        }"
+                        class="post-title"
+                        >{{ article.titre }}</router-link
+                      >
                     </h2>
-                    <p class="card-text">
-                      {{ article.text }}
+                    <p class="card-text description">
+                      {{ article.description }}
                     </p>
                     <div class="content">
                       <router-link
-                        to="/article/slug"
+                        :to="{
+                          name: 'ArticleBySlug',
+                          params: { slug: article.slug },
+                        }"
                         class="read-more-btn"
-                        href=""
                         >Read Full Article</router-link
                       >
                     </div>
@@ -129,6 +140,8 @@
 </template>
 
 <script>
+import { getPublishedPostBySlug } from "../../../api/post";
+import { PROFIL_IMAGE } from "../../../configs";
 import ArticleSide from "./ArticleSide.vue";
 export default {
   name: "ArticleListByCategoryComponent",
@@ -137,68 +150,33 @@ export default {
   },
   data() {
     return {
-      articles: [
-        {
-          img: require("../../../assets/img/post/ls-2.jpg"),
-          title: "What to Do in Houston: Ideas for Your Visit",
-          category: "lifestyle",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna
-                …`,
-          date: "02 Jun 2021",
-        },
-        {
-          img: require("../../../assets/img/post/cr-1.jpg"),
-          title: "What to Do in Houston: Ideas for Your Visit",
-          category: "lifestyle",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna
-                …`,
-          date: "02 Jun 2021",
-        },
-        {
-          img: require("../../../assets/img/post/cr-2.jpg"),
-          title: "What to Do in Houston: Ideas for Your Visit",
-          category: "lifestyle",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna
-                …`,
-          date: "02 Jun 2021",
-        },
-        {
-          img: require("../../../assets/img/post/post-4.jpg"),
-          title: "What to Do in Houston: Ideas for Your Visit",
-          category: "lifestyle",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna
-                …`,
-          date: "02 Jun 2021",
-        },
-        {
-          img: require("../../../assets/img/post/cr-2.jpg"),
-          title: "What to Do in Houston: Ideas for Your Visit",
-          category: "lifestyle",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna
-                …`,
-          date: "02 Jun 2021",
-        },
-        {
-          img: require("../../../assets/img/post/post-4.jpg"),
-          title: "What to Do in Houston: Ideas for Your Visit",
-          category: "lifestyle",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna
-                …`,
-          date: "02 Jun 2021",
-        },
-      ],
+      articles: [],
+      titre: "",
+      PROFIL_IMAGE: PROFIL_IMAGE,
     };
+  },
+  methods: {
+    fetch() {
+      getPublishedPostBySlug(this.$route.params.slug).then((result) => {
+        this.articles = result.data;
+        this.titre = result.data[0].categorie_article.nomCategorie;
+      });
+    },
+  },
+  mounted() {
+    this.fetch();
   },
 };
 </script>
 
 <style scoped>
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
 p {
   font-weight: 400;
   color: #333;
@@ -293,7 +271,7 @@ img {
   vertical-align: middle;
   border: 0;
   max-width: 100%;
-  height: auto;
+  height: 240px;
 }
 
 a,
