@@ -78,7 +78,7 @@
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
               <input
-                v-if="post.etat_article.id !== 5"
+                v-if="post.etat_article.id !== 5 || post.recommadee == true"
                 disabled
                 class="visually-hidden form-check-input"
                 type="checkbox"
@@ -99,7 +99,7 @@
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
               <input
-                v-if="post.etat_article.id !== 5"
+                v-if="post.etat_article.id !== 5 || post.top == true"
                 disabled
                 class="visually-hidden form-check-input"
                 type="checkbox"
