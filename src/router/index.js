@@ -62,11 +62,11 @@ const routes = [
     },
   },
   {
-    path: "/article/categorie",
+    path: "/article/categorie/:slug",
     name: "ArticleListByCategory",
     component: ArticleListByCategory,
     meta: {
-      title: "Détails d'article",
+      title: "Liste d'article par catégorie",
     },
   },
   {
@@ -82,7 +82,7 @@ const routes = [
     name: "ArticleBySlug",
     component: ArticleBySlug,
     meta: {
-      title: "Liste d'article par catégorie",
+      title: "Détails d'article",
     },
   },
   {

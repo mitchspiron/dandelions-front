@@ -62,7 +62,7 @@ export default {
       illustration: "",
     };
   },
-  created() {
+  mounted() {
     this.fetch();
   },
   methods: {

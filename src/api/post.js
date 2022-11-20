@@ -12,6 +12,24 @@ export const getPost = () => {
   });
 };
 
+export const getRecommandedPost = () => {
+  return axios.get(`${URL}/recommanded`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const getTopPost = () => {
+  return axios.get(`${URL}/top`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const getPostBySlug = (slug) => {
   return axios.get(`${URL}/${slug}`, {
     withCredentials: true,
@@ -86,6 +104,15 @@ export const updateStateBySlug = (slug, data) => {
 
 export const switchToRecommandedBySlug = (slug, data) => {
   return axios.put(`${URL}/switch-recommanded/${slug}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const switchTopBySlug = (slug, data) => {
+  return axios.put(`${URL}/switch-top/${slug}`, data, {
     withCredentials: true,
     headers: {
       Authorization: "Bearer " + localStorage.getItem("dandelions_token"),

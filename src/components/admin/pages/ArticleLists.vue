@@ -77,12 +77,40 @@
           <td class="text-muted">{{ post.categorie_article.nomCategorie }}</td>
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" />
+              <input
+                v-if="post.etat_article.id !== 5"
+                disabled
+                class="visually-hidden form-check-input"
+                type="checkbox"
+                :checked="post.top"
+                @input="(event) => (text = event.target.checked)"
+                @change="switchTop(post.slug, post.top, $event)"
+              />
+              <input
+                v-else
+                class="form-check-input"
+                type="checkbox"
+                :checked="post.top"
+                @input="(event) => (text = event.target.checked)"
+                @change="switchTop(post.slug, post.top, $event)"
+              />
             </div>
           </td>
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
               <input
+                v-if="post.etat_article.id !== 5"
+                disabled
+                class="visually-hidden form-check-input"
+                type="checkbox"
+                :checked="post.recommadee"
+                @input="(event) => (text = event.target.checked)"
+                @change="
+                  switchToRecommanded(post.slug, post.recommadee, $event)
+                "
+              />
+              <input
+                v-else
                 class="form-check-input"
                 type="checkbox"
                 :checked="post.recommadee"
@@ -185,6 +213,7 @@
 import { useToast } from "vue-toastification";
 import {
   getPost,
+  switchTopBySlug,
   switchToRecommandedBySlug,
   updateStateBySlug,
 } from "../../../api/post";
@@ -195,7 +224,7 @@ export default {
     return {
       posts: [],
       article: { etat: null },
-      switch: { recommadee: true || false },
+      switch: { recommadee: true || false, top: true || false },
     };
   },
   methods: {
@@ -235,6 +264,32 @@ export default {
         switchToRecommandedBySlug(slug, etat)
           .then(() => {
             toast.success("L'article n'est plus recommandé");
+            this.fetch();
+          })
+          .catch(() => {
+            toast.error("Une erreur est survenue!");
+          });
+      }
+    },
+    switchTop(slug, etat, event) {
+      const toast = useToast();
+      if (event.target.checked) {
+        this.switch.top = true;
+        etat = this.switch;
+        switchTopBySlug(slug, etat)
+          .then(() => {
+            toast.success("L'article est le top");
+            this.fetch();
+          })
+          .catch(() => {
+            toast.error("Une erreur est survenue!");
+          });
+      } else {
+        this.switch.top = false;
+        etat = this.switch;
+        switchTopBySlug(slug, etat)
+          .then(() => {
+            toast.success("L'article n'est plus le top");
             this.fetch();
           })
           .catch(() => {

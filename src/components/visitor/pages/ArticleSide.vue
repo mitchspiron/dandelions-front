@@ -9,7 +9,7 @@
               decoding="async"
               src="../../../assets/img/author.jpg"
               alt="About Me"
-              class="w-100 author-thumb-sm d-block"
+              class="w-100 author-thumb-sm img-thumbnail d-block"
             />
             <h2 class="widget-title my-3">Hootan Safiyari</h2>
             <p class="mb-3 pb-2">
@@ -30,36 +30,37 @@
           <h2 class="section-title mb-3">Recommended</h2>
           <div class="widget-body">
             <div class="widget-list">
-              <article class="card mb-4">
+              <article v-for="top in tops" :key="top.id" class="card mb-4">
                 <div class="card-image">
-                  <div class="post-info">
-                    <span class="text-uppercase">1 minutes read</span>
-                  </div>
                   <img
                     loading="lazy"
                     decoding="async"
-                    src="../../../assets/img/post/post-9.jpg"
+                    :src="PROFIL_IMAGE + top.illustration"
                     alt="Post Thumbnail"
-                    class="w-100"
+                    class="w-100 img-thumbnail"
                   />
                 </div>
                 <div class="card-body px-0 pb-1">
                   <h3>
                     <router-link
-                      to="/article/slug"
+                      :to="{
+                        name: 'ArticleBySlug',
+                        params: { slug: top.slug },
+                      }"
                       class="post-title post-title-sm"
                       href=""
-                      >Portugal and France Now Allow Unvaccinated
-                      Tourists</router-link
+                      >{{ top.titre }}</router-link
                     >
                   </h3>
-                  <p class="card-text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor …
+                  <p class="card-text description">
+                    {{ top.description }}
                   </p>
                   <div class="content">
                     <router-link
-                      to="/article/slug"
+                      :to="{
+                        name: 'ArticleBySlug',
+                        params: { slug: top.slug },
+                      }"
                       class="read-more-btn"
                       href=""
                       >Read Full Article</router-link
@@ -69,26 +70,29 @@
               </article>
               <div
                 class="media"
-                v-for="(recommendation, i) in recommendations"
+                v-for="(recommandation, i) in recommandations"
                 :key="i"
               >
                 <router-link
-                  to="/article/slug"
+                  :to="{
+                    name: 'ArticleBySlug',
+                    params: { slug: recommandation.slug },
+                  }"
                   class="d-flex align-items-center"
                 >
                   <img
                     loading="lazy"
                     decoding="async"
-                    :src="recommendation.img"
+                    :src="PROFIL_IMAGE + recommandation.illustration"
                     alt="Post Thumbnail"
-                    class="w-100"
+                    class="w-100 img-thumbnail"
                   />
                   <div class="media-body">
                     <h3 style="margin-top: -5px">
-                      {{ recommendation.title }}
+                      {{ recommandation.titre }}
                     </h3>
-                    <p class="mb-0 small">
-                      {{ recommendation.text }}
+                    <p class="mb-0 small description">
+                      {{ recommandation.description }}
                     </p>
                   </div>
                 </router-link>
@@ -102,11 +106,15 @@
           <h2 class="section-title mb-3">Categories</h2>
           <div class="widget-body">
             <ul class="widget-list">
-              <li v-for="(category, i) in categories" :key="i">
-                <router-link to="/article/categorie"
-                  >{{ category.name
+              <li v-for="category in categories" :key="category.id">
+                <router-link
+                  :to="{
+                    name: 'ArticleListByCategory',
+                    params: { slug: category.slug },
+                  }"
+                  >{{ category.nomCategorie
                   }}<span class="ml-auto"
-                    >({{ category.count }})</span
+                    >({{ category._count.article }})</span
                   ></router-link
                 >
               </li>
@@ -119,85 +127,53 @@
 </template>
 
 <script>
+import { getRecommandedPost, getTopPost } from "../../../api/post";
+import { getPostCategory } from "../../../api/post-category";
+import { PROFIL_IMAGE } from "../../../configs";
 export default {
   name: "ArticleSide",
   components: {},
   data() {
     return {
-      categories: [
-        {
-          name: "Computer",
-          count: 3,
-        },
-        {
-          name: "Cruises",
-          count: 2,
-        },
-        {
-          name: "Destination",
-          count: 1,
-        },
-        {
-          name: "Internet",
-          count: 4,
-        },
-        {
-          name: "Lifestyle",
-          count: 2,
-        },
-        {
-          name: "News",
-          count: 5,
-        },
-        {
-          name: "Telephone",
-          count: 1,
-        },
-        {
-          name: "Tips",
-          count: 1,
-        },
-        {
-          name: "Travel",
-          count: 3,
-        },
-        {
-          name: "Website",
-          count: 4,
-        },
-        {
-          name: "Hugo",
-          count: 2,
-        },
-      ],
-      recommendations: [
-        {
-          img: require("../../../assets/img/post/post-2.jpg"),
-          title: "These Are Making It Easier To Visit",
-          text: `Heading Here is example of hedings. You can use …`,
-        },
-        {
-          img: require("../../../assets/img/post/ls-2.jpg"),
-          title: "No Image Specified",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing …`,
-        },
-        {
-          img: require("../../../assets/img/post/post-5.jpg"),
-          title: "Perfect For Fashion",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing …`,
-        },
-        {
-          img: require("../../../assets/img/post/post-9.jpg"),
-          title: "Record Utra Smooth Video",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing …`,
-        },
-      ],
+      categories: [],
+      recommandations: [],
+      tops: [],
+      PROFIL_IMAGE: PROFIL_IMAGE,
     };
+  },
+  methods: {
+    fetch() {
+      getPostCategory().then((result) => {
+        this.categories = result.data;
+      });
+    },
+    fetchRecommandation() {
+      getRecommandedPost().then((result) => {
+        this.recommandations = result.data;
+      });
+    },
+    fetchTop() {
+      getTopPost().then((result) => {
+        this.tops = result.data;
+      });
+    },
+  },
+  mounted() {
+    this.fetch();
+    this.fetchRecommandation();
+    this.fetchTop();
   },
 };
 </script>
 
 <style scoped>
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 p {
   font-weight: 400;
   color: #333;
