@@ -44,7 +44,7 @@
           <router-link to="/evenement" class="btn btn-link"
             >Evénements</router-link
           >
-          <router-link to="/enterprise" class="btn btn-link"
+          <router-link to="/entreprise" class="btn btn-link"
             >Enterprises</router-link
           >
           <router-link to="/contact" class="btn btn-link" href=""

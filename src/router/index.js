@@ -31,6 +31,7 @@ import UserNew from "../views/admin/UserNew.vue";
 import CategoryNew from "../views/admin/CategoryNew.vue";
 import CategoryEdit from "../views/admin/CategoryEdit.vue";
 import EnterpriseNew from "../views/admin/EnterpriseNew.vue";
+import EnterpriseEdit from "../views/admin/EnterpriseEdit.vue";
 import ArticleNew from "../views/admin/ArticleNew.vue";
 import ArticleEdit from "../views/admin/ArticleEdit.vue";
 
@@ -102,7 +103,7 @@ const routes = [
     },
   },
   {
-    path: "/enterprise/name",
+    path: "/entreprise/:slug",
     name: "EnterpriseProfil",
     component: EnterpriseProfil,
     meta: {
@@ -118,7 +119,7 @@ const routes = [
     },
   },
   {
-    path: "/enterprise",
+    path: "/entreprise",
     name: "Enterprises",
     component: Enterprises,
     meta: {
@@ -216,14 +217,19 @@ const routes = [
     component: CategoryEdit,
   },
   {
-    path: "/admin/enterprise",
+    path: "/admin/entreprise",
     name: "EnterprisesAdmin",
     component: EnterprisesAdmin,
   },
   {
-    path: "/admin/enterprise/nouveau",
+    path: "/admin/entreprise/nouveau",
     name: "EnterpriseNew",
     component: EnterpriseNew,
+  },
+  {
+    path: "/admin/entreprise/:slug",
+    name: "EnterpriseEdit",
+    component: EnterpriseEdit,
   },
 ];
 

@@ -211,7 +211,6 @@ export default {
             .then(() => {
               this.loading = false;
               this.$store.dispatch("userStore/setConnected");
-              toast.success("Article ajouté illustration profil réussi");
               this.$swal(
                 "Article ajouté avec succès",
                 "L'article sera publié après approbation de l'admiistrateur",

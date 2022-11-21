@@ -12,7 +12,7 @@
               class="w-100 author-thumb-sm d-block"
             />
             <h2 class="widget-title my-3">
-              <router-link to="/enterprise/name">Amazon</router-link>
+              <router-link to="/entreprise/name">Amazon</router-link>
             </h2>
             <p class="mb-3 pb-2">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

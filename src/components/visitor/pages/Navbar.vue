@@ -30,7 +30,7 @@
         <router-link to="/evenement" class="nav-item nav-link"
           >Evénements</router-link
         >
-        <router-link to="/enterprise" class="nav-item nav-link"
+        <router-link to="/entreprise" class="nav-item nav-link"
           >Enterprises</router-link
         >
         <router-link to="/contact" class="nav-item nav-link"
@@ -62,7 +62,6 @@
     <a
       v-if="isLoggedIn"
       class="nav-link nav-profile d-flex align-items-center pe-3"
-      href="#"
       data-bs-toggle="dropdown"
     >
       <img

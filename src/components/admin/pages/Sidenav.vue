@@ -2,12 +2,12 @@
   <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
       <li class="nav-item">
-        <router-link to="/admin" class="nav-link collapsed">
+        <router-link to="/" class="nav-link collapsed">
           <i class="bi bi-speedometer2"></i>
           <span>Dashboard</span>
         </router-link>
       </li>
-      <li class="nav-item">
+      <li v-if="(me.roleUser || me.role) == 1" class="nav-item">
         <router-link to="/utilisateur" class="nav-link collapsed">
           <i class="bi bi-people"></i>
           <span>Utilisateurs</span>
@@ -32,7 +32,7 @@
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link to="/admin/enterprise" class="nav-link collapsed">
+        <router-link to="/admin/entreprise" class="nav-link collapsed">
           <i class="bi bi-building"></i>
           <span>Entreprises</span>
         </router-link>
@@ -66,6 +66,11 @@
 export default {
   name: "Sidenav",
   components: {},
+  computed: {
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+  },
 };
 </script>
 <style scoped>

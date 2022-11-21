@@ -15,34 +15,44 @@
             <div class="row">
               <div
                 class="col-md-3 mb-4"
-                v-for="(article, i) in articles"
-                :key="i"
+                v-for="enterprise in enterprises"
+                :key="enterprise.id"
               >
                 <article class="card article-card article-card-sm h-100">
-                  <router-link to="/enterprise/name">
+                  <router-link
+                    :to="{
+                      name: 'EnterpriseProfil',
+                      params: { slug: enterprise.slug },
+                    }"
+                  >
                     <div class="card-image">
                       <img
                         loading="lazy"
                         decoding="async"
-                        :src="article.img"
+                        :src="PROFIL_IMAGE + enterprise.illustration"
                         alt="Post Thumbnail"
-                        class="w-100"
+                        class="w-100 img-thumbnail"
                       />
                     </div>
                   </router-link>
                   <div class="card-body px-0 pb-0">
                     <h2>
-                      <router-link to="/enterprise/name" class="post-title">{{
-                        article.name
-                      }}</router-link>
+                      <router-link
+                        :to="{
+                          name: 'EnterpriseProfil',
+                          params: { slug: enterprise.slug },
+                        }"
+                        class="post-title"
+                        >{{ enterprise.nom }}</router-link
+                      >
                     </h2>
-                    <p class="card-text">
-                      {{ article.text }}
+                    <p class="card-text description">
+                      {{ enterprise.descriptionA }}
                     </p>
                     <!-- 
                     <div class="content">
                       <router-link
-                        to="/enterprise/name"
+                        to="/entreprise/name"
                         class="read-more-btn"
                         href=""
                         >Know More</router-link
@@ -121,75 +131,38 @@
 </template>
 
 <script>
+import { getEnterprise } from "../../../api/enterprise.";
+import { PROFIL_IMAGE } from "../../../configs";
 export default {
   name: "EnterpriseLists",
   components: {},
   data() {
     return {
-      articles: [
-        {
-          img: require("../../../assets/img/company/amazon.jpg"),
-          name: "Amazon",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-        },
-        {
-          img: require("../../../assets/img/company/apple.jpg"),
-          name: "Apple",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-        },
-        {
-          img: require("../../../assets/img/company/google.jpg"),
-          name: "Google",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-        },
-        {
-          img: require("../../../assets/img/company/meta.jpg"),
-          name: "Meta",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-        },
-        {
-          img: require("../../../assets/img/company/twitter.jpg"),
-          name: "Twitter",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-        },
-        {
-          img: require("../../../assets/img/company/glassdoor.png"),
-          name: "Glassdoor",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-        },
-        {
-          img: require("../../../assets/img/company/microsoft.jpg"),
-          name: "Microsoft",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-        },
-        {
-          img: require("../../../assets/img/company/pixar.jpeg"),
-          name: "Pixar",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-        },
-      ],
+      enterprises: [],
+      PROFIL_IMAGE: PROFIL_IMAGE,
     };
+  },
+  methods: {
+    fetch() {
+      getEnterprise().then((result) => {
+        this.enterprises = result.data;
+      });
+    },
+  },
+  mounted() {
+    this.fetch();
   },
 };
 </script>
 
 <style scoped>
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
 p {
   font-weight: 400;
   color: #333;
@@ -284,7 +257,7 @@ img {
   vertical-align: middle;
   border: 0;
   max-width: 100%;
-  height: auto;
+  height: 150px;
 }
 
 a,

@@ -11,7 +11,7 @@
             <div class="meta-data">
               <Popper placement="auto" hover="true"
                 ><span class="commented-person-name"
-                  ><router-link to="/enterprise/name" class="text-dark">{{
+                  ><router-link to="/entreprise/name" class="text-dark">{{
                     comment.name
                   }}</router-link></span
                 >
@@ -20,7 +20,7 @@
                   <div class="card border-0 shadow-lg" style="max-width: 540px">
                     <div class="media">
                       <router-link
-                        to="/enterprise/name"
+                        to="/entreprise/name"
                         class="d-flex align-items-center"
                       >
                         <img
@@ -73,7 +73,7 @@
                 <div class="meta-data">
                   <Popper placement="auto" hover="true"
                     ><span class="commented-person-name"
-                      ><router-link to="/enterprise/name" class="text-dark">{{
+                      ><router-link to="/entreprise/name" class="text-dark">{{
                         comment.reply.name
                       }}</router-link></span
                     >
@@ -85,7 +85,7 @@
                       >
                         <div class="media">
                           <router-link
-                            to="/enterprise/name"
+                            to="/entreprise/name"
                             class="d-flex align-items-center"
                           >
                             <img

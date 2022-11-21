@@ -78,7 +78,16 @@
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
               <input
-                v-if="post.etat_article.id !== 5 || post.recommadee == true"
+                v-if="(me.roleUser || me.role) !== 1"
+                disabled
+                class="form-check-input"
+                type="checkbox"
+                :checked="post.top"
+              />
+              <input
+                v-else-if="
+                  post.etat_article.id !== 5 || post.recommadee == true
+                "
                 disabled
                 class="visually-hidden form-check-input"
                 type="checkbox"
@@ -99,7 +108,14 @@
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
               <input
-                v-if="post.etat_article.id !== 5 || post.top == true"
+                v-if="(me.roleUser || me.role) !== 1"
+                disabled
+                class="form-check-input"
+                type="checkbox"
+                :checked="post.recommadee"
+              />
+              <input
+                v-else-if="post.etat_article.id !== 5 || post.top == true"
                 disabled
                 class="visually-hidden form-check-input"
                 type="checkbox"
@@ -166,7 +182,12 @@
               >
                 <i class="fa-regular fa-pen-to-square"></i>
               </router-link>
-              <a type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a
+                v-if="(me.roleUser || me.role) == 1"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
                 <i class="bi bi-three-dots-vertical"></i>
               </a>
               <ul class="dropdown-menu">
@@ -226,6 +247,11 @@ export default {
       article: { etat: null },
       switch: { recommadee: true || false, top: true || false },
     };
+  },
+  computed: {
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
   },
   methods: {
     fetch() {

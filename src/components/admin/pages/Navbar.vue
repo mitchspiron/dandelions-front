@@ -1,7 +1,7 @@
 <template>
   <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
-      <router-link to="/admin" class="logo d-flex align-items-center">
+      <router-link to="/" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="" />
         <span class="d-none d-lg-block">Dandelions Admin</span>
       </router-link>
@@ -46,46 +46,46 @@
         </li>
         <li class="nav-item dropdown pe-3">
           <a
+            v-if="isLoggedIn"
             class="nav-link nav-profile d-flex align-items-center pe-0"
-            href="#"
             data-bs-toggle="dropdown"
           >
             <img
-              src="../../../assets/img/profile.jpg"
+              :src="PROFIL_IMAGE + (me.illustrationUser || me.illustration)"
+              style="width: 37px; height: 40px"
               alt="Profile"
-              class="rounded-circle"
+              class="rounded-circle img-thumbnail"
             />
-            <span class="d-none d-md-block dropdown-toggle ps-2"
-              >K. Anderson</span
-            >
+            <span class="d-none d-md-block dropdown-toggle ps-2">{{
+              me.prenomUser || me.prenom
+            }}</span>
           </a>
           <ul
             class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile"
           >
-            <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
-            </li>
             <li>
               <hr class="dropdown-divider" />
             </li>
 
             <li>
-              <a
+              <router-link
+                to="/mon-espace"
                 class="dropdown-item d-flex align-items-center"
-                href="users-profile.html"
               >
                 <i class="bi bi-person"></i>
-                <span>My Profile</span>
-              </a>
+                <span>Mon espace</span>
+              </router-link>
             </li>
             <li>
               <hr class="dropdown-divider" />
             </li>
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a
+                class="dropdown-item d-flex align-items-center"
+                @click="disconnect"
+              >
                 <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
+                <span>Se déconnecter</span>
               </a>
             </li>
           </ul>
@@ -95,9 +95,37 @@
   </header>
 </template>
 <script>
+import { useToast } from "vue-toastification";
+import { PROFIL_IMAGE } from "../../../configs";
 export default {
   name: "Navbar",
   components: {},
+  data() {
+    return {
+      PROFIL_IMAGE: PROFIL_IMAGE,
+    };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters["userStore/isLoggedIn"];
+    },
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+  },
+  methods: {
+    redirectToProfil() {
+      this.$router.push(`/mon-espace/`);
+    },
+    disconnect() {
+      const toast = useToast();
+      localStorage.removeItem("dandelions_token");
+      this.$store.dispatch("userStore/setUser", {});
+      this.$store.dispatch("userStore/setDisconnected");
+      this.$router.push(this.$route.query.redirect || "/");
+      toast.info("Vous êtes déconnecté");
+    },
+  },
 };
 </script>
 <style scoped>

@@ -1,14 +1,15 @@
 <template>
   <form
-    @submit.prevent="confirm"
+    @submit.prevent="confirmIllustration"
     enctype="multipart/form-data"
     autocomplete="off"
-    class="col-md-12 shadow-lg border-0 mb-5"
+    class="col-md-12 shadow-lg border-0 mb-3"
   >
     <div class="card border-0">
       <div class="card-body">
         <div class="col-md-12">
           <div class="mb-3 mt-md-1">
+            <h3 class="fw-bold text-uppercase">Illustration de l'entreprise</h3>
             <div
               class="d-flex align-items-start align-items-sm-center mb-3 gap-4"
             >
@@ -43,6 +44,35 @@
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer py-2 px-3">
+        <div class="col-md-12">
+          <div class="d-flex align-items-center">
+            <h4 class="mb-0">Modification de l'illustration</h4>
+            <button
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+            >
+              Modifier
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- --------------------- -->
+  <form
+    @submit.prevent="confirm"
+    autocomplete="off"
+    class="col-md-12 shadow-lg border-0 mb-5"
+  >
+    <div class="card border-0">
+      <div class="card-body">
+        <div class="col-md-12">
+          <div class="mb-3 mt-md-1">
+            <h3 class="fw-bold text-uppercase">Information de l'article</h3>
             <div class="d-flex justify-content-between mb-3 gap-1">
               <div class="col-4 form-floating">
                 <input
@@ -150,12 +180,12 @@
       <div class="card-footer py-2 px-3">
         <div class="col-md-12">
           <div class="d-flex align-items-center">
-            <h4 class="mb-0">Ajout entreprise</h4>
+            <h4 class="mb-0">Modification de l'information</h4>
             <button
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
-              Ajouter
+              Modifier
             </button>
           </div>
         </div>
@@ -165,7 +195,12 @@
 </template>
 <script>
 import { useToast } from "vue-toastification";
-import { createEnterprise, uploadedFile } from "../../../api/enterprise.";
+import {
+  getEnterpriseBySlug,
+  updateEnterpriseBySlug,
+  updateIllustrationById,
+  uploadedFile,
+} from "../../../api/enterprise.";
 
 export default {
   name: "EnterpriseForm",
@@ -173,8 +208,6 @@ export default {
   data() {
     return {
       form: {
-        idRedacteur: "",
-        illustration: "",
         nom: "",
         brand: "",
         email: "",
@@ -186,6 +219,9 @@ export default {
         textContact: "",
       },
       file: "",
+      image: {
+        illustration: "",
+      },
       loading: false,
     };
   },
@@ -195,6 +231,11 @@ export default {
     },
   },
   methods: {
+    fetch() {
+      getEnterpriseBySlug(this.$route.params.slug).then((result) => {
+        this.form = result.data;
+      });
+    },
     avatar() {
       const FILE_INPUT = document.querySelector("input[type=file]");
       const AVATAR = document.getElementById("avatar");
@@ -215,37 +256,51 @@ export default {
       const file = this.$refs.file.files[0];
       this.file = file;
     },
-    confirm() {
+    confirmIllustration() {
       const toast = useToast();
-      this.loading = true;
       let formData = new FormData();
       formData.append("file", this.file);
       uploadedFile(formData)
         .then((result) => {
-          this.form.idRedacteur = this.me.sub || this.me.id;
-          this.form.illustration = result.data.filename;
-          createEnterprise(this.form)
+          this.image.illustration = result.data.filename;
+          updateIllustrationById(
+            this.$route.params.slug,
+            this.me.sub || this.me.id,
+            this.image
+          )
             .then(() => {
-              this.loading = false;
-              this.$store.dispatch("userStore/setConnected");
-              toast.success("Entreprise ajoutée");
+              toast.success("Modification illustration d'entreprise réussi");
               this.$router.push(
                 this.$route.query.redirect || "/admin/entreprise"
               );
             })
             .catch((e) => {
-              this.loading = false;
               toast.info(e.response.data.message);
             });
         })
         .catch((e) => {
-          this.loading = false;
-          toast.error(e.response.data.message);
+          console.log("erreur", e);
+        });
+    },
+    confirm() {
+      const toast = useToast();
+      updateEnterpriseBySlug(
+        this.$route.params.slug,
+        this.me.sub || this.me.id,
+        this.form
+      )
+        .then(() => {
+          toast.success("Modification entreprise réussi");
+          this.$router.push(this.$route.query.redirect || "/admin/entreprise");
+        })
+        .catch((e) => {
+          toast.info(e.response.data.message);
         });
     },
   },
   mounted() {
     this.avatar();
+    this.fetch();
   },
 };
 </script>
