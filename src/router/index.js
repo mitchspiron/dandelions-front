@@ -95,7 +95,7 @@ const routes = [
     },
   },
   {
-    path: "/login",
+    path: "/se-connecter",
     name: "Login",
     component: Login,
     meta: {

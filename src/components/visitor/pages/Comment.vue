@@ -1,33 +1,37 @@
 <template>
   <div id="comments" class="comments-block block">
     <h3 class="news-title">
-      <span>02 Comments</span>
+      <span>{{ comments.length }} Commentaires</span>
     </h3>
     <ul class="all-comments">
       <li v-for="(comment, i) in comments" :key="i">
         <div class="comment">
-          <img class="commented-person" alt="" :src="comment.img" />
+          <img
+            class="commented-person img-thumbnail rounded-circle"
+            alt=""
+            :src="PROFIL_IMAGE + comment.utilisateur.illustration"
+          />
           <div class="comment-body">
             <div class="meta-data">
               <Popper placement="auto" hover="true"
                 ><span class="commented-person-name"
-                  ><router-link to="/entreprise/name" class="text-dark">{{
-                    comment.name
+                  ><router-link to="/enterprise/name" class="text-dark">{{
+                    comment.utilisateur.prenom
                   }}</router-link></span
                 >
 
-                <template #content>
+                <!-- <template #content>
                   <div class="card border-0 shadow-lg" style="max-width: 540px">
                     <div class="media">
                       <router-link
-                        to="/entreprise/name"
+                        to="/enterprise/name"
                         class="d-flex align-items-center"
                       >
                         <img
                           loading="lazy"
                           decoding="async"
                           :src="comment.img"
-                          alt="Post Thumbnail"
+                          alt="Post Thumbnail img-thumbnail"
                           class="w-100"
                         />
                         <div class="media-body">
@@ -37,114 +41,83 @@
                           <p class="mb-0 small text-dark">
                             {{ comment.content }}
                           </p>
-                          <!-- <div class="content">
-                            <router-link
-                              to="/article/slug"
-                              class="read-more-btn"
-                              href=""
-                              >Read Full Article -></router-link
-                            >
-                          </div> -->
                         </div>
                       </router-link>
                     </div>
                   </div>
-                </template>
+                </template> -->
               </Popper>
-              <span class="comment-hour d-block">{{ comment.datetime }}</span>
+              <span class="comment-hour d-block">{{ comment.createdAt }}</span>
             </div>
             <div class="comment-content">
               <p>
-                {{ comment.content }}
+                {{ comment.contenu }}
               </p>
             </div>
-            <div class="text-left">
-              <a class="comment-reply" href="#"
-                ><i class="fa fa-reply"></i> Reply</a
-              >
-            </div>
-          </div>
-        </div>
-        <ul class="comments-reply" v-if="comment.reply">
-          <li>
-            <div class="comment">
-              <img class="commented-person" alt="" :src="comment.reply.img" />
-              <div class="comment-body">
-                <div class="meta-data">
-                  <Popper placement="auto" hover="true"
-                    ><span class="commented-person-name"
-                      ><router-link to="/entreprise/name" class="text-dark">{{
-                        comment.reply.name
-                      }}</router-link></span
-                    >
-
-                    <template #content>
-                      <div
-                        class="card border-0 shadow-lg"
-                        style="max-width: 540px"
-                      >
-                        <div class="media">
-                          <router-link
-                            to="/entreprise/name"
-                            class="d-flex align-items-center"
-                          >
-                            <img
-                              loading="lazy"
-                              decoding="async"
-                              :src="comment.reply.img"
-                              alt="Post Thumbnail"
-                              class="w-100"
-                            />
-                            <div class="media-body">
-                              <h3 style="margin-top: -5px">
-                                {{ comment.reply.name }}
-                              </h3>
-                              <p class="mb-0 small text-dark">
-                                {{ comment.reply.content }}
-                              </p>
-                              <!-- <div class="content">
-                                <router-link
-                                  to="/article/slug"
-                                  class="read-more-btn"
-                                  href=""
-                                  >Read Full Article -></router-link
-                                >
-                              </div> -->
-                            </div>
-                          </router-link>
-                        </div>
-                      </div>
-                    </template>
-                  </Popper>
-                  <span class="comment-hour d-block">{{
-                    comment.reply.datetime
-                  }}</span>
-                </div>
-                <div class="comment-content">
-                  <p>
-                    {{ comment.reply.content }}
-                  </p>
+            <form v-if="isLoggedIn" role="form" autocomplete="off">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <textarea
+                      @focus="checkIsLoggin"
+                      class="form-control required-field"
+                      id="message"
+                      rows="1"
+                      placeholder="Réponse"
+                      v-model.lazy="formReply.contenu"
+                      autocomplete="off"
+                      required
+                    ></textarea>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-        </ul>
+              <div class="text-left d-flex gap-2 mt-2">
+                <a
+                  @click="confirmReply(comment.id, formReply)"
+                  class="comment-reply"
+                  type="submit"
+                  ><i class="fa fa-reply"></i> Répondre</a
+                >
+                <a
+                  v-if="(me.sub || me.id) == comment.utilisateur.id"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalModifier"
+                  @click="updateComment(comment.id, comment.contenu)"
+                  class="comment-reply"
+                  ><i class="bi bi-pen"></i
+                ></a>
+                <a
+                  v-if="(me.sub || me.id) == comment.utilisateur.id"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalDelete"
+                  @click="initDeleteComment(comment.id)"
+                  class="comment-reply"
+                  ><i class="bi bi-trash"></i
+                ></a>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- reponse -->
+        <Reply :idCommentaire="comment.id" />
       </li>
     </ul>
   </div>
-
+  <!-- ------------------------------COMMENT FORM------------------------------------- -->
   <div class="comment-form">
-    <h3 class="title-normal">Leave a Reply</h3>
-    <p class="mb-4">Your email address will not be published.</p>
-    <form role="form">
+    <h3 class="title-normal">Laissez un commentaire</h3>
+    <p class="mb-3">Votre adresse email ne sera pas publié.</p>
+    <form @submit.prevent="confirmComment" role="form" autocomplete="off">
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
             <textarea
+              @focus="checkIsLoggin"
               class="form-control required-field"
               id="message"
-              placeholder="Messege"
-              rows="8"
+              placeholder="Commentaire"
+              autocomplete="off"
+              v-model="form.contenu"
               required
             ></textarea>
           </div>
@@ -155,54 +128,241 @@
             class="comments-btn btn btn-sm btn-outline-primary"
             type="submit"
           >
-            Post Comment
+            Commenter
           </button>
         </div>
       </div>
     </form>
   </div>
+
+  <!-- -----------------------------------MODAL UPDATE COMMENTAIRE------------------------------------------ -->
+  <div
+    class="modal fade"
+    id="modalModifier"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    aria-labelledby="modalLabelModifier"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <form
+        @submit.prevent="confirmUpdateComment"
+        class="modal-content border-0 bg-light text-dark"
+      >
+        <div class="modal-header mx-2">
+          <h4 class="modal-title text-dark" id="modalLabelModifier">
+            Modifier le commentaire
+          </h4>
+        </div>
+        <div class="modal-body">
+          <section class="row p-2">
+            <div class="col-12">
+              <textarea
+                class="form-control"
+                id="inputMessage"
+                rows="4"
+                required
+                v-model="formUpdateComment.contenu"
+                style="resize: none"
+              ></textarea>
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer mx-2">
+          <button type="submit" class="btn px-3" style="background: #582456">
+            <i class="fa-solid fa-check text-white"></i>
+          </button>
+          <button
+            type="button"
+            data-bs-dismiss="modal"
+            ref="CloseModifier"
+            class="btn bg-dark px-3"
+          >
+            <i class="fa-solid fa-xmark text-light"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- ------------------------------------END MODAL UPDATE COMMENTAIRE ------------------------------------ -->
+
+  <!-- ------------------------------MODAL DELETE COMMENTAIRE----------------------------------------------- -->
+  <div
+    class="modal fade"
+    id="modalDelete"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    aria-labelledby="modalLabelDelete"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 bg-light text-dark">
+        <div class="modal-header mx-2">
+          <h4 class="modal-title text-dark" id="modalLabelDelete">
+            Supprimer le commentaire
+          </h4>
+        </div>
+        <div class="modal-body">
+          <section class="row p-2">
+            <div class="col-12">
+              Etes-vous sûr de vouloir supprimer ce commentaire ?
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer mx-2">
+          <button
+            @click="deleteComment()"
+            type="submit"
+            class="btn px-3"
+            style="background: #582456"
+          >
+            <i class="fa-solid fa-check text-white"></i>
+          </button>
+          <button
+            type="button"
+            data-bs-dismiss="modal"
+            ref="CloseDelete"
+            class="btn bg-dark px-3"
+          >
+            <i class="fa-solid fa-xmark text-light"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------------END MODAL DELETE COMMENTAIRE----------------------------------------------- -->
 </template>
 <script>
+import { useToast } from "vue-toastification";
 import Popper from "vue3-popper";
+import { PROFIL_IMAGE } from "../../../configs";
+import { decodeToken } from "../../../utils/decodeToken";
+import {
+  createComment,
+  deleteCommentById,
+  getCommentByPost,
+  updateCommentById,
+} from "../../../api/comment";
+import Reply from "./Reply.vue";
+import { createResponse } from "../../../api/reply";
 
 export default {
   name: "Comment",
+  props: ["idCommentaire"],
   components: {
     Popper,
+    Reply,
   },
   data() {
     return {
-      comments: [
-        {
-          img: require("../../../assets/img/profile.jpg"),
-          name: "Jack Anderson",
-          datetime: "February 6, 2019 at 12:20 pm",
-          content: `Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Qui expedita magnam ea tempora consectetur fugit dolorum
-                    numquam at obcaecati voluptatibus.`,
-          reply: {
-            img: require("../../../assets/img/testimonial-1.jpg"),
-            name: "Jhonny American",
-            datetime: "March 9, 2019 at 12:20 pm",
-            content: `Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Qui expedita magnam ea tempora consectetur fugit dolorum
-                    numquam at obcaecati voluptatibus.`,
-          },
-        },
-        {
-          img: require("../../../assets/img/testimonial-2.jpg"),
-          name: "Bob McDonald",
-          datetime: "February 6, 2019 at 12:20 pm",
-          content: `Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Qui expedita magnam ea tempora consectetur fugit dolorum
-                    numquam at obcaecati voluptatibus.`,
-        },
-      ],
+      comments: [],
+      form: {
+        idUtilisateur: "",
+        contenu: "",
+      },
+      formReply: {
+        idUtilisateur: "",
+        contenu: "",
+      },
+      PROFIL_IMAGE: PROFIL_IMAGE,
+      formUpdateComment: { idSelectUpdate: 0, contenu: "" },
+      idDeleteComment: 0,
     };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters["userStore/isLoggedIn"];
+    },
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+  },
+  methods: {
+    fetch() {
+      getCommentByPost(this.$route.params.slug).then((result) => {
+        this.comments = result.data;
+      });
+    },
+    checkIsLoggin() {
+      try {
+        const decodeV = decodeToken(localStorage.getItem("dandelions_token"));
+        if (decodeV) {
+          //console.log("ok visiteur");
+        }
+      } catch (err) {
+        this.$router.push(`/se-connecter`);
+      }
+    },
+    confirmComment() {
+      const toast = useToast();
+      this.form.idUtilisateur = this.me.sub || this.me.id;
+      createComment(this.$route.params.slug, this.form)
+        .then(() => {
+          toast.success("Commentaire ajouté");
+          this.form.contenu = "";
+          this.fetch();
+        })
+        .catch((e) => {
+          toast.info(e.response.data.message);
+        });
+    },
+    updateComment(id, comment) {
+      this.formUpdateComment = {
+        idSelectUpdate: id,
+        contenu: comment,
+      };
+    },
+    initDeleteComment(id) {
+      this.idDeleteComment = id;
+    },
+    deleteComment() {
+      deleteCommentById(this.idDeleteComment).then(() => {
+        const toast = useToast();
+        getCommentByPost(this.$route.params.slug).then((result) => {
+          this.data = result.data;
+          this.$refs.CloseDelete.click();
+          this.fetch();
+          toast.success("Commentaire supprimé");
+        });
+      });
+    },
+    confirmUpdateComment() {
+      updateCommentById(this.formUpdateComment).then(() => {
+        const toast = useToast();
+        getCommentByPost(this.$route.params.slug).then((result) => {
+          this.data = result.data;
+          this.$refs.CloseModifier.click();
+          this.fetch();
+          toast.success("Commentaire modifié");
+        });
+      });
+    },
+    confirmReply(id, form) {
+      const toast = useToast();
+      this.formReply.idUtilisateur = this.me.sub || this.me.id;
+      form = this.formReply;
+      createResponse(id, form)
+        .then(() => {
+          toast.success("Réponse ajouté");
+          this.formReply.contenu = "";
+          this.fetch();
+        })
+        .catch((e) => {
+          toast.info(e.response.data.message);
+        });
+    },
+  },
+  mounted() {
+    this.fetch();
   },
 };
 </script>
 <style scoped>
+a {
+  cursor: pointer;
+}
 .content a {
   float: right;
   margin-right: 10px;
@@ -233,11 +393,11 @@ export default {
   margin-left: 15px;
 }
 .comments-block {
-  margin: 40px 0;
+  margin: 40px 0 -25px;
 }
 
 .all-comments .comment-content {
-  margin: 15px 0;
+  margin: 5px 0;
 }
 .all-comments .comment-reply {
   font-weight: 400;
@@ -272,9 +432,9 @@ export default {
   display: flex;
 }
 .all-comments img.commented-person {
-  height: 80px;
+  height: 50px;
+  width: 50px;
   margin-right: 20px;
-  border-radius: 5px;
 }
 .all-comments .commented-person-name {
   margin-bottom: 0;

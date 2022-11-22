@@ -1,0 +1,414 @@
+<template>
+  <ul class="comments-reply" v-for="reply in replies" :key="reply.id">
+    <li>
+      <!-- <li v-if="comment.id == reply.idCommentaire"></li> -->
+      <div class="comment">
+        <img
+          class="commented-person img-thumbnail rounded-circle"
+          alt=""
+          :src="PROFIL_IMAGE + reply.utilisateur.illustration"
+        />
+        <div class="comment-body">
+          <div class="meta-data">
+            <Popper placement="auto" hover="true"
+              ><span class="commented-person-name"
+                ><router-link to="/enterprise/name" class="text-dark">{{
+                  reply.utilisateur.prenom
+                }}</router-link></span
+              >
+
+              <!-- <template #content>
+                      <div
+                        class="card border-0 shadow-lg"
+                        style="max-width: 540px"
+                      >
+                        <div class="media">
+                          <router-link
+                            to="/enterprise/name"
+                            class="d-flex align-items-center"
+                          >
+                            <img
+                              loading="lazy"
+                              decoding="async"
+                              :src="comment.reply.img"
+                              alt="Post Thumbnail img-thumbnail border-0"
+                              class="w-100"
+                            />
+                            <div class="media-body">
+                              <h3 style="margin-top: -5px">
+                                {{ comment.reply.name }}
+                              </h3>
+                              <p class="mb-0 small text-dark">
+                                {{ comment.reply.content }}
+                              </p>
+                            </div>
+                          </router-link>
+                        </div>
+                      </div>
+                    </template> -->
+            </Popper>
+            <span class="comment-hour d-block">{{ reply.createdAt }}</span>
+          </div>
+          <div class="comment-content">
+            <p>{{ reply.contenu }}</p>
+          </div>
+          <div class="text-left d-flex gap-2 mt-0">
+            <a
+              v-if="(me.sub || me.id) == reply.utilisateur.id"
+              data-bs-toggle="modal"
+              data-bs-target="#modalModifierReponse"
+              @click="updateReply(reply.id, reply.contenu)"
+              class="comment-reply"
+              ><i class="bi bi-pen"></i
+            ></a>
+            <a
+              v-if="(me.sub || me.id) == reply.utilisateur.id"
+              data-bs-toggle="modal"
+              data-bs-target="#modalDeleteReponse"
+              @click="initDeleteReply(reply.id)"
+              class="comment-reply"
+              ><i class="bi bi-trash"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <!-- -----------------------------------MODAL UPDATE COMMENTAIRE------------------------------------------ -->
+  <div
+    class="modal fade"
+    id="modalModifierReponse"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    aria-labelledby="modalLabelModifier"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <form
+        @submit.prevent="confirmUpdateReply"
+        class="modal-content border-0 bg-light text-dark"
+      >
+        <div class="modal-header mx-2">
+          <h4 class="modal-title text-dark" id="modalLabelModifier">
+            Modifier la réponse
+          </h4>
+        </div>
+        <div class="modal-body">
+          <section class="row p-2">
+            <div class="col-12">
+              <textarea
+                class="form-control"
+                id="inputMessage"
+                rows="4"
+                required
+                v-model="formUpdateReply.contenu"
+                style="resize: none"
+              ></textarea>
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer mx-2">
+          <button type="submit" class="btn px-3" style="background: #582456">
+            <i class="fa-solid fa-check text-white"></i>
+          </button>
+          <button
+            type="button"
+            data-bs-dismiss="modal"
+            ref="CloseModifier"
+            class="btn bg-dark px-3"
+          >
+            <i class="fa-solid fa-xmark text-light"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- ------------------------------------END MODAL UPDATE COMMENTAIRE ------------------------------------ -->
+
+  <!-- ------------------------------MODAL DELETE COMMENTAIRE----------------------------------------------- -->
+  <div
+    class="modal fade"
+    id="modalDeleteReponse"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    aria-labelledby="modalLabelDelete"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 bg-light text-dark">
+        <div class="modal-header mx-2">
+          <h4 class="modal-title text-dark" id="modalLabelDelete">
+            Supprimer la réponse
+          </h4>
+        </div>
+        <div class="modal-body">
+          <section class="row p-2">
+            <div class="col-12">
+              Etes-vous sûr de vouloir supprimer cette réponse ?
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer mx-2">
+          <button
+            @click="deleteReply()"
+            type="submit"
+            class="btn px-3"
+            style="background: #582456"
+          >
+            <i class="fa-solid fa-check text-white"></i>
+          </button>
+          <button
+            type="button"
+            data-bs-dismiss="modal"
+            ref="CloseDelete"
+            class="btn bg-dark px-3"
+          >
+            <i class="fa-solid fa-xmark text-light"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------------END MODAL DELETE COMMENTAIRE----------------------------------------------- -->
+</template>
+<script>
+import { useToast } from "vue-toastification";
+import Popper from "vue3-popper";
+import {
+  deleteResponseById,
+  getResponseByComment,
+  updateResponseById,
+} from "../../../api/reply";
+import { PROFIL_IMAGE } from "../../../configs";
+import { decodeToken } from "../../../utils/decodeToken";
+
+export default {
+  name: "Reply",
+  props: ["idCommentaire"],
+  components: {
+    Popper,
+  },
+  data() {
+    return {
+      replies: [],
+      PROFIL_IMAGE: PROFIL_IMAGE,
+      formUpdateReply: { idSelectUpdate: 0, contenu: "" },
+      idDeleteReply: 0,
+    };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters["userStore/isLoggedIn"];
+    },
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+  },
+  methods: {
+    fetchReply() {
+      getResponseByComment(this.idCommentaire).then((result) => {
+        this.replies = result.data;
+      });
+    },
+    checkIsLoggin() {
+      try {
+        const decodeV = decodeToken(localStorage.getItem("dandelions_token"));
+        if (decodeV) {
+          //console.log("ok visiteur");
+        }
+      } catch (err) {
+        this.$router.push(`/se-connecter`);
+      }
+    },
+    updateReply(id, reply) {
+      this.formUpdateReply = {
+        idSelectUpdate: id,
+        contenu: reply,
+      };
+    },
+    confirmUpdateReply() {
+      updateResponseById(this.formUpdateReply).then(() => {
+        const toast = useToast();
+        getResponseByComment(this.idCommentaire).then((result) => {
+          this.data = result.data;
+          this.$refs.CloseModifier.click();
+          toast.success("Réponse modifiée");
+        });
+      });
+    },
+    initDeleteReply(id) {
+      this.idDeleteReply = id;
+    },
+    deleteReply() {
+      deleteResponseById(this.idDeleteReply).then(() => {
+        const toast = useToast();
+        getResponseByComment(this.idCommentaire).then((result) => {
+          this.data = result.data;
+          this.$refs.CloseDelete.click();
+          toast.success("Réponse supprimée");
+        });
+      });
+    },
+  },
+  mounted() {
+    this.fetchReply();
+  },
+};
+</script>
+<style scoped>
+a {
+  cursor: pointer;
+}
+.content a {
+  float: right;
+  margin-right: 10px;
+  color: #2c122b;
+  display: inline;
+  text-decoration: none;
+  background-position: 0% 110%;
+  background-repeat: no-repeat;
+  background-size: 100% 3px;
+  transition: 0.3s;
+}
+.read-more-btn {
+  font-family: "Neuton", serif;
+  font-size: 15px;
+}
+.media {
+  width: 410px;
+}
+.media img {
+  height: 170px;
+  width: 130px !important;
+  -o-object-fit: cover;
+  object-fit: cover;
+  border-radius: 5px 0 0 5px;
+}
+
+.media-body {
+  margin-left: 15px;
+}
+.comments-block {
+  margin: 40px 0 -25px;
+}
+
+.all-comments .comment-content {
+  margin: 5px 0;
+}
+.all-comments .comment-reply {
+  font-weight: 400;
+  color: #777;
+  font-size: 13px;
+  border: 1px solid #dadada;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+.all-comments .comment-reply:hover {
+  background: #582456;
+  color: #fff;
+  border-color: #582456;
+}
+
+.comments-counter {
+  font-size: 18px;
+}
+.comments-counter a {
+  color: #323232;
+}
+
+.all-comments {
+  list-style: none;
+  margin: 0;
+  padding: 20px 0;
+}
+.all-comments .comment {
+  border-bottom: 1px solid #e7e7e7;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  display: flex;
+}
+.all-comments img.commented-person {
+  height: 50px;
+  width: 50px;
+  margin-right: 20px;
+}
+.all-comments .commented-person-name {
+  margin-bottom: 0;
+  margin-top: 0;
+  font-weight: 600;
+  font-size: 18px;
+  color: #303030;
+}
+.all-comments .comment-hour {
+  color: #959595;
+  font-size: 14px;
+}
+
+.comments-reply {
+  list-style: none;
+  margin: 0 0 0 40px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.comment-form {
+  margin-bottom: 0;
+}
+.comment-form .title-normal {
+  font-size: 22px;
+}
+.comment-form .comments-btn {
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.btn-outline-primary {
+  background: transparent;
+  color: #582456;
+  border-color: #582456;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:active,
+.btn-outline-primary.active .btn-outline-primary:focus,
+.btn-outline-primary.focus {
+  background: #582456 !important;
+  border-color: #582456 !important;
+  color: #fff;
+}
+
+.btn-sm {
+  font-size: 14px;
+  padding: 10px 25px;
+}
+
+.news-title {
+  font-size: 30px;
+  line-height: 28px;
+  line-height: 100%;
+  text-transform: uppercase;
+  margin: 0 0 20px;
+  padding-bottom: 10px;
+}
+.news-title span {
+  line-height: 28px;
+  padding-bottom: 14px;
+  position: relative;
+}
+.news-title span:after {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 2px;
+  background: #582456;
+  left: 0px;
+  bottom: 0px;
+}
+
+.block {
+  position: relative;
+}
+</style>

@@ -53,7 +53,7 @@
     </div>
     <router-link
       v-if="!isLoggedIn"
-      to="/login"
+      to="/se-connecter"
       class="btn text-light"
       style="background-color: #582456"
     >

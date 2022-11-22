@@ -87,7 +87,7 @@ export default {
             "Vous pouvez maintenant vous reconnecter",
             "success"
           );
-          this.$router.push(`/login`);
+          this.$router.push(`/se-connecter`);
         })
         .catch((e) => {
           toast.info(e.response.data.message);
