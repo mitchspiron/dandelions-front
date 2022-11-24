@@ -16,7 +16,7 @@
                 nom
               }}</router-link>
             </h2>
-            <p class="mb-3 pb-2 description">
+            <p class="mb-3 description">
               {{ descriptionA }}
             </p>
           </div>
