@@ -28,7 +28,14 @@
                     <div class="card-image">
                       <div class="post-info">
                         <span class="text-uppercase">{{
-                          article.createdAt
+                          new Date(article.createdAt).toLocaleDateString(
+                            "Fr-fr",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )
                         }}</span>
                       </div>
                       <img

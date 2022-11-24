@@ -88,7 +88,7 @@ const routes = [
     },
   },
   {
-    path: "/evenement/slug",
+    path: "/evenement/:slug",
     name: "EventBySlug",
     component: EventBySlug,
     meta: {

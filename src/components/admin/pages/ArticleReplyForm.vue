@@ -47,7 +47,13 @@
                         </div>
                       </template> -->
             </Popper>
-            <span class="comment-hour d-block">{{ reply.createdAt }}</span>
+            <span class="comment-hour d-block">{{
+              new Date(reply.createdAt).toLocaleDateString("Fr-fr", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }}</span>
           </div>
           <div class="comment-content">
             <p>{{ reply.contenu }}</p>

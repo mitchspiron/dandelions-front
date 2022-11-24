@@ -13,7 +13,13 @@
       >
         <div class="card-image">
           <div class="post-info">
-            <span class="text-uppercase">{{ article.createdAt }}</span>
+            <span class="text-uppercase">{{
+              new Date(article.createdAt).toLocaleDateString("Fr-fr", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }}</span>
           </div>
           <img
             loading="lazy"
@@ -73,7 +79,13 @@
         >
           <div class="card-image">
             <div class="post-info">
-              <span class="text-uppercase">{{ article.createdAt }}</span>
+              <span class="text-uppercase">{{
+                new Date(article.createdAt).toLocaleDateString("Fr-fr", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }}</span>
             </div>
             <img
               loading="lazy"

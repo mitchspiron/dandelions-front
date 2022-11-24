@@ -30,7 +30,7 @@
               d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"
             />
           </svg>
-          <span>{{ posts.createdAt }}</span>
+          <span>{{ createdAt }}</span>
         </li>
       </ul>
       <h1 class="my-3">{{ posts.titre }}</h1>
@@ -60,6 +60,7 @@ export default {
       posts: [],
       categorie_article: "",
       illustration: "",
+      createdAt: Date.now(),
     };
   },
   mounted() {
@@ -71,6 +72,13 @@ export default {
         this.posts = result.data;
         this.categorie_article = result.data.categorie_article.nomCategorie;
         this.illustration = PROFIL_IMAGE + result.data.illustration;
+        let options = {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        const dateCreation = new Date(result.data.createdAt);
+        this.createdAt = dateCreation.toLocaleDateString("Fr-fr", options);
       });
     },
   },

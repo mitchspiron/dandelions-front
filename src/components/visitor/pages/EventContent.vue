@@ -4,7 +4,7 @@
       <img
         loading="lazy"
         decoding="async"
-        src="../../../assets/img/post/post-4.jpg"
+        :src="illustration"
         alt="Post Thumbnail"
         class="w-100"
         style=""
@@ -12,51 +12,16 @@
       <ul class="post-meta mb-2 mt-4 d-flex">
         <li class="me-auto">
           <i class="bi bi-calendar-plus"></i>
-          <span> 29 May, 2021</span>
+          <span> {{ createdAt }}</span>
         </li>
         <li>
           <i class="bi bi-calendar-x text-danger"></i>
-          <span class="text-danger"> 29 May, 2021</span>
+          <span class="text-danger"> {{ deadline }}</span>
         </li>
       </ul>
-      <h1 class="my-3">Top 7 Reasons to Visit Denver this Summer</h1>
+      <h1 class="my-3">{{ evenements.titre }}</h1>
       <div class="content text-left">
-        <h1 id="heading">Heading</h1>
-        <p>
-          Here is example of hedings. You can use this heading by following
-          markdownify rules. For example: use
-          <code>#</code> for heading 1 and use <code>######</code> for heading
-          6.
-        </p>
-        <h2 id="emphasis">Emphasis</h2>
-        <p>
-          Emphasis, aka italics, with <em>asterisks</em> or
-          <em>underscores</em>.
-        </p>
-        <p>
-          Strong emphasis, aka bold, with <strong>asterisks</strong> or
-          <strong>underscores</strong>.
-        </p>
-        <p>
-          Combined emphasis with
-          <strong>asterisks and <em>underscores</em></strong
-          >.
-        </p>
-        <p>Strikethrough uses two tildes. <del>Scratch this.</del></p>
-        <h2 id="paragraph">Paragraph</h2>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam nihil
-          enim maxime corporis cumque totam aliquid nam sint inventore optio
-          modi neque laborum officiis necessitatibus, facilis placeat pariatur!
-          Voluptatem, sed harum pariatur adipisci voluptates voluptatum cumque,
-          porro sint minima similique magni perferendis fuga! Optio vel ipsum
-          excepturi tempore reiciendis id quidem? Vel in, doloribus debitis
-          nesciunt fugit sequi magnam accusantium modi neque quis, vitae velit,
-          pariatur harum autem a! Velit impedit atque maiores animi possimus
-          asperiores natus repellendus excepturi sint architecto eligendi non,
-          omnis nihil. Facilis, doloremque illum. Fugit optio laborum minus
-          debitis natus illo perspiciatis corporis voluptatum rerum laboriosam.
-        </p>
+        <div v-html="evenements.contenu"></div>
       </div>
     </article>
   </div>
@@ -70,7 +35,7 @@
   </div>
 
   <!-- Modal -->
-  <div
+  <!-- <div
     class="modal fade"
     id="EventModal"
     tabindex="-1"
@@ -132,13 +97,43 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
+import { getEvenementBySlug } from "../../../api/event";
+import { PROFIL_IMAGE } from "../../../configs";
 export default {
   name: "EventContent",
   components: {},
+  data() {
+    return {
+      evenements: [],
+      createdAt: Date.now(),
+      deadline: Date.now(),
+      illustration: "",
+    };
+  },
+  mounted() {
+    this.fetch();
+  },
+  methods: {
+    fetch() {
+      getEvenementBySlug(this.$route.params.slug).then((result) => {
+        this.evenements = result.data;
+        this.illustration = PROFIL_IMAGE + result.data.illustration;
+        let options = {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        const dateCreation = new Date(result.data.createdAt);
+        this.createdAt = dateCreation.toLocaleDateString("Fr-fr", options);
+        const dateExpiration = new Date(result.data.deadline);
+        this.deadline = dateExpiration.toLocaleDateString("Fr-fr", options);
+      });
+    },
+  },
 };
 </script>
 <style scoped>

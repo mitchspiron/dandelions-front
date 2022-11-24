@@ -7,16 +7,17 @@
             <img
               loading="lazy"
               decoding="async"
-              src="../../../assets/img/company/amazon.jpg"
+              :src="illustration"
               alt="About Me"
-              class="w-100 author-thumb-sm d-block"
+              class="w-100 author-thumb-sm img-thumbnail d-block"
             />
             <h2 class="widget-title my-3">
-              <router-link to="/entreprise/name">Amazon</router-link>
+              <router-link :to="{ path: '/entreprise/' + slug }">{{
+                nom
+              }}</router-link>
             </h2>
-            <p class="mb-3 pb-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna …
+            <p class="mb-3 pb-2 description">
+              {{ descriptionA }}
             </p>
           </div>
         </div>
@@ -59,35 +60,42 @@
 </template>
 
 <script>
+import { getEvenementBySlug } from "../../../api/event";
+import { PROFIL_IMAGE } from "../../../configs";
 export default {
   name: "ArticleSide",
   components: {},
   data() {
     return {
-      recommendations: [
-        {
-          title: "These Are Making It Easier To Visit",
-          text: `Heading Here is example of hedings. You can use …`,
-        },
-        {
-          title: "No Image Specified",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing …`,
-        },
-        {
-          title: "Perfect For Fashion",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing …`,
-        },
-        {
-          title: "Record Utra Smooth Video",
-          text: `Lorem ipsum dolor sit amet, consectetur adipiscing …`,
-        },
-      ],
+      nom: "",
+      slug: "",
+      descriptionA: "",
+      illustration: "",
     };
+  },
+  mounted() {
+    this.fetch();
+  },
+  methods: {
+    fetch() {
+      getEvenementBySlug(this.$route.params.slug).then((result) => {
+        this.nom = result.data.entreprise.nom;
+        this.slug = result.data.entreprise.slug;
+        this.descriptionA = result.data.entreprise.descriptionA;
+        this.illustration = PROFIL_IMAGE + result.data.entreprise.illustration;
+      });
+    },
   },
 };
 </script>
 
 <style scoped>
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
 a,
 a:hover {
   color: #000;
