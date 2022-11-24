@@ -2,7 +2,7 @@
   <Navbar />
   <Sidenav />
   <slot />
-  <Footer />
+  <!-- <Footer /> -->
   <a
     href="#"
     class="back-to-top d-flex align-items-center justify-content-center"
@@ -12,14 +12,14 @@
 
 <script>
 import Navbar from "../pages/Navbar.vue";
-import Footer from "../pages/Footer.vue";
+//import Footer from "../pages/Footer.vue";
 import Sidenav from "../pages/Sidenav.vue";
 export default {
   name: "AdminLayout",
   components: {
     Sidenav,
     Navbar,
-    Footer,
+    /*  Footer, */
   },
 };
 </script>

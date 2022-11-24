@@ -13,14 +13,13 @@
           />
           <div class="comment-body">
             <div class="meta-data">
-              <Popper placement="auto" hover="true"
-                ><span class="commented-person-name"
-                  ><router-link to="/enterprise/name" class="text-dark">{{
-                    comment.utilisateur.prenom
-                  }}</router-link></span
-                >
+              <span class="commented-person-name"
+                ><router-link to="/enterprise/name" class="text-dark">{{
+                  comment.utilisateur.prenom
+                }}</router-link></span
+              >
 
-                <!-- <template #content>
+              <!--<Popper placement="auto" hover="true" <template #content>
                   <div class="card border-0 shadow-lg" style="max-width: 540px">
                     <div class="media">
                       <router-link
@@ -45,8 +44,7 @@
                       </router-link>
                     </div>
                   </div>
-                </template> -->
-              </Popper>
+                </template> </Popper>-->
               <span class="comment-hour d-block">{{ comment.createdAt }}</span>
             </div>
             <div class="comment-content">
@@ -236,7 +234,7 @@
 </template>
 <script>
 import { useToast } from "vue-toastification";
-import Popper from "vue3-popper";
+//import Popper from "vue3-popper";
 import { PROFIL_IMAGE } from "../../../configs";
 import { decodeToken } from "../../../utils/decodeToken";
 import {
@@ -250,9 +248,8 @@ import { createResponse } from "../../../api/reply";
 
 export default {
   name: "Comment",
-  props: ["idCommentaire"],
   components: {
-    Popper,
+    /*  Popper, */
     Reply,
   },
   data() {

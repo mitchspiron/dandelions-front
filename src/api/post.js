@@ -3,8 +3,8 @@ import { BASE_URL } from "../configs";
 
 const URL = BASE_URL + "/post";
 
-export const getPost = () => {
-  return axios.get(`${URL}`, {
+export const getPost = (id) => {
+  return axios.get(`${URL}/admin/${id}`, {
     withCredentials: true,
     headers: {
       Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
@@ -102,8 +102,8 @@ export const uploadedFile = (data) => {
   });
 };
 
-export const updateIllustrationBySlug = (slug, data) => {
-  return axios.put(`${URL}/update-illustration/${slug}`, data, {
+export const updateIllustrationBySlug = (slug, id, data) => {
+  return axios.put(`${URL}/update-illustration/${slug}/${id}`, data, {
     withCredentials: true,
     headers: {
       Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
@@ -111,17 +111,8 @@ export const updateIllustrationBySlug = (slug, data) => {
   });
 };
 
-export const updatePostTitleBySlug = (slug, data) => {
-  return axios.put(`${URL}/title/${slug}`, data, {
-    withCredentials: true,
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
-    },
-  });
-};
-
-export const updatePostBySlug = (slug, data) => {
-  return axios.put(`${URL}/${slug}`, data, {
+export const updatePostBySlug = (slug, id, data) => {
+  return axios.put(`${URL}/${slug}/${id}`, data, {
     withCredentials: true,
     headers: {
       Authorization: "Bearer " + localStorage.getItem("dandelions_token"),

@@ -42,16 +42,50 @@
           <th>ID</th>
           <th>Titre</th>
           <th>Header</th>
+          <th>Inscription</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(event, id) in events" :key="id">
-          <td>{{ event.id }}</td>
-          <td class="text-muted">{{ event.article }}</td>
+        <tr v-for="evenement in evenements" :key="evenement.id">
+          <td>{{ evenement.id }}</td>
+          <td class="text-muted">{{ evenement.titre }}</td>
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" />
+              <input
+                v-if="(me.roleUser || me.role) !== 1"
+                disabled
+                class="form-check-input"
+                type="checkbox"
+                :checked="evenement.onHeader"
+              />
+              <input
+                v-else
+                class="form-check-input"
+                type="checkbox"
+                :checked="evenement.onHeader"
+                @input="(event) => (text = event.target.checked)"
+                @change="
+                  switchOnHeader(evenement.slug, evenement.onHeader, $event)
+                "
+              />
+            </div>
+          </td>
+          <td>
+            <div class="form-check form-switch d-flex justify-content-center">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                :checked="evenement.onSubscribe"
+                @input="(event) => (text = event.target.checked)"
+                @change="
+                  switchOnSubscribe(
+                    evenement.slug,
+                    evenement.onSubscribe,
+                    $event
+                  )
+                "
+              />
             </div>
           </td>
           <td>
@@ -59,12 +93,18 @@
               <router-link to="/evenement/slug/subscriber" type="button"
                 ><i class="fa-solid fa-list"></i
               ></router-link>
-              <router-link to="/evenement/slug" type="button">
+              <router-link
+                :to="{ name: 'EventBySlug', params: { slug: evenement.slug } }"
+                type="button"
+              >
                 <i class="fa-regular fa-eye"></i>
               </router-link>
-              <a type="button">
+              <router-link
+                :to="{ name: 'EventEdit', params: { slug: evenement.slug } }"
+                type="button"
+              >
                 <i class="fa-regular fa-pen-to-square"></i>
-              </a>
+              </router-link>
               <a type="button">
                 <i class="bi bi-trash"></i>
               </a>
@@ -76,26 +116,87 @@
   </div>
 </template>
 <script>
+import { useToast } from "vue-toastification";
+import {
+  getEvenementAdmin,
+  switchOnHeaderBySlug,
+  switchOnSubscribeBySlug,
+} from "../../../api/event";
 export default {
   name: "EventLists",
   components: {},
   data() {
     return {
-      events: [
-        {
-          id: 1,
-          article: "Marvel Comics",
-        },
-        {
-          id: 2,
-          article: "DC Comics",
-        },
-        {
-          id: 3,
-          article: "Ring Of Power",
-        },
-      ],
+      evenements: [],
+      switch: { onHeader: true || false, onSubscribe: true || false },
     };
+  },
+  computed: {
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+  },
+  methods: {
+    fetch() {
+      getEvenementAdmin(this.me.sub || this.me.id).then((result) => {
+        this.evenements = result.data;
+      });
+    },
+    switchOnHeader(slug, etat, event) {
+      const toast = useToast();
+      if (event.target.checked) {
+        this.switch.onHeader = true;
+        etat = this.switch;
+        switchOnHeaderBySlug(slug, etat)
+          .then(() => {
+            toast.success("L'évenement est à l'header");
+            this.fetch();
+          })
+          .catch(() => {
+            toast.error("Une erreur est survenue!");
+          });
+      } else {
+        this.switch.onHeader = false;
+        etat = this.switch;
+        switchOnHeaderBySlug(slug, etat)
+          .then(() => {
+            toast.success("L'évenement n'est plus à l'header");
+            this.fetch();
+          })
+          .catch(() => {
+            toast.error("Une erreur est survenue!");
+          });
+      }
+    },
+    switchOnSubscribe(slug, etat, event) {
+      const toast = useToast();
+      if (event.target.checked) {
+        this.switch.onSubscribe = true;
+        etat = this.switch;
+        switchOnSubscribeBySlug(slug, etat)
+          .then(() => {
+            toast.success("L'évenement est ouvert à une inscription");
+            this.fetch();
+          })
+          .catch(() => {
+            toast.error("Une erreur est survenue!");
+          });
+      } else {
+        this.switch.onSubscribe = false;
+        etat = this.switch;
+        switchOnSubscribeBySlug(slug, etat)
+          .then(() => {
+            toast.success("L'évenement est fermé à une inscription");
+            this.fetch();
+          })
+          .catch(() => {
+            toast.error("Une erreur est survenue!");
+          });
+      }
+    },
+  },
+  mounted() {
+    this.fetch();
   },
 };
 </script>

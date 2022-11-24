@@ -1,6 +1,6 @@
 <template>
   <form
-    @submit.prevent="confirm"
+    @submit.prevent="confirmIllustration"
     enctype="multipart/form-data"
     autocomplete="off"
     class="col-md-12 shadow-lg border-0 mb-5"
@@ -9,6 +9,7 @@
       <div class="card-body">
         <div class="col-md-12">
           <div class="mb-3 mt-md-1">
+            <h3 class="fw-bold text-uppercase">Illustration du coming-soon</h3>
             <div
               class="d-flex align-items-start align-items-sm-center mb-3 gap-4"
             >
@@ -43,6 +44,35 @@
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer py-2 px-3">
+        <div class="col-md-12">
+          <div class="d-flex align-items-center">
+            <h4 class="mb-0">Modification de l'illustration coming-soon</h4>
+            <button
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+            >
+              Modifier
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- --------------------------------- -->
+  <form
+    @submit.prevent="confirm()"
+    autocomplete="off"
+    class="col-md-12 shadow-lg border-0 mb-5"
+  >
+    <div class="card border-0">
+      <div class="card-body">
+        <div class="col-md-12">
+          <div class="mb-3 mt-md-1">
+            <h3 class="fw-bold text-uppercase">Information du coming-soon</h3>
             <div class="d-flex justify-content-between mb-3 gap-1">
               <div class="col-3 form-floating">
                 <select
@@ -103,14 +133,16 @@
           <div class="col-md-12" style="margin-bottom: 100px">
             <QuillEditor
               v-model:content="form.contenu"
+              v-model="form.contenu"
               contentType="html"
               :modules="modules"
               theme="snow"
               toolbar="full"
+              ref="quill"
             />
           </div>
         </div>
-        <div class="col-2 card border shadow-sm py-2">
+        <div class="visually-hidden col-2 card border shadow-sm py-2">
           <div class="form-check form-switch m-auto">
             <input
               class="form-check-input"
@@ -145,7 +177,12 @@
 import { QuillEditor } from "@vueup/vue-quill";
 import BlotFormatter from "quill-blot-formatter";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
-import { createEvenement, uploadedFile } from "../../../api/event";
+import {
+  getEvenementBySlug,
+  uploadedFile,
+  updateIllustrationBySlug,
+  updateEvenementBySlug,
+} from "../../../api/event";
 import { useToast } from "vue-toastification";
 import { getEnterpriseAdmin } from "../../../api/enterprise.";
 export default {
@@ -157,13 +194,15 @@ export default {
         idEntreprise: "",
         titre: "",
         description: "",
-        illustration: "",
         contenu: "",
-        deadline: Date,
+        deadline: Date.now(),
         onSubscribe: true || false,
       },
       enterprises: [],
       file: "",
+      image: {
+        illustration: "",
+      },
       loading: false,
     };
   },
@@ -181,12 +220,22 @@ export default {
     me() {
       return this.$store.getters["userStore/me"];
     },
+    editor() {
+      return this.$refs.quill;
+    },
   },
   methods: {
     fetchEnterprise() {
       getEnterpriseAdmin(this.me.sub || this.me.id).then((result) => {
         this.enterprises = result.data;
-        console.log("company", result.data);
+      });
+    },
+    fetch() {
+      getEvenementBySlug(this.$route.params.slug).then((result) => {
+        this.form = result.data;
+        this.form.deadline = result.data.deadline.split("T")[0];
+        this.form.idEntreprise = result.data.idEntreprise;
+        this.editor.setHTML(this.form.contenu);
       });
     },
     avatar() {
@@ -209,41 +258,52 @@ export default {
       const file = this.$refs.file.files[0];
       this.file = file;
     },
-    confirm() {
+    confirmIllustration() {
       const toast = useToast();
-      this.loading = true;
       let formData = new FormData();
       formData.append("file", this.file);
       uploadedFile(formData)
         .then((result) => {
-          this.form.illustration = result.data.filename;
-          createEvenement(this.form)
+          this.image.illustration = result.data.filename;
+          updateIllustrationBySlug(
+            this.$route.params.slug,
+            this.me.sub || this.me.id,
+            this.image
+          )
             .then(() => {
-              this.loading = false;
-              this.$store.dispatch("userStore/setConnected");
-              this.$swal(
-                "Coming-Soon ajouté avec succès",
-                "Le coming-soon est visible sur le plateforme",
-                "success"
-              );
+              toast.success("Modification illustration du coming-soon réussi");
               this.$router.push(
                 this.$route.query.redirect || "/admin/evenement"
               );
             })
             .catch((e) => {
-              this.loading = false;
               toast.info(e.response.data.message);
             });
         })
         .catch((e) => {
-          this.loading = false;
-          toast.error(e.response.data.message);
+          console.log("erreur", e);
+        });
+    },
+    confirm() {
+      const toast = useToast();
+      updateEvenementBySlug(
+        this.$route.params.slug,
+        this.me.sub || this.me.id,
+        this.form
+      )
+        .then(() => {
+          toast.success("Modification coming-soon réussi");
+          this.$router.push(this.$route.query.redirect || "/admin/evenement");
+        })
+        .catch((e) => {
+          toast.info(e.response.data.message);
         });
     },
   },
   mounted() {
     this.avatar();
     this.fetchEnterprise();
+    this.fetch();
   },
 };
 </script>

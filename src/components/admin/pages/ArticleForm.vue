@@ -213,7 +213,7 @@ export default {
               this.$store.dispatch("userStore/setConnected");
               this.$swal(
                 "Article ajouté avec succès",
-                "L'article sera publié après approbation de l'admiistrateur",
+                "L'article sera publié après approbation de l'administrateur",
                 "success"
               );
               this.$router.push(this.$route.query.redirect || "/admin/article");

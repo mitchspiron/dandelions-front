@@ -1,123 +1,79 @@
 <template>
-  <div class="d-flex justify-content-center gap-2">
-    <form
-      @submit.prevent="confirmIllustration"
-      enctype="multipart/form-data"
-      autocomplete="off"
-      class="col-md-6 shadow-lg border-0 mb-3"
-    >
-      <div class="card border-0">
-        <div class="card-body">
-          <div class="col-md-12">
-            <div class="">
-              <h3 class="fw-bold text-uppercase">Illustration de l'article</h3>
-              <div class="d-flex align-items-start align-items-sm-center gap-4">
-                <div
-                  id="avatar"
-                  alt="user-avatar"
-                  class="d-block rounded col-3"
-                />
-                <div>
-                  <div class="input-group">
-                    <span
-                      class="input-group-text"
-                      style="color: #582456"
-                      id="basic-addon1"
-                      ><i class="fa-solid fa-cloud-arrow-up"></i
-                    ></span>
-                    <input
-                      type="file"
-                      ref="file"
-                      @change="onSelect"
-                      class="form-control"
-                      name="image"
-                      id="image"
-                      accept="image/*"
-                      placeholder="Username"
-                      aria-label="Username"
-                      aria-describedby="basic-addon1"
-                    />
-                  </div>
-                  <p class="text-muted mb-0">
-                    Allowed JPG, GIF or PNG. Max size of 800K
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer py-2 px-3">
-          <div class="col-md-12">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">Modification de l'illustration</h4>
-              <button
-                v-if="loading"
-                class="btn btn-primary btn-md ms-auto border-0"
-                disabled
-                style="background-color: #582456"
-              >
-                <span
-                  class="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Loading...
-              </button>
-              <button
-                v-else
-                class="btn btn-primary btn-md ms-auto border-0"
-                style="background-color: #582456"
-              >
-                Modifier
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-    <!-- ----------------- -->
-    <form
-      @submit.prevent="confirmTitle"
-      enctype="multipart/form-data"
-      autocomplete="off"
-      class="col-md-6 shadow-lg border-0 mb-3"
-    >
-      <div class="card border-0">
-        <div class="card-body">
-          <div class="col-md-12">
-            <div class="">
-              <h3 class="fw-bold text-uppercase">Titre de l'article</h3>
-              <div class="d-flex align-items-start align-items-sm-center gap-4">
-                <div class="col-12 form-floating mt-2">
+  <form
+    @submit.prevent="confirmIllustration"
+    enctype="multipart/form-data"
+    autocomplete="off"
+    class="col-md-12 shadow-lg border-0 mb-3"
+  >
+    <div class="card border-0">
+      <div class="card-body">
+        <div class="col-md-12">
+          <div class="">
+            <h3 class="fw-bold text-uppercase">Illustration de l'article</h3>
+            <div class="d-flex align-items-start align-items-sm-center gap-4">
+              <div
+                id="avatar"
+                alt="user-avatar"
+                class="d-block rounded col-3"
+              />
+              <div>
+                <div class="input-group">
+                  <span
+                    class="input-group-text"
+                    style="color: #582456"
+                    id="basic-addon1"
+                    ><i class="fa-solid fa-cloud-arrow-up"></i
+                  ></span>
                   <input
-                    type="text"
+                    type="file"
+                    ref="file"
+                    @change="onSelect"
                     class="form-control"
-                    id="titre"
-                    placeholder=""
-                    v-model="article.titre"
+                    name="image"
+                    id="image"
+                    accept="image/*"
+                    placeholder="Username"
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
                   />
-                  <label for="titre" class="form-label">Titre</label>
                 </div>
+                <p class="text-muted mb-0">
+                  Allowed JPG, GIF or PNG. Max size of 800K
+                </p>
               </div>
             </div>
           </div>
         </div>
-        <div class="card-footer py-2 px-3">
-          <div class="col-md-12">
-            <div class="d-flex align-items-center">
-              <h4 class="mb-0">Modification du titre</h4>
-              <button
-                class="btn btn-primary btn-md ms-auto border-0"
-                style="background-color: #582456"
-              >
-                Modifier
-              </button>
-            </div>
+      </div>
+      <div class="card-footer py-2 px-3">
+        <div class="col-md-12">
+          <div class="d-flex align-items-center">
+            <h4 class="mb-0">Modification de l'illustration</h4>
+            <button
+              v-if="loading"
+              class="btn btn-primary btn-md ms-auto border-0"
+              disabled
+              style="background-color: #582456"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+            >
+              Modifier
+            </button>
           </div>
         </div>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
   <!-- ----------------- -->
   <form
     @submit.prevent="confirm"
@@ -130,7 +86,17 @@
           <div class="mb-3 mt-md-1">
             <h3 class="fw-bold text-uppercase">Article</h3>
             <div class="d-flex justify-content-between mb-3 gap-1">
-              <div class="col-6 form-floating">
+              <div class="col-4 form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="titre"
+                  placeholder=""
+                  v-model="form.titre"
+                />
+                <label for="titre" class="form-label">Titre</label>
+              </div>
+              <div class="col-4 form-floating">
                 <select
                   class="form-select"
                   id="floatingSelect"
@@ -153,7 +119,7 @@
                   >Séléctionner la catégorie de l'article</label
                 >
               </div>
-              <div class="col-6 form-floating">
+              <div class="col-4 form-floating">
                 <textarea
                   class="form-control"
                   v-model="form.description"
@@ -220,7 +186,6 @@ import {
   getPostBySlug,
   updateIllustrationBySlug,
   updatePostBySlug,
-  updatePostTitleBySlug,
   uploadedFile,
 } from "../../../api/post";
 import { getPostCategory } from "../../../api/post-category";
@@ -230,11 +195,11 @@ export default {
   data() {
     return {
       form: {
+        titre: "",
         idCategorie: "",
         description: "",
         contenu: "",
       },
-      article: { titre: "" },
       categorie_article: "",
       categories: [],
       file: "",
@@ -273,7 +238,6 @@ export default {
         this.form = result.data;
         this.form.idCategorie = result.data.categorie_article.id;
         this.categorie_article = result.data.categorie_article.nomCategorie;
-        this.article.titre = result.data.titre;
         this.editor.setHTML(this.form.contenu);
       });
     },
@@ -304,7 +268,11 @@ export default {
       uploadedFile(formData)
         .then((result) => {
           this.image.illustration = result.data.filename;
-          updateIllustrationBySlug(this.$route.params.slug, this.image)
+          updateIllustrationBySlug(
+            this.$route.params.slug,
+            this.me.sub || this.me.id,
+            this.image
+          )
             .then(() => {
               toast.success("Modification illustration d'article réussi");
               this.$router.push(this.$route.query.redirect || "/admin/article");
@@ -319,20 +287,13 @@ export default {
     },
     confirm() {
       const toast = useToast();
-      updatePostBySlug(this.$route.params.slug, this.form)
+      updatePostBySlug(
+        this.$route.params.slug,
+        this.me.sub || this.me.id,
+        this.form
+      )
         .then(() => {
           toast.success("Modification article réussi");
-          this.$router.push(this.$route.query.redirect || "/admin/article");
-        })
-        .catch((e) => {
-          toast.info(e.response.data.message);
-        });
-    },
-    confirmTitle() {
-      const toast = useToast();
-      updatePostTitleBySlug(this.$route.params.slug, this.article)
-        .then(() => {
-          toast.success("Modification titre article réussi");
           this.$router.push(this.$route.query.redirect || "/admin/article");
         })
         .catch((e) => {

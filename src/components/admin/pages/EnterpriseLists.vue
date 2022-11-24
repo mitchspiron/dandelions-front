@@ -14,7 +14,17 @@
         />
       </div>
     </div>
-    <div class="">
+    <div
+      v-if="(me.roleUser || me.role) == 2 && enterprises.length == 1"
+      class=""
+    >
+      <router-link
+        to="/admin/entreprise/nouveau"
+        class="visually-hidden btn btn-outline-secondary"
+        ><i class="fa-solid fa-plus"></i
+      ></router-link>
+    </div>
+    <div v-else class="">
       <router-link
         to="/admin/entreprise/nouveau"
         class="btn btn-outline-secondary"
@@ -36,7 +46,7 @@
       <tbody>
         <tr v-for="(enterprise, id) in enterprises" :key="id">
           <td>{{ enterprise.id }}</td>
-          <td class="fw-bold mb-1">{{ enterprise.name }}</td>
+          <td class="fw-bold mb-1">{{ enterprise.nom }}</td>
           <td class="text-muted mb-0">{{ enterprise.email }}</td>
           <td>
             <div class="form-check form-switch d-flex justify-content-center">

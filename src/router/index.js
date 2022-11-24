@@ -24,6 +24,7 @@ import Articles from "../views/admin/Articles.vue";
 import ArticleComment from "../views/admin/ArticleComment.vue";
 import Events from "../views/admin/Events.vue";
 import EventNew from "../views/admin/EventNew.vue";
+import EventEdit from "../views/admin/EventEdit.vue";
 import EventSubscribers from "../views/admin/EventSubscribers.vue";
 import Categories from "../views/admin/Categories.vue";
 import EnterprisesAdmin from "../views/admin/EnterprisesAdmin.vue";
@@ -172,7 +173,7 @@ const routes = [
     component: ArticleEdit,
   },
   {
-    path: "/article/slug/commentaire",
+    path: "/article/commentaire/:slug",
     name: "ArticleComment",
     component: ArticleComment,
   },
@@ -190,6 +191,11 @@ const routes = [
     path: "/admin/evenement/nouveau",
     name: "EventNew",
     component: EventNew,
+  },
+  {
+    path: "/admin/evenement/:slug",
+    name: "EventEdit",
+    component: EventEdit,
   },
   {
     path: "/utilisateur",

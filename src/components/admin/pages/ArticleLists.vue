@@ -70,8 +70,8 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="post in posts" :key="post.id">
+      <tbody v-for="post in posts" :key="post.id">
+        <tr>
           <td>{{ post.id }}</td>
           <td class="fw-bold">{{ post.titre }}</td>
           <td class="text-muted">{{ post.categorie_article.nomCategorie }}</td>
@@ -173,7 +173,8 @@
               >
                 <i class="fa-regular fa-eye"></i>
               </router-link>
-              <router-link to="/article/slug/commentaire"
+              <router-link
+                :to="{ name: 'ArticleComment', params: { slug: post.slug } }"
                 ><i class="fa-regular fa-comments"></i
               ></router-link>
               <router-link
@@ -255,7 +256,7 @@ export default {
   },
   methods: {
     fetch() {
-      getPost().then((result) => {
+      getPost(this.me.sub || this.me.id).then((result) => {
         this.posts = result.data;
       });
     },

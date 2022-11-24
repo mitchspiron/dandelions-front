@@ -1,6 +1,6 @@
 <template>
-  <ul class="comments-reply">
-    <li v-for="reply in replies" :key="reply.id">
+  <ul class="comments-reply" v-for="reply in replies" :key="reply.id">
+    <li>
       <!-- <li v-if="comment.id == reply.idCommentaire"></li> -->
       <div class="comment">
         <img
@@ -10,41 +10,43 @@
         />
         <div class="comment-body">
           <div class="meta-data">
-            <span class="commented-person-name"
-              ><router-link to="/enterprise/name" class="text-dark">{{
-                reply.utilisateur.prenom
-              }}</router-link></span
-            >
+            <Popper placement="auto" hover="true"
+              ><span class="commented-person-name"
+                ><router-link to="/enterprise/name" class="text-dark">{{
+                  reply.utilisateur.prenom
+                }}</router-link></span
+              >
 
-            <!-- <Popper placement="auto" hover="true"> <template #content>
-                      <div
-                        class="card border-0 shadow-lg"
-                        style="max-width: 540px"
-                      >
-                        <div class="media">
-                          <router-link
-                            to="/enterprise/name"
-                            class="d-flex align-items-center"
-                          >
-                            <img
-                              loading="lazy"
-                              decoding="async"
-                              :src="comment.reply.img"
-                              alt="Post Thumbnail img-thumbnail border-0"
-                              class="w-100"
-                            />
-                            <div class="media-body">
-                              <h3 style="margin-top: -5px">
-                                {{ comment.reply.name }}
-                              </h3>
-                              <p class="mb-0 small text-dark">
-                                {{ comment.reply.content }}
-                              </p>
-                            </div>
-                          </router-link>
+              <!-- <template #content>
+                        <div
+                          class="card border-0 shadow-lg"
+                          style="max-width: 540px"
+                        >
+                          <div class="media">
+                            <router-link
+                              to="/enterprise/name"
+                              class="d-flex align-items-center"
+                            >
+                              <img
+                                loading="lazy"
+                                decoding="async"
+                                :src="comment.reply.img"
+                                alt="Post Thumbnail img-thumbnail border-0"
+                                class="w-100"
+                              />
+                              <div class="media-body">
+                                <h3 style="margin-top: -5px">
+                                  {{ comment.reply.name }}
+                                </h3>
+                                <p class="mb-0 small text-dark">
+                                  {{ comment.reply.content }}
+                                </p>
+                              </div>
+                            </router-link>
+                          </div>
                         </div>
-                      </div>
-                    </template></Popper> -->
+                      </template> -->
+            </Popper>
             <span class="comment-hour d-block">{{ reply.createdAt }}</span>
           </div>
           <div class="comment-content">
@@ -52,7 +54,6 @@
           </div>
           <div class="text-left d-flex gap-2 mt-0">
             <a
-              v-if="(me.sub || me.id) == reply.utilisateur.id"
               data-bs-toggle="modal"
               data-bs-target="#modalModifierReponse"
               @click="updateReply(reply.id, reply.contenu)"
@@ -60,7 +61,6 @@
               ><i class="bi bi-pen"></i
             ></a>
             <a
-              v-if="(me.sub || me.id) == reply.utilisateur.id"
               data-bs-toggle="modal"
               data-bs-target="#modalDeleteReponse"
               @click="initDeleteReply(reply.id)"
@@ -72,14 +72,14 @@
       </div>
     </li>
   </ul>
-  <!-- -----------------------------------MODAL UPDATE REPONSE------------------------------------------ -->
+  <!-- -----------------------------------MODAL UPDATE COMMENTAIRE------------------------------------------ -->
   <div
     class="modal fade"
     id="modalModifierReponse"
     tabindex="-1"
     data-bs-backdrop="static"
     data-bs-keyboard="false"
-    aria-labelledby="modalLabelModifierReponse"
+    aria-labelledby="modalLabelModifier"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-centered">
@@ -88,7 +88,7 @@
         class="modal-content border-0 bg-light text-dark"
       >
         <div class="modal-header mx-2">
-          <h4 class="modal-title text-dark" id="modalLabelModifierReponse">
+          <h4 class="modal-title text-dark" id="modalLabelModifier">
             Modifier la réponse
           </h4>
         </div>
@@ -122,22 +122,22 @@
       </form>
     </div>
   </div>
-  <!-- ------------------------------------END MODAL UPDATE REPONSE ------------------------------------ -->
+  <!-- ------------------------------------END MODAL UPDATE COMMENTAIRE ------------------------------------ -->
 
-  <!-- ------------------------------MODAL DELETE REPONSE----------------------------------------------- -->
+  <!-- ------------------------------MODAL DELETE COMMENTAIRE----------------------------------------------- -->
   <div
     class="modal fade"
     id="modalDeleteReponse"
     tabindex="-1"
     data-bs-backdrop="static"
     data-bs-keyboard="false"
-    aria-labelledby="modalLabelDeleteReponse"
+    aria-labelledby="modalLabelDelete"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 bg-light text-dark">
         <div class="modal-header mx-2">
-          <h4 class="modal-title text-dark" id="modalLabelDeleteReponse">
+          <h4 class="modal-title text-dark" id="modalLabelDelete">
             Supprimer la réponse
           </h4>
         </div>
@@ -169,11 +169,11 @@
       </div>
     </div>
   </div>
-  <!-- ------------------------------END MODAL DELETE REPONSE----------------------------------------------- -->
+  <!-- ------------------------------END MODAL DELETE COMMENTAIRE----------------------------------------------- -->
 </template>
 <script>
 import { useToast } from "vue-toastification";
-//import Popper from "vue3-popper";
+import Popper from "vue3-popper";
 import {
   deleteResponseById,
   getResponseByComment,
@@ -183,10 +183,10 @@ import { PROFIL_IMAGE } from "../../../configs";
 import { decodeToken } from "../../../utils/decodeToken";
 
 export default {
-  name: "Reply",
+  name: "ArticleReplyForm",
   props: ["idCommentaire"],
   components: {
-    /* Popper, */
+    Popper,
   },
   data() {
     return {
@@ -225,7 +225,6 @@ export default {
         idSelectUpdate: id,
         contenu: reply,
       };
-      console.log("reponse", this.formUpdateReply);
     },
     confirmUpdateReply() {
       updateResponseById(this.formUpdateReply).then(() => {
