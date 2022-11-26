@@ -96,7 +96,8 @@ export default {
           toast.success(
             "Bienvenu" + " " + result.data[0].nom + " " + result.data[0].prenom
           );
-          this.$router.push(this.$route.query.redirect || "/");
+          //this.$router.push(this.$route.query.redirect || "/");
+          this.$router.go(-1 || "/");
         })
         .catch((e) => {
           toast.info(e.response.data.message);

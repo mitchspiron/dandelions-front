@@ -21,6 +21,15 @@ export const getEvenement = () => {
   });
 };
 
+export const getFourLastEvenement = () => {
+  return axios.get(`${URL}/four-last`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const getEvenementBySlug = (slug) => {
   return axios.get(`${URL}/${slug}`, {
     withCredentials: true,

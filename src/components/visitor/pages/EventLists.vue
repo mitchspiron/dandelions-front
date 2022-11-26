@@ -8,7 +8,7 @@
               class="mb-4 d-inline-block"
               style="border-bottom: 1px solid #582456"
             >
-              Event list
+              Coming-Soon
             </h1>
           </div>
           <div class="col-lg-12 mb-5 mb-lg-0">
@@ -22,22 +22,33 @@
                 <div class="row g-0">
                   <div class="col-md-12">
                     <div class="card-body">
-                      <h5>
-                        <router-link to="/evenement/slug" class="post-title">{{
-                          event.titre
-                        }}</router-link>
-                      </h5>
-                      <p class="card-text">
+                      <h3>
+                        <router-link
+                          :to="{ path: '/evenement/' + event.slug }"
+                          class="post-title fw-bold"
+                          >{{ event.titre }}</router-link
+                        >
+                      </h3>
+                      <p class="card-text description">
                         {{ event.description }}
                       </p>
                       <p class="card-text d-flex">
                         <small class="text-muted me-auto">{{
-                          event.date
+                          event.entreprise.nom
                         }}</small>
                         <small
-                          class="text-light rounded"
+                          class="text-light rounded-pill d-inline col-4 text-center"
                           style="background: #582456; opacity: 0.6"
-                          >Expire in : {{ event.deadline }}</small
+                          >{{
+                            new Date(event.deadline).toLocaleDateString(
+                              "Fr-fr",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              }
+                            )
+                          }}</small
                         >
                       </p>
                     </div>
@@ -113,66 +124,34 @@
   </main>
 </template>
 <script>
+import { getEvenement } from "../../../api/event";
 export default {
   name: "EnterpriseLists",
   components: {},
   data() {
     return {
-      events: [
-        {
-          titre: "LOREM IPSUM 1",
-          description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-          date: "il y a une minute",
-          deadline: "25-12-2022",
-        },
-        {
-          titre: "LOREM IPSUM 2",
-          description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-          date: "il y a une minute",
-          deadline: "25-12-2022",
-        },
-        {
-          titre: "LOREM IPSUM 3",
-          description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-          date: "il y a une minute",
-          deadline: "25-12-2022",
-        },
-        {
-          titre: "LOREM IPSUM 1",
-          description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-          date: "il y a une minute",
-          deadline: "25-12-2022",
-        },
-        {
-          titre: "LOREM IPSUM 2",
-          description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-          date: "il y a une minute",
-          deadline: "25-12-2022",
-        },
-        {
-          titre: "LOREM IPSUM 3",
-          description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    …`,
-          date: "il y a une minute",
-          deadline: "25-12-2022",
-        },
-      ],
+      events: [],
     };
+  },
+  methods: {
+    fetch() {
+      getEvenement().then((result) => {
+        this.events = result.data;
+      });
+    },
+  },
+  mounted() {
+    this.fetch();
   },
 };
 </script>
 <style scoped>
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
 .post-title {
   color: #000;
   display: inline;

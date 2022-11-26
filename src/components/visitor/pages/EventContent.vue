@@ -25,14 +25,29 @@
       </div>
     </article>
   </div>
-  <div class="d-grid gap-2 col-6 mx-auto">
-    <a
-      class="btn btn-md btn-outline-primary"
-      data-bs-toggle="modal"
-      data-bs-target="#EventModal"
-      >Subscribe</a
+  <form @submit.prevent="confirm" class="d-grid gap-2 col-6 mx-auto">
+    <button
+      v-if="loading"
+      class="btn btn-md btn-outline-secondary"
+      type="button"
+      disabled
     >
-  </div>
+      <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      Loading...
+    </button>
+    <button
+      v-else
+      @click="checkIsLoggin"
+      class="btn btn-md btn-outline-primary"
+      type="submit"
+    >
+      Register
+    </button>
+  </form>
 
   <!-- Modal -->
   <!-- <div
@@ -101,18 +116,34 @@
 </template>
 
 <script>
+import { useToast } from "vue-toastification";
 import { getEvenementBySlug } from "../../../api/event";
+import { createEventRegistration } from "../../../api/event-register";
 import { PROFIL_IMAGE } from "../../../configs";
+import { decodeToken } from "../../../utils/decodeToken";
 export default {
   name: "EventContent",
   components: {},
   data() {
     return {
+      loading: false,
       evenements: [],
       createdAt: Date.now(),
       deadline: Date.now(),
       illustration: "",
+      form: {
+        idEvenement: null,
+        idUtilisateur: null,
+      },
     };
+  },
+  computed: {
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+    isLoggedIn() {
+      return this.$store.getters["userStore/isLoggedIn"];
+    },
   },
   mounted() {
     this.fetch();
@@ -132,6 +163,39 @@ export default {
         const dateExpiration = new Date(result.data.deadline);
         this.deadline = dateExpiration.toLocaleDateString("Fr-fr", options);
       });
+    },
+    confirm() {
+      getEvenementBySlug(this.$route.params.slug).then((result) => {
+        const toast = useToast();
+        this.form.idEvenement = result.data.id;
+        this.form.idUtilisateur = this.me.sub || this.me.id;
+        this.loading = true;
+        createEventRegistration(this.form)
+          .then(() => {
+            this.loading = false;
+            this.$swal(
+              "Inscription réussi",
+              "Vérifier votre courriel",
+              "success"
+            );
+          })
+          .catch((e) => {
+            this.loading = false;
+            toast.info(e.response.data.message);
+          });
+      });
+    },
+    checkIsLoggin() {
+      const toast = useToast();
+      try {
+        const decodeV = decodeToken(localStorage.getItem("dandelions_token"));
+        if (decodeV) {
+          //console.log("ok visiteur");
+        }
+      } catch (err) {
+        toast.info("Vous devez être connecté!");
+        this.$router.push(`/se-connecter`);
+      }
     },
   },
 };

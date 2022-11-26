@@ -24,30 +24,37 @@
       </div>
       <div class="col-lg-12 col-md-6">
         <div class="widget">
-          <h2 class="section-title mb-3">Latest event</h2>
+          <h2 class="section-title mb-3">Latest Coming-Soon</h2>
           <div class="widget-body">
             <div class="widget-list">
-              <div
-                class="media"
-                v-for="(recommendation, i) in recommendations"
-                :key="i"
-              >
+              <div class="media" v-for="(event, i) in events" :key="i">
                 <router-link
-                  to="/evenement/slug"
+                  :to="{ path: '/evenement/' + event.slug }"
                   class="d-flex align-items-center"
                 >
                   <div class="media-body">
                     <h3 style="margin-top: -5px">
-                      {{ recommendation.title }}
+                      {{ event.title }}
                     </h3>
-                    <p class="mb-0 small">
-                      {{ recommendation.text }}
+                    <p class="mb-0 small description">
+                      {{ event.description }}
                     </p>
-                    <small
-                      class="text-light rounded"
-                      style="background: #582456; opacity: 0.6"
-                      >Expire in : 25-12-2022</small
-                    >
+                    <p class="card-text d-flex mt-2">
+                      <small class="text-muted me-auto">{{
+                        event.entreprise.nom
+                      }}</small>
+                      <small
+                        class="text-light rounded-pill d-inline col-4 text-center"
+                        style="background: #582456; opacity: 0.6"
+                        >{{
+                          new Date(event.deadline).toLocaleDateString("Fr-fr", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
+                        }}</small
+                      >
+                    </p>
                   </div>
                 </router-link>
               </div>
@@ -60,7 +67,7 @@
 </template>
 
 <script>
-import { getEvenementBySlug } from "../../../api/event";
+import { getEvenementBySlug, getFourLastEvenement } from "../../../api/event";
 import { PROFIL_IMAGE } from "../../../configs";
 export default {
   name: "ArticleSide",
@@ -71,10 +78,12 @@ export default {
       slug: "",
       descriptionA: "",
       illustration: "",
+      events: [],
     };
   },
   mounted() {
     this.fetch();
+    this.fetchFourLastEvent();
   },
   methods: {
     fetch() {
@@ -83,6 +92,11 @@ export default {
         this.slug = result.data.entreprise.slug;
         this.descriptionA = result.data.entreprise.descriptionA;
         this.illustration = PROFIL_IMAGE + result.data.entreprise.illustration;
+      });
+    },
+    fetchFourLastEvent() {
+      getFourLastEvenement().then((result) => {
+        this.events = result.data;
       });
     },
   },
