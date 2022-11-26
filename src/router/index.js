@@ -183,7 +183,7 @@ const routes = [
     component: Events,
   },
   {
-    path: "/evenement/slug/subscriber",
+    path: "/evenement/inscrit/:slug",
     name: "EventSubscribers",
     component: EventSubscribers,
   },

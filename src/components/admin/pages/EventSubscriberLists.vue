@@ -28,32 +28,35 @@
       </thead>
       <tbody>
         <tr v-for="(subscriber, id) in subscribers" :key="id">
-          <td>{{ subscriber.id }}</td>
-          <td class="text-muted">{{ subscriber.name }}</td>
-          <td class="text-muted">{{ subscriber.firstname }}</td>
-          <td class="text-muted">{{ subscriber.email }}</td>
-          <td class="text-muted">{{ subscriber.phone }}</td>
+          <td>{{ id + 1 }}</td>
+          <td class="text-muted">{{ subscriber.utilisateur.nom }}</td>
+          <td class="text-muted">{{ subscriber.utilisateur.prenom }}</td>
+          <td class="text-muted">{{ subscriber.utilisateur.email }}</td>
+          <td class="text-muted">{{ subscriber.utilisateur.telephone }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
 <script>
+import { getEventRegistrationByEvent } from "../../../api/event-register";
 export default {
   name: "EventSubscriberLists",
   components: {},
   data() {
     return {
-      subscribers: [
-        {
-          id: 1,
-          name: "Edward",
-          firstname: "Jean",
-          email: "jeanedward@mail.com",
-          phone: "0323565956",
-        },
-      ],
+      subscribers: [],
     };
+  },
+  methods: {
+    fetch() {
+      getEventRegistrationByEvent(this.$route.params.slug).then((result) => {
+        this.subscribers = result.data;
+      });
+    },
+  },
+  mounted() {
+    this.fetch();
   },
 };
 </script>

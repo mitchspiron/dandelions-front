@@ -90,7 +90,12 @@
           </td>
           <td>
             <div class="d-flex justify-content-center gap-4">
-              <router-link to="/evenement/slug/subscriber" type="button"
+              <router-link
+                :to="{
+                  name: 'EventSubscribers',
+                  params: { slug: evenement.slug },
+                }"
+                type="button"
                 ><i class="fa-solid fa-list"></i
               ></router-link>
               <router-link

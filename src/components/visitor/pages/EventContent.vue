@@ -25,7 +25,11 @@
       </div>
     </article>
   </div>
-  <form @submit.prevent="confirm" class="d-grid gap-2 col-6 mx-auto">
+  <form
+    @submit.prevent="confirm"
+    v-if="evenements.onSubscribe == true"
+    class="d-grid gap-2 col-6 mx-auto"
+  >
     <button
       v-if="loading"
       class="btn btn-md btn-outline-secondary"

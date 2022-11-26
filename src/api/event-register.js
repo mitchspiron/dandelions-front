@@ -15,3 +15,12 @@ export const createEventRegistration = (data) => {
     },
   });
 };
+
+export const getEventRegistrationByEvent = (slug) => {
+  return axios.get(`${URL}/${slug}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
