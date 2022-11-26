@@ -101,6 +101,7 @@ const routes = [
     component: Login,
     meta: {
       title: "Login",
+      noAccessTo: true,
     },
   },
   {
@@ -156,86 +157,137 @@ const routes = [
     path: "/admin",
     name: "HomeAdmin",
     component: HomeAdmin,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/article",
     name: "Articles",
     component: Articles,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/article/nouveau",
     name: "ArticleNew",
     component: ArticleNew,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/article/:slug",
     name: "ArticleEdit",
     component: ArticleEdit,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/article/commentaire/:slug",
     name: "ArticleComment",
     component: ArticleComment,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/evenement",
     name: "Events",
     component: Events,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/evenement/inscrit/:slug",
     name: "EventSubscribers",
     component: EventSubscribers,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/evenement/nouveau",
     name: "EventNew",
     component: EventNew,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/evenement/:slug",
     name: "EventEdit",
     component: EventEdit,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/utilisateur",
     name: "Users",
     component: Users,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/utilisateur/nouveau",
     name: "UserNew",
     component: UserNew,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/article/categorie",
     name: "Categories",
     component: Categories,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/article/categorie/nouveau",
     name: "CategoryNew",
     component: CategoryNew,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/article/categorie/:id",
     name: "CategoryEdit",
     component: CategoryEdit,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/entreprise",
     name: "EnterprisesAdmin",
     component: EnterprisesAdmin,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/entreprise/nouveau",
     name: "EnterpriseNew",
     component: EnterpriseNew,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
   {
     path: "/admin/entreprise/:slug",
     name: "EnterpriseEdit",
     component: EnterpriseEdit,
+    meta: {
+      noAccessNotLoggedIn: true,
+    },
   },
 ];
 
@@ -244,4 +296,31 @@ const router = createRouter({
   routes,
 });
 
+router.afterEach((from) => {
+  document.title = from.meta.title;
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.noAccessTo)) {
+    if (!store.getters["userStore/isLoggedIn"]) {
+      next();
+      return;
+    }
+    next("/");
+  } else {
+    next();
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.noAccessNotLoggedIn)) {
+    if (store.getters["userStore/isLoggedIn"]) {
+      next();
+      return;
+    }
+    next("/se-connecter");
+  } else {
+    next();
+  }
+});
 export default router;
