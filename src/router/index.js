@@ -314,7 +314,11 @@ router.beforeEach((to, from, next) => {
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.noAccessNotLoggedIn)) {
-    if (store.getters["userStore/isLoggedIn"]) {
+    if (
+      store.getters["userStore/isLoggedIn"] &&
+      (store.getters["userStore/me"].roleUser ||
+        store.getters["userStore/me"].role) !== 3
+    ) {
       next();
       return;
     }
