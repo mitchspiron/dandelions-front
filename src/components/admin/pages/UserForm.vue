@@ -75,7 +75,7 @@
               </div>
               <div class="col-3 form-floating">
                 <input
-                  type="telephone"
+                  type="tel"
                   class="form-control"
                   id="phone"
                   placeholder="+26100000000"

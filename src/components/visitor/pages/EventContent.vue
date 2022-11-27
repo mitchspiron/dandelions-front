@@ -94,7 +94,7 @@
           </div>
           <div class="col-12 form-floating">
             <input
-              type="telephone"
+              type="tel"
               class="form-control"
               id="telephone"
               placeholder=""

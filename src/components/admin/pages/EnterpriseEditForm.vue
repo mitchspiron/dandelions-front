@@ -37,6 +37,7 @@
                     placeholder="Username"
                     aria-label="Username"
                     aria-describedby="basic-addon1"
+                    required
                   />
                 </div>
                 <p class="text-muted mb-0">
@@ -81,6 +82,7 @@
                   id="nom"
                   placeholder="Dandelions"
                   v-model="form.nom"
+                  required
                 />
                 <label for="nom" class="form-label">Nom</label>
               </div>
@@ -91,6 +93,7 @@
                   id="brand"
                   placeholder=""
                   v-model="form.brand"
+                  required
                 />
                 <label for="brand" class="form-label">Brand</label>
               </div>
@@ -101,6 +104,7 @@
                   id="email"
                   placeholder="name@example.com"
                   v-model="form.email"
+                  required
                 />
                 <label for="email" class="form-label">Adresse email</label>
               </div>
@@ -109,11 +113,12 @@
               <div class="d-flex justify-content-between mb-4 gap-1">
                 <div class="col-4 form-floating">
                   <input
-                    type="telephone"
+                    type="tel"
                     class="form-control"
                     id="phone"
                     placeholder="+26100000000"
                     v-model="form.telephone"
+                    required
                   />
                   <label for="phone" class="form-label">Téléphone</label>
                 </div>
@@ -124,6 +129,7 @@
                     id="annee"
                     placeholder=""
                     v-model="form.anneeCreation"
+                    required
                   />
                   <label for="annee" class="form-label"
                     >Année de création</label
@@ -136,6 +142,7 @@
                     id="site"
                     placeholder=""
                     v-model="form.urlWebsite"
+                    required
                   />
                   <label for="site" class="form-label">URL site web</label>
                 </div>
@@ -151,6 +158,8 @@
               <textarea
                 class="form-control"
                 v-model="form.descriptionA"
+                required
+                maxlength="300"
               ></textarea>
               <label for="example-text-input" class="form-control-label"
                 >Déscription 1</label
@@ -160,6 +169,8 @@
               <textarea
                 class="form-control"
                 v-model="form.descriptionB"
+                required
+                maxlength="300"
               ></textarea>
               <label for="example-text-input" class="form-control-label"
                 >Déscription 2</label
@@ -169,6 +180,8 @@
               <textarea
                 class="form-control"
                 v-model="form.textContact"
+                required
+                maxlength="300"
               ></textarea>
               <label for="example-text-input" class="form-control-label"
                 >Phrase pour la section visiter website</label

@@ -35,6 +35,7 @@
                     placeholder="Username"
                     aria-label="Username"
                     aria-describedby="basic-addon1"
+                    required
                   />
                 </div>
                 <p class="text-muted mb-0">
@@ -93,6 +94,7 @@
                   id="titre"
                   placeholder=""
                   v-model="form.titre"
+                  required
                 />
                 <label for="titre" class="form-label">Titre</label>
               </div>
@@ -103,6 +105,7 @@
                   aria-label="Floating label select example"
                   autocomplete="off"
                   v-model="form.idCategorie"
+                  required
                 >
                   <option :value="form.idCategorie" selected disabled>
                     {{ categorie_article }}
@@ -123,6 +126,8 @@
                 <textarea
                   class="form-control"
                   v-model="form.description"
+                  required
+                  maxlength="300"
                 ></textarea>
                 <label for="example-text-input" class="form-control-label"
                   >Déscription</label

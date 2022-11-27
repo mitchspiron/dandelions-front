@@ -15,6 +15,7 @@
                 class="form-control"
                 type="text"
                 autocomplete="off"
+                required
               />
               <label for="example-text-input" class="form-control-label"
                 >Catégorie</label

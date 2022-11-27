@@ -36,6 +36,7 @@
                     placeholder="Username"
                     aria-label="Username"
                     aria-describedby="basic-addon1"
+                    required
                   />
                 </div>
                 <p class="text-muted mb-0">
@@ -51,6 +52,7 @@
                   aria-label="Floating label select example"
                   autocomplete="off"
                   v-model="form.idEntreprise"
+                  required
                 >
                   <option value="" selected disabled>Entreprise</option>
                   <option
@@ -72,6 +74,7 @@
                   id="titre"
                   placeholder=""
                   v-model="form.titre"
+                  required
                 />
                 <label for="titre" class="form-label">Titre</label>
               </div>
@@ -82,6 +85,7 @@
                   id="deadline"
                   placeholder=""
                   v-model="form.deadline"
+                  required
                 />
                 <label for="deadline" class="form-label">Date limite</label>
               </div>
@@ -89,6 +93,8 @@
                 <textarea
                   class="form-control"
                   v-model="form.description"
+                  required
+                  maxlength="300"
                 ></textarea>
                 <label for="example-text-input" class="form-control-label"
                   >Déscription</label
@@ -160,7 +166,7 @@ export default {
         illustration: "",
         contenu: "",
         deadline: Date,
-        onSubscribe: true || false,
+        onSubscribe: false,
       },
       enterprises: [],
       file: "",
