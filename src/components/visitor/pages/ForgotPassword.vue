@@ -35,10 +35,15 @@
                         id="email"
                         placeholder="email address"
                         v-model="form.email"
+                        @blur="validate('email')"
+                        @keypress="validate('email')"
                       />
                       <label for="email" class="form-label"
                         >Email address</label
                       >
+                      <p class="text-danger" v-if="!!errors.email">
+                        {{ errors.email }}
+                      </p>
                     </div>
                     <div class="mb-3 d-grid">
                       <button
@@ -79,12 +84,24 @@
 <script>
 import { useToast } from "vue-toastification";
 import { forgotPassword } from "../../../api/auth-user";
+import * as yup from "yup";
+
+const FormSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required("Veuillez insérer votre adresse email")
+    .email("Veuillez saisir un email valide"),
+});
+
 export default {
   name: "RegisterForm",
   props: ["register", "login", "showLogin"],
   components: {},
   data() {
     return {
+      errors: {
+        email: "",
+      },
       form: {
         email: "",
       },
@@ -92,21 +109,36 @@ export default {
     };
   },
   methods: {
+    validate(field) {
+      FormSchema.validateAt(field, this.form)
+        .then(() => (this.errors[field] = ""))
+        .catch((err) => {
+          this.errors[err.path] = err.message;
+        });
+    },
     confirm() {
-      const toast = useToast();
-      this.loading = true;
-      forgotPassword(this.form)
+      FormSchema.validate(this.form, { abortEarly: false })
         .then(() => {
-          this.loading = false;
-          this.$swal(
-            "Email de récupération envoyé!",
-            "Vérifier votre courriel",
-            "success"
-          );
+          const toast = useToast();
+          this.loading = true;
+          forgotPassword(this.form)
+            .then(() => {
+              this.loading = false;
+              this.$swal(
+                "Email de récupération envoyé!",
+                "Vérifier votre courriel",
+                "success"
+              );
+            })
+            .catch((e) => {
+              this.loading = false;
+              toast.info(e.response.data.message);
+            });
         })
-        .catch((e) => {
-          this.loading = false;
-          toast.info(e.response.data.message);
+        .catch((err) => {
+          err.inner.forEach((error) => {
+            this.errors = { ...this.errors, [error.path]: error.message };
+          });
         });
     },
   },

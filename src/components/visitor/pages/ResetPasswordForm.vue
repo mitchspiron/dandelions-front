@@ -33,10 +33,15 @@
                         id="password"
                         placeholder="email address"
                         v-model="form.motDePasse"
+                        @blur="validate('motDePasse')"
+                        @keypress="validate('motDePasse')"
                       />
                       <label for="password" class="form-label"
                         >Nouveau mot de passe</label
                       >
+                      <p class="text-danger" v-if="!!errors.motDePasse">
+                        {{ errors.motDePasse }}
+                      </p>
                     </div>
                     <div class="col-12 form-floating mb-3">
                       <input
@@ -44,10 +49,16 @@
                         class="form-control"
                         id="confirm-password"
                         placeholder="email address"
+                        v-model="form.confirmMotDePasse"
+                        @blur="validate('confirmMotDePasse')"
+                        @keypress="validate('confirmMotDePasse')"
                       />
                       <label for="confirm-password" class="form-label"
                         >Confirmer nouveau mot de passe</label
                       >
+                      <p class="text-danger" v-if="!!errors.confirmMotDePasse">
+                        {{ errors.confirmMotDePasse }}
+                      </p>
                     </div>
                     <div class="mb-3 d-grid">
                       <button class="btn btn-outline-dark" type="submit">
@@ -67,30 +78,71 @@
 <script>
 import { resetPassword } from "../../../api/auth-user";
 import { useToast } from "vue-toastification";
+import * as yup from "yup";
+
+const FormSchema = yup.object().shape({
+  motDePasse: yup
+    .string()
+    .required("Veuillez insérer votre nouveau mot de passe")
+    .min(8, "Le mot de passe doit contenir au moins 8 caractères")
+    .max(15, "Le mot de passe ne doit pas dépasser 15 caractères")
+    .matches(
+      /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,15}$/gm,
+      "Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial"
+    ),
+  confirmMotDePasse: yup
+    .string()
+    .required("Veuillez confirmer le nouveau mot de passe")
+    .oneOf(
+      [yup.ref("motDePasse"), null],
+      "Les mots de passes de correspondent pas"
+    ),
+});
+
 export default {
   name: "ResetPasswordForm",
   components: {},
   data() {
     return {
+      errors: {
+        motDePasse: "",
+        confirmMotDePasse: "",
+      },
       form: {
         motDePasse: "",
+        confirmMotDePasse: "",
       },
     };
   },
   methods: {
+    validate(field) {
+      FormSchema.validateAt(field, this.form)
+        .then(() => (this.errors[field] = ""))
+        .catch((err) => {
+          this.errors[err.path] = err.message;
+        });
+    },
     submit() {
-      const toast = useToast();
-      resetPassword(this.form, this.$route.params.token)
+      FormSchema.validate(this.form, { abortEarly: false })
         .then(() => {
-          this.$swal(
-            "Mot de passe changé avec succès!",
-            "Vous pouvez maintenant vous reconnecter",
-            "success"
-          );
-          this.$router.push(`/se-connecter`);
+          const toast = useToast();
+          resetPassword(this.form, this.$route.params.token)
+            .then(() => {
+              this.$swal(
+                "Mot de passe changé avec succès!",
+                "Vous pouvez maintenant vous reconnecter",
+                "success"
+              );
+              this.$router.push(`/se-connecter`);
+            })
+            .catch((e) => {
+              toast.info(e.response.data.message);
+            });
         })
-        .catch((e) => {
-          toast.info(e.response.data.message);
+        .catch((err) => {
+          err.inner.forEach((error) => {
+            this.errors = { ...this.errors, [error.path]: error.message };
+          });
         });
     },
   },

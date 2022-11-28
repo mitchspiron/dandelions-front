@@ -36,6 +36,7 @@
                     placeholder="Username"
                     aria-label="Username"
                     aria-describedby="basic-addon1"
+                    required
                   />
                 </div>
                 <p class="text-muted mb-0">
@@ -75,6 +76,7 @@
                   id="firstname"
                   placeholder="Don Andres"
                   v-model="infos.prenom"
+                  required
                 />
                 <label for="firstname" class="form-label">Prénom</label>
               </div>
@@ -85,6 +87,7 @@
                   id="lastname"
                   placeholder="Iniesta"
                   v-model="infos.nom"
+                  required
                 />
                 <label for="lastname" class="form-label">Nom</label>
               </div>
@@ -97,6 +100,7 @@
                   id="email"
                   placeholder="name@example.com"
                   v-model="infos.email"
+                  required
                 />
                 <label for="email" class="form-label">Adresse email</label>
               </div>
@@ -107,6 +111,7 @@
                   id="phone"
                   placeholder="+26100000000"
                   v-model="infos.telephone"
+                  required
                 />
                 <label for="phone" class="form-label">Téléphone</label>
               </div>
@@ -116,6 +121,8 @@
                 <textarea
                   class="form-control"
                   v-model="infos.aPropos"
+                  required
+                  maxlength="300"
                 ></textarea>
                 <label for="example-text-input" class="form-control-label"
                   >A propos</label
@@ -159,10 +166,15 @@
                   placeholder=""
                   autocomplete="new-password"
                   v-model="password.ancienMotDePasse"
+                  @blur="validate('ancienMotDePasse')"
+                  @keypress="validate('ancienMotDePasse')"
                 />
                 <label for="old-pwd" class="form-label"
                   >Mot de passe actuel</label
                 >
+                <p class="text-danger" v-if="!!errors.ancienMotDePasse">
+                  {{ errors.ancienMotDePasse }}
+                </p>
               </div>
               <div class="col-4 form-floating">
                 <input
@@ -172,10 +184,15 @@
                   placeholder=""
                   autocomplete="new-password"
                   v-model="password.nouveauMotDePasse"
+                  @blur="validate('nouveauMotDePasse')"
+                  @keypress="validate('nouveauMotDePasse')"
                 />
                 <label for="new-pwd" class="form-label"
                   >Nouveau mot de passe</label
                 >
+                <p class="text-danger" v-if="!!errors.nouveauMotDePasse">
+                  {{ errors.nouveauMotDePasse }}
+                </p>
               </div>
               <div class="col-4 form-floating">
                 <input
@@ -184,10 +201,16 @@
                   id="confirm-new-pwd"
                   placeholder="name@example.com"
                   autocomplete="new-password"
+                  v-model="password.confirmMotDePasse"
+                  @blur="validate('confirmMotDePasse')"
+                  @keypress="validate('confirmMotDePasse')"
                 />
                 <label for="confirm-new-pwd" class="form-label"
                   >Confirmer nouveau mot de passe</label
                 >
+                <p class="text-danger" v-if="!!errors.confirmMotDePasse">
+                  {{ errors.confirmMotDePasse }}
+                </p>
               </div>
             </div>
           </div>
@@ -218,6 +241,30 @@ import {
   uploadedFile,
 } from "../../../api/users";
 import { decodeToken } from "../../../utils/decodeToken";
+import * as yup from "yup";
+
+const PasswordFormSchema = yup.object().shape({
+  ancienMotDePasse: yup
+    .string()
+    .required("Veuillez insérer votre mot de passe actuel"),
+  nouveauMotDePasse: yup
+    .string()
+    .required("Veuillez insérer votre nouveau mot de passe")
+    .min(8, "Le mot de passe doit contenir au moins 8 caractères")
+    .max(15, "Le mot de passe ne doit pas dépasser 15 caractères")
+    .matches(
+      /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,15}$/gm,
+      "Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial"
+    ),
+  confirmMotDePasse: yup
+    .string()
+    .required("Veuillez confirmer votre nouveau mot de passe")
+    .oneOf(
+      [yup.ref("nouveauMotDePasse"), null],
+      "Les mots de passes de correspondent pas"
+    ),
+});
+
 export default {
   name: "MeForm",
   components: {},
@@ -231,9 +278,15 @@ export default {
         aPropos: "",
         role: null,
       },
+      errors: {
+        ancienMotDePasse: "",
+        nouveauMotDePasse: "",
+        confirmMotDePasse: "",
+      },
       password: {
         ancienMotDePasse: "",
         nouveauMotDePasse: "",
+        confirmMotDePasse: "",
       },
       file: "",
       image: {
@@ -256,6 +309,13 @@ export default {
     this.infos.role = this.me.roleUser || this.me.role;
   },
   methods: {
+    validate(field) {
+      PasswordFormSchema.validateAt(field, this.password)
+        .then(() => (this.errors[field] = ""))
+        .catch((err) => {
+          this.errors[err.path] = err.message;
+        });
+    },
     avatar() {
       const FILE_INPUT = document.querySelector("input[type=file]");
       const AVATAR = document.getElementById("avatar");
@@ -291,25 +351,25 @@ export default {
         });
     },
     confirmPassword() {
-      const toast = useToast();
-      updateUsersPasswordById(this.me.sub || this.me.id, this.password)
+      PasswordFormSchema.validate(this.password, { abortEarly: false })
         .then(() => {
-          toast.success("Modification mot de passe réussi");
-          /* result.data[0].illustration =
-            this.me.illustrationUser || this.me.illustration;
-          result.data[0].nom = this.me.nomUser || this.me.nom;
-          result.data[0].prenom = this.me.prenomUser || this.me.prenom;
-          result.data[0].aPropos = this.me.aProposUser || this.me.aPropos;
-          result.data[0].email = this.me.emailUser || this.me.email;
-          result.data[0].telephone = this.me.telephoneUser || this.me.telephone;
-          result.data[0].role = this.me.roleUser || this.me.role;
-          result.data[0].id = this.me.sub || this.me.id;
-          this.$store.dispatch("userStore/setUser", result.data[0]); */
-          //this.$store.dispatch("userStore/setConnected");
-          this.$router.push(this.$route.query.redirect || "/mon-espace");
+          const toast = useToast();
+          updateUsersPasswordById(this.me.sub || this.me.id, this.password)
+            .then(() => {
+              toast.success("Modification mot de passe réussi");
+              this.password.ancienMotDePasse = "";
+              this.password.nouveauMotDePasse = "";
+              this.password.confirmMotDePasse = "";
+              this.$router.push(this.$route.query.redirect || "/mon-espace");
+            })
+            .catch((e) => {
+              toast.info(e.response.data.message);
+            });
         })
-        .catch((e) => {
-          toast.info(e.response.data.message);
+        .catch((err) => {
+          err.inner.forEach((error) => {
+            this.errors = { ...this.errors, [error.path]: error.message };
+          });
         });
     },
     onSelect() {

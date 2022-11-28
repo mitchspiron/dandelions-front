@@ -30,8 +30,13 @@
                       id="email"
                       placeholder="email address"
                       v-model="form.email"
+                      @blur="validate('email')"
+                      @keypress="validate('email')"
                     />
                     <label for="email" class="form-label">Email address</label>
+                    <p class="text-danger" v-if="!!errors.email">
+                      {{ errors.email }}
+                    </p>
                   </div>
                   <div class="col-12 form-floating mb-3">
                     <input
@@ -40,8 +45,13 @@
                       id="firstname"
                       placeholder="********"
                       v-model="form.motDePasse"
+                      @blur="validate('motDePasse')"
+                      @keypress="validate('motDePasse')"
                     />
                     <label for="firstname" class="form-label">Password</label>
+                    <p class="text-danger" v-if="!!errors.motDePasse">
+                      {{ errors.motDePasse }}
+                    </p>
                   </div>
                   <p class="small">
                     <a class="text-primary" @click="showForgotPassword()"
@@ -73,12 +83,26 @@
 <script>
 import { signin } from "../../../api/auth-user";
 import { useToast } from "vue-toastification";
+import * as yup from "yup";
+
+const LoginFormSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required("Veuillez insérer votre adresse email")
+    .email("Veuillez saisir un email valide"),
+  motDePasse: yup.string().required("Veuillez insérer votre mot de passe"),
+});
+
 export default {
   name: "LoginForm",
   props: ["register", "login", "showRegister", "showForgotPassword"],
   components: {},
   data() {
     return {
+      errors: {
+        email: "",
+        motDePasse: "",
+      },
       form: {
         email: "",
         motDePasse: "",
@@ -86,21 +110,43 @@ export default {
     };
   },
   methods: {
+    validate(field) {
+      LoginFormSchema.validateAt(field, this.form)
+        .then(() => (this.errors[field] = ""))
+        .catch((err) => {
+          this.errors[err.path] = err.message;
+        });
+    },
     async submit() {
-      const toast = useToast();
-      await signin(this.form)
-        .then((result) => {
-          localStorage.setItem("dandelions_token", result.data[1].access_token);
-          this.$store.dispatch("userStore/setUser", result.data[0]);
-          this.$store.dispatch("userStore/setConnected");
-          toast.success(
-            "Bienvenu" + " " + result.data[0].nom + " " + result.data[0].prenom
-          );
-          //this.$router.push(this.$route.query.redirect || "/");
-          this.$router.go(-1 || "/");
+      LoginFormSchema.validate(this.form, { abortEarly: false })
+        .then(() => {
+          const toast = useToast();
+          signin(this.form)
+            .then((result) => {
+              localStorage.setItem(
+                "dandelions_token",
+                result.data[1].access_token
+              );
+              this.$store.dispatch("userStore/setUser", result.data[0]);
+              this.$store.dispatch("userStore/setConnected");
+              toast.success(
+                "Bienvenu" +
+                  " " +
+                  result.data[0].nom +
+                  " " +
+                  result.data[0].prenom
+              );
+              //this.$router.push(this.$route.query.redirect || "/");
+              this.$router.go(-1 || "/");
+            })
+            .catch((e) => {
+              toast.info(e.response.data.message);
+            });
         })
-        .catch((e) => {
-          toast.info(e.response.data.message);
+        .catch((err) => {
+          err.inner.forEach((error) => {
+            this.errors = { ...this.errors, [error.path]: error.message };
+          });
         });
     },
   },

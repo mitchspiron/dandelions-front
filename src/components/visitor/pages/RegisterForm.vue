@@ -23,38 +23,6 @@
                 <form class="mb-3 mt-md-4" @submit.prevent="submit">
                   <h2 class="fw-bold text-uppercase">Lorem ipsum</h2>
                   <p class="mb-3">Please enter your login and password!</p>
-                  <!-- <div
-                    class="d-flex align-items-start align-items-sm-center mb-3 gap-4"
-                  >
-                    <div
-                      id="avatar"
-                      alt="user-avatar"
-                      class="d-block rounded col-3"
-                    />
-                    <div>
-                      <div class="input-group mb-3">
-                        <span
-                          class="input-group-text"
-                          style="color: #582456"
-                          id="basic-addon1"
-                          ><i class="fa-solid fa-cloud-arrow-up"></i
-                        ></span>
-                        <input
-                          type="file"
-                          class="form-control"
-                          name="image"
-                          id="image"
-                          accept="image/*"
-                          placeholder="Username"
-                          aria-label="Username"
-                          aria-describedby="basic-addon1"
-                        />
-                      </div>
-                      <p class="text-muted mb-0">
-                        Allowed JPG, GIF or PNG. Max size of 800K
-                      </p>
-                    </div>
-                  </div> -->
                   <div class="d-flex justify-content-center mb-3 gap-2">
                     <div class="col-6 form-floating">
                       <input
@@ -63,10 +31,15 @@
                         id="firstname"
                         placeholder="Don Andres"
                         v-model="form.prenom"
+                        @blur="validate('prenom')"
+                        @keypress="validate('prenom')"
                       />
                       <label for="firstname" class="form-label"
                         >Firstname</label
                       >
+                      <p class="text-danger" v-if="!!errors.prenom">
+                        {{ errors.prenom }}
+                      </p>
                     </div>
                     <div class="col-6 form-floating">
                       <input
@@ -75,8 +48,13 @@
                         id="lastname"
                         placeholder="Iniesta"
                         v-model="form.nom"
+                        @blur="validate('nom')"
+                        @keypress="validate('nom')"
                       />
                       <label for="lastname" class="form-label">Lastname</label>
+                      <p class="text-danger" v-if="!!errors.nom">
+                        {{ errors.nom }}
+                      </p>
                     </div>
                   </div>
                   <div class="d-flex justify-content-center mb-3 gap-2">
@@ -87,10 +65,15 @@
                         id="email"
                         placeholder="name@example.com"
                         v-model="form.email"
+                        @blur="validate('email')"
+                        @keypress="validate('email')"
                       />
                       <label for="email" class="form-label"
                         >Email address</label
                       >
+                      <p class="text-danger" v-if="!!errors.email">
+                        {{ errors.email }}
+                      </p>
                     </div>
                     <div class="col-6 form-floating">
                       <input
@@ -99,8 +82,13 @@
                         id="phone"
                         placeholder="+26100000000"
                         v-model="form.telephone"
+                        @blur="validate('telephone')"
+                        @keypress="validate('telephone')"
                       />
                       <label for="phone" class="form-label">Number phone</label>
+                      <p class="text-danger" v-if="!!errors.telephone">
+                        {{ errors.telephone }}
+                      </p>
                     </div>
                   </div>
                   <div class="mb-3">
@@ -112,10 +100,15 @@
                           id="password"
                           placeholder="*******"
                           v-model="form.motDePasse"
+                          @blur="validate('motDePasse')"
+                          @keypress="validate('motDePasse')"
                         />
                         <label for="password" class="form-label"
                           >Password</label
                         >
+                        <p class="text-danger" v-if="!!errors.motDePasse">
+                          {{ errors.motDePasse }}
+                        </p>
                       </div>
                       <div class="col-6 form-floating">
                         <input
@@ -124,10 +117,18 @@
                           id="password-repeat"
                           placeholder="*******"
                           v-model="form.confirmMotDePasse"
+                          @blur="validate('confirmMotDePasse')"
+                          @keypress="validate('confirmMotDePasse')"
                         />
                         <label for="password-repeat" class="form-label"
                           >Password repeat</label
                         >
+                        <p
+                          class="text-danger"
+                          v-if="!!errors.confirmMotDePasse"
+                        >
+                          {{ errors.confirmMotDePasse }}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -136,13 +137,19 @@
                       <div class="col-12 form-floating">
                         <textarea
                           v-model="form.aPropos"
+                          @blur="validate('aPropos')"
+                          @keypress="validate('aPropos')"
                           class="form-control"
+                          maxlength="300"
                         ></textarea>
                         <label
                           for="example-text-input"
                           class="form-control-label"
                           >About me</label
                         >
+                        <p class="text-danger" v-if="!!errors.aPropos">
+                          {{ errors.aPropos }}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -185,12 +192,54 @@
 <script>
 import { signup } from "../../../api/auth-user";
 import { useToast } from "vue-toastification";
+import * as yup from "yup";
+
+const RegisterFormSchema = yup.object().shape({
+  nom: yup.string().required("Veuillez insérer votre nom"),
+  prenom: yup.string().required("Veuillez insérer votre prénom"),
+  email: yup
+    .string()
+    .required("Veuillez insérer votre adresse email")
+    .email("Veuillez saisir un email valide"),
+  telephone: yup
+    .string()
+    .required("Veuillez insérer votre numéro de téléphone"),
+  aPropos: yup
+    .string()
+    .required("Veuillez insérer deux ou trois phrases vous concernant"),
+  motDePasse: yup
+    .string()
+    .required("Veuillez insérer votre mot de passe")
+    .min(8, "Le mot de passe doit contenir au moins 8 caractères")
+    .max(15, "Le mot de passe ne doit pas dépasser 15 caractères")
+    .matches(
+      /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,15}$/gm,
+      "Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial"
+    ),
+  confirmMotDePasse: yup
+    .string()
+    .required("Veuillez confirmer votre mot de passe")
+    .oneOf(
+      [yup.ref("motDePasse"), null],
+      "Les mots de passes de correspondent pas"
+    ),
+});
+
 export default {
   name: "RegisterForm",
   props: ["register", "login", "showLogin"],
   components: {},
   data() {
     return {
+      errors: {
+        nom: "",
+        prenom: "",
+        email: "",
+        telephone: "",
+        aPropos: "",
+        motDePasse: "",
+        confirmMotDePasse: "",
+      },
       form: {
         nom: "",
         prenom: "",
@@ -204,59 +253,42 @@ export default {
     };
   },
   methods: {
-    /* avatar() {
-      const FILE_INPUT = document.querySelector("input[type=file]");
-      const AVATAR = document.getElementById("avatar");
-
-      FILE_INPUT.addEventListener("change", (event) => {
-        const file = event.target.files[0];
-
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-
-        reader.onloadend = () => {
-          AVATAR.setAttribute("aria-label", file.name);
-          AVATAR.style.background = `url(${reader.result}) center center/cover`;
-        };
-      });
-    }, */
-
-    submit() {
-      const toast = useToast();
-      this.loading = true;
-      signup(this.form)
-        .then(() => {
-          this.loading = false;
-          this.$swal(
-            "Email de confirmation envoyé!",
-            "Vérifier votre courriel",
-            "success"
-          );
-        })
-        .catch((e) => {
-          this.loading = false;
-          toast.info(e.response.data.message);
+    validate(field) {
+      RegisterFormSchema.validateAt(field, this.form)
+        .then(() => (this.errors[field] = ""))
+        .catch((err) => {
+          this.errors[err.path] = err.message;
         });
     },
-  },
-  mounted() {
-    //this.avatar();
+    submit() {
+      RegisterFormSchema.validate(this.form, { abortEarly: false })
+        .then(() => {
+          const toast = useToast();
+          this.loading = true;
+          signup(this.form)
+            .then(() => {
+              this.loading = false;
+              this.$swal(
+                "Email de confirmation envoyé!",
+                "Vérifier votre courriel",
+                "success"
+              );
+            })
+            .catch((e) => {
+              this.loading = false;
+              toast.info(e.response.data.message);
+            });
+        })
+        .catch((err) => {
+          err.inner.forEach((error) => {
+            this.errors = { ...this.errors, [error.path]: error.message };
+          });
+        });
+    },
   },
 };
 </script>
 <style scoped>
-/* #avatar {
-  background-image: url("../../../assets/img/avatar.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 100px;
-  width: 100px;
-  border: 3px solid #582456;
-  border-radius: 50%;
-  transition: background ease-out 200ms;
-} */
-
-/* ---- */
 a {
   text-decoration: none;
   cursor: pointer;
