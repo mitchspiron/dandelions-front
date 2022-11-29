@@ -8,8 +8,8 @@
         <input
           type="text"
           class="form-control"
-          placeholder="Username"
-          aria-label="Username"
+          placeholder="ex: Dandelions"
+          v-model="search"
           aria-describedby="basic-addon1"
         />
       </div>
@@ -44,6 +44,12 @@
         </tr>
       </thead>
       <tbody>
+        <tr v-if="noEnterprise">
+          <td colspan="6">
+            <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Aucun
+            résultat trouvé
+          </td>
+        </tr>
         <tr v-for="(enterprise, id) in enterprises" :key="id">
           <td>{{ enterprise.id }}</td>
           <td class="fw-bold mb-1">{{ enterprise.nom }}</td>
@@ -101,7 +107,11 @@
 </template>
 <script>
 import { useToast } from "vue-toastification";
-import { getEnterpriseAdmin, isAbonneeBySlug } from "../../../api/enterprise.";
+import {
+  filterEnterpriseAdmin,
+  getEnterpriseAdmin,
+  isAbonneeBySlug,
+} from "../../../api/enterprise.";
 export default {
   name: "EnterpriseLists",
   components: {},
@@ -109,6 +119,8 @@ export default {
     return {
       enterprises: [],
       switch: { abonnee: true || false },
+      noEnterprise: false,
+      search: "",
     };
   },
   computed: {
@@ -147,6 +159,20 @@ export default {
             toast.error("Une erreur est survenue!");
           });
       }
+    },
+  },
+  watch: {
+    search() {
+      filterEnterpriseAdmin(this.me.sub || this.me.id, this.search).then(
+        (result) => {
+          this.enterprises = result.data;
+          if (result.data == "") {
+            this.noEnterprise = true;
+          } else {
+            this.noEnterprise = false;
+          }
+        }
+      );
     },
   },
   mounted() {

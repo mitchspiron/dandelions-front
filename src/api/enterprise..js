@@ -22,6 +22,16 @@ export const getEnterpriseAdmin = (id) => {
   });
 };
 
+export const filterEnterpriseAdmin = (id, data) => {
+  const form = { searchkey: data };
+  return axios.post(`${URL}/admin/filter/${id}`, form, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const createEnterprise = (data) => {
   const newEnterprise = {
     idRedacteur: data.idRedacteur,
