@@ -13,6 +13,17 @@ export const getUsers = () => {
   });
 };
 
+export const filterUsers = (data) => {
+  const form = { searchkey: data.searchkey, role: data.role };
+  console.log("tiiii", form);
+  return axios.post(`${URL}/filter`, form, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const createUsers = (data) => {
   const newUser = {
     nom: data.nom,

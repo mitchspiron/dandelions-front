@@ -11,6 +11,7 @@
           placeholder="Nom complet"
           aria-label="fullname"
           aria-describedby="basic-addon1"
+          v-model="search.searchkey"
         />
       </div>
     </div>
@@ -19,8 +20,13 @@
         <span class="input-group-text" id="basic-addon1"
           ><i class="fa fa-search"></i
         ></span>
-        <select class="form-select" aria-label="Default select example">
-          <option value="" selected disabled>Rôles</option>
+        <select
+          class="form-select"
+          v-model="search.role"
+          aria-label="Floating label select example"
+          autocomplete="off"
+        >
+          <option value="" selected>Rôles</option>
           <option value="1">Administrateur</option>
           <option value="2">Rédacreur</option>
           <option value="3">Visiteur</option>
@@ -46,6 +52,12 @@
         </tr>
       </thead>
       <tbody>
+        <tr class="text-center" v-if="noUser">
+          <td colspan="6">
+            <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Aucun
+            résultat trouvé
+          </td>
+        </tr>
         <tr class="text-center" v-for="user in users" :key="user.id">
           <td>{{ user.id }}</td>
           <td>
@@ -98,7 +110,7 @@
   </div>
 </template>
 <script>
-import { getUsers } from "../../../api/users";
+import { filterUsers, getUsers } from "../../../api/users";
 import { PROFIL_IMAGE } from "../../../configs";
 
 export default {
@@ -108,13 +120,41 @@ export default {
     return {
       users: [],
       PROFIL_IMAGE: PROFIL_IMAGE,
+      /* searchkey: "",
+      role: "", */
+      search: {
+        searchkey: "",
+        role: "",
+      },
+      noUser: 0,
     };
+  },
+  computed: {
+    combined() {
+      return this.searchkey && this.role;
+    },
   },
   methods: {
     fetch() {
       getUsers().then((result) => {
         this.users = result.data;
       });
+    },
+  },
+  watch: {
+    search: {
+      deep: true,
+      handler() {
+        console.log(this.search);
+        filterUsers(this.search).then((result) => {
+          this.users = result.data;
+          if (result.data == "") {
+            this.noUser = true;
+          } else {
+            this.noUser = false;
+          }
+        });
+      },
     },
   },
   mounted() {
