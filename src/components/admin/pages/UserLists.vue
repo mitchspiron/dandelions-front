@@ -129,11 +129,6 @@ export default {
       noUser: 0,
     };
   },
-  computed: {
-    combined() {
-      return this.searchkey && this.role;
-    },
-  },
   methods: {
     fetch() {
       getUsers().then((result) => {
@@ -145,7 +140,6 @@ export default {
     search: {
       deep: true,
       handler() {
-        console.log(this.search);
         filterUsers(this.search).then((result) => {
           this.users = result.data;
           if (result.data == "") {

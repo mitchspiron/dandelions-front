@@ -12,6 +12,20 @@ export const getPost = (id) => {
   });
 };
 
+export const filterPost = (id, data) => {
+  const form = {
+    searchkey: data.searchkey,
+    searchCategory: data.searchCategory,
+    searchEtat: data.searchEtat,
+  };
+  return axios.post(`${URL}/admin/filter/${id}`, form, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const getPublishedPost = () => {
   return axios.get(`${URL}/published`, {
     withCredentials: true,

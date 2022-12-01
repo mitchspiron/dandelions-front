@@ -8,9 +8,10 @@
         <input
           type="text"
           class="form-control"
-          placeholder="Titre"
+          placeholder="ex: Titre"
           aria-label="Titre"
           aria-describedby="basic-addon1"
+          v-model="search.searchkey"
         />
       </div>
     </div>
@@ -19,14 +20,42 @@
         <span class="input-group-text" id="basic-addon1"
           ><i class="fa fa-search"></i
         ></span>
-        <select class="form-select" aria-label="Default select example">
-          <option value="" selected disabled>Catégorie</option>
-          <option value="1">Tech</option>
-          <option value="2">News</option>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="search.searchCategory"
+        >
+          <option value="" selected>Catégorie</option>
+          <option
+            v-for="category in categories"
+            :key="category.id"
+            :value="category.nomCategorie"
+          >
+            {{ category.nomCategorie }}
+          </option>
         </select>
       </div>
     </div>
-    <div class="col-1 card border shadow-sm">
+    <div class="col-3 card border-0 shadow-sm">
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon1"
+          ><i class="fa fa-search"></i
+        ></span>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          v-model="search.searchEtat"
+        >
+          <option value="" selected>Etat</option>
+          <option value="envoyé">envoyé</option>
+          <option value="en cours d'éxamen">en cours d'éxamen</option>
+          <option value="à corriger">à corriger</option>
+          <option value="réfusé">réfusé</option>
+          <option value="publié">publié</option>
+        </select>
+      </div>
+    </div>
+    <!--  <div class="col-1 card border shadow-sm">
       <div class="form-check form-switch m-auto">
         <input
           class="form-check-input"
@@ -49,7 +78,7 @@
           >Recommandé</label
         >
       </div>
-    </div>
+    </div> -->
     <div class="">
       <router-link to="/admin/article/nouveau" class="btn btn-outline-secondary"
         ><i class="fa-solid fa-plus"></i
@@ -70,8 +99,14 @@
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody v-for="post in posts" :key="post.id">
-        <tr>
+      <tbody>
+        <tr class="text-center" v-if="noPost">
+          <td colspan="12">
+            <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Aucun
+            résultat trouvé
+          </td>
+        </tr>
+        <tr v-for="post in posts" :key="post.id">
           <td>{{ post.id }}</td>
           <td class="fw-bold">{{ post.titre }}</td>
           <td class="text-muted">{{ post.categorie_article.nomCategorie }}</td>
@@ -234,19 +269,28 @@
 <script>
 import { useToast } from "vue-toastification";
 import {
+  filterPost,
   getPost,
   switchTopBySlug,
   switchToRecommandedBySlug,
   updateStateBySlug,
 } from "../../../api/post";
+import { getPostCategory } from "../../../api/post-category";
 export default {
   name: "ArticleLists",
   components: {},
   data() {
     return {
       posts: [],
+      categories: [],
       article: { etat: null },
       switch: { recommadee: true || false, top: true || false },
+      search: {
+        searchkey: "",
+        searchCategory: "",
+        searchEtat: "",
+      },
+      noPost: 0,
     };
   },
   computed: {
@@ -255,6 +299,11 @@ export default {
     },
   },
   methods: {
+    fetchCategory() {
+      getPostCategory().then((result) => {
+        this.categories = result.data;
+      });
+    },
     fetch() {
       getPost(this.me.sub || this.me.id).then((result) => {
         this.posts = result.data;
@@ -325,8 +374,24 @@ export default {
       }
     },
   },
+  watch: {
+    search: {
+      deep: true,
+      handler() {
+        filterPost(this.me.sub || this.me.id, this.search).then((result) => {
+          this.posts = result.data;
+          if (result.data == "") {
+            this.noPost = true;
+          } else {
+            this.noPost = false;
+          }
+        });
+      },
+    },
+  },
   mounted() {
     this.fetch();
+    this.fetchCategory();
   },
 };
 </script>
