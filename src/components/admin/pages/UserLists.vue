@@ -22,14 +22,14 @@
         ></span>
         <select
           class="form-select"
-          v-model="search.role"
+          v-model="search.searchRole"
           aria-label="Floating label select example"
           autocomplete="off"
         >
           <option value="" selected>Rôles</option>
-          <option value="1">Administrateur</option>
-          <option value="2">Rédacreur</option>
-          <option value="3">Visiteur</option>
+          <option value="Administrateur">Administrateur</option>
+          <option value="Rédacreur">Rédacreur</option>
+          <option value="Visiteur">Visiteur</option>
         </select>
       </div>
     </div>
@@ -124,7 +124,7 @@ export default {
       role: "", */
       search: {
         searchkey: "",
-        role: "",
+        searchRole: "",
       },
       noUser: 0,
     };

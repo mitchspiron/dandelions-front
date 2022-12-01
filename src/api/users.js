@@ -14,7 +14,7 @@ export const getUsers = () => {
 };
 
 export const filterUsers = (data) => {
-  const form = { searchkey: data.searchkey, role: data.role };
+  const form = { searchkey: data.searchkey, searchRole: data.searchRole };
   console.log("tiiii", form);
   return axios.post(`${URL}/filter`, form, {
     withCredentials: true,
