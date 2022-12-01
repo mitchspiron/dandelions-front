@@ -12,6 +12,16 @@ export const getEvenementAdmin = (id) => {
   });
 };
 
+export const filterEvenementAdmin = (id, data) => {
+  const form = { searchkey: data };
+  return axios.post(`${URL}/admin/filter/${id}`, form, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const getEvenement = () => {
   return axios.get(`${URL}`, {
     withCredentials: true,

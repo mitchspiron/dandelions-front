@@ -8,13 +8,13 @@
         <input
           type="text"
           class="form-control"
-          placeholder="Titre"
-          aria-label="Titre"
+          placeholder="ex: Séminaire"
           aria-describedby="basic-addon1"
+          v-model="search"
         />
       </div>
     </div>
-    <div class="col-2 card border shadow-sm">
+    <!--  <div class="col-2 card border shadow-sm">
       <div class="form-check form-switch m-auto">
         <input
           class="form-check-input"
@@ -26,7 +26,7 @@
           >Header</label
         >
       </div>
-    </div>
+    </div> -->
     <div class="">
       <router-link
         to="/admin/evenement/nouveau"
@@ -47,6 +47,12 @@
         </tr>
       </thead>
       <tbody>
+        <tr v-if="noEvent">
+          <td colspan="6">
+            <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Aucun
+            résultat trouvé
+          </td>
+        </tr>
         <tr v-for="evenement in evenements" :key="evenement.id">
           <td>{{ evenement.id }}</td>
           <td class="text-muted">{{ evenement.titre }}</td>
@@ -123,6 +129,7 @@
 <script>
 import { useToast } from "vue-toastification";
 import {
+  filterEvenementAdmin,
   getEvenementAdmin,
   switchOnHeaderBySlug,
   switchOnSubscribeBySlug,
@@ -134,6 +141,8 @@ export default {
     return {
       evenements: [],
       switch: { onHeader: true || false, onSubscribe: true || false },
+      noEvent: false,
+      search: "",
     };
   },
   computed: {
@@ -198,6 +207,20 @@ export default {
             toast.error("Une erreur est survenue!");
           });
       }
+    },
+  },
+  watch: {
+    search() {
+      filterEvenementAdmin(this.me.sub || this.me.id, this.search).then(
+        (result) => {
+          this.evenements = result.data;
+          if (result.data == "") {
+            this.noEvent = true;
+          } else {
+            this.noEvent = false;
+          }
+        }
+      );
     },
   },
   mounted() {
