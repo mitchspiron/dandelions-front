@@ -12,6 +12,19 @@ export const getPost = (id) => {
   });
 };
 
+export const filterPostVisitor = (data) => {
+  const form = {
+    searchkey: data.searchkey,
+    searchCategory: data.searchCategory,
+  };
+  return axios.post(`${URL}/filter`, form, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const filterPost = (id, data) => {
   const form = {
     searchkey: data.searchkey,
