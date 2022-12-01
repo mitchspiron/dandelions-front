@@ -13,6 +13,16 @@ export const getEnterprise = () => {
   });
 };
 
+export const filterEnterprise = (data) => {
+  const form = { searchkey: data };
+  return axios.post(`${URL}/filter`, form, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const getEnterpriseAdmin = (id) => {
   return axios.get(`${URL}/admin/${id}`, {
     withCredentials: true,
