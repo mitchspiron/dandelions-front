@@ -28,7 +28,7 @@
         >
           <option value="" selected>Rôles</option>
           <option value="Administrateur">Administrateur</option>
-          <option value="Rédacreur">Rédacreur</option>
+          <option value="Rédacteur">Rédacteur</option>
           <option value="Visiteur">Visiteur</option>
         </select>
       </div>
