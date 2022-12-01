@@ -11,6 +11,29 @@
               Coming-Soon
             </h1>
           </div>
+          <!-- --------- -->
+          <div class="d-flex justify-content-center align-items-center mb-4">
+            <div
+              class="col-10 d-flex justify-content-center align-items-center gap-2"
+            >
+              <div class="shadow-lg border-0 rounded col-md-6 mb-2">
+                <div class="form input-group">
+                  <span
+                    class="input-group-text bg-white border-0"
+                    id="basic-addon1"
+                    ><i class="bi bi-file-text"></i
+                  ></span>
+                  <input
+                    type="text"
+                    class="form-control form-input"
+                    placeholder="Commencez votre recherche..."
+                    v-model="search"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- --------- -->
           <div class="col-lg-12 mb-5 mb-lg-0">
             <div class="row">
               <div
@@ -124,13 +147,15 @@
   </main>
 </template>
 <script>
-import { getEvenement } from "../../../api/event";
+import { filterEvenement, getEvenement } from "../../../api/event";
 export default {
   name: "EnterpriseLists",
   components: {},
   data() {
     return {
       events: [],
+      search: "",
+      noEvent: 0,
     };
   },
   methods: {
@@ -140,12 +165,34 @@ export default {
       });
     },
   },
+  watch: {
+    search() {
+      filterEvenement(this.search).then((result) => {
+        this.events = result.data;
+        if (result.data == "") {
+          this.noEvent = true;
+        } else {
+          this.noEvent = false;
+        }
+      });
+    },
+  },
   mounted() {
     this.fetch();
   },
 };
 </script>
 <style scoped>
+.form {
+  position: relative;
+}
+
+.form-input {
+  height: 55px;
+  text-indent: 33px;
+  border-radius: 10px;
+  border: none;
+}
 .description {
   overflow: hidden;
   display: -webkit-box;

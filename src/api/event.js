@@ -22,6 +22,16 @@ export const filterEvenementAdmin = (id, data) => {
   });
 };
 
+export const filterEvenement = (data) => {
+  const form = { searchkey: data };
+  return axios.post(`${URL}/filter`, form, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const getEvenement = () => {
   return axios.get(`${URL}`, {
     withCredentials: true,
