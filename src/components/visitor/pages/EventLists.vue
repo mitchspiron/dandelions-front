@@ -37,6 +37,15 @@
           <div class="col-lg-12 mb-5 mb-lg-0">
             <div class="row">
               <div
+                v-if="noEvent"
+                class="col-md-12 d-flex justify-content-center align-items-center"
+              >
+                <h2>
+                  <i class="bi bi-exclamation-triangle me-2 text-danger"></i
+                  >Aucun résultat trouvé
+                </h2>
+              </div>
+              <div
                 v-for="(event, i) in events"
                 :key="i"
                 class="card mb-3 m-auto border-0 shadow-sm"
