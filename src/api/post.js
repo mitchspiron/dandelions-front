@@ -102,6 +102,18 @@ export const getPublishedPostBySlug = (slug) => {
   });
 };
 
+export const filterPublishedPostBySlug = (slug, data) => {
+  const form = {
+    searchkey: data,
+  };
+  return axios.post(`${URL}/published/filter/${slug}`, form, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const createPost = (data) => {
   const newPost = {
     idRedacteur: data.idRedacteur,
