@@ -46,7 +46,7 @@
                 </h2>
               </div>
               <div
-                v-for="(event, i) in events"
+                v-for="(event, i) in displayedEvents"
                 :key="i"
                 class="card mb-3 m-auto border-0 shadow-sm"
                 style="max-width: 400px"
@@ -93,57 +93,13 @@
                 <div class="row">
                   <div class="col-12">
                     <nav class="mt-4">
-                      <!-- pagination -->
-                      <nav class="mb-md-50">
-                        <ul class="pagination justify-content-center">
-                          <li class="page-item">
-                            <a
-                              href=""
-                              class="page-link"
-                              aria-label="Pagination Arrow"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="26"
-                                height="26"
-                                fill="currentColor"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
-                                />
-                              </svg>
-                            </a>
-                          </li>
-                          <li class="page-item active">
-                            <a href="" class="page-link"> 1 </a>
-                          </li>
-                          <li class="page-item">
-                            <a href="" class="page-link"> 2 </a>
-                          </li>
-                          <li class="page-item">
-                            <a
-                              class="page-link"
-                              href=""
-                              aria-label="Pagination Arrow"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="26"
-                                height="26"
-                                fill="currentColor"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-                                />
-                              </svg>
-                            </a>
-                          </li>
-                        </ul>
-                      </nav>
+                      <vue-awesome-paginate
+                        class="d-flex justify-content-center"
+                        :total-items="events.length"
+                        :items-per-page="perPage"
+                        :max-pages-shown="3"
+                        v-model="page"
+                      />
                     </nav>
                   </div>
                 </div>
@@ -165,6 +121,8 @@ export default {
       events: [],
       search: "",
       noEvent: 0,
+      page: 1,
+      perPage: 6,
     };
   },
   methods: {
@@ -172,6 +130,18 @@ export default {
       getEvenement().then((result) => {
         this.events = result.data;
       });
+    },
+    paginate(events) {
+      let page = this.page;
+      let perPage = this.perPage;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      return events.slice(from, to);
+    },
+  },
+  computed: {
+    displayedEvents() {
+      return this.paginate(this.events);
     },
   },
   watch: {
@@ -222,37 +192,5 @@ export default {
 a.post-title:hover {
   color: #000;
   background-size: 100% 8px;
-}
-.pagination {
-  justify-content: center;
-}
-.pagination .page-item .page-link {
-  display: inline-block;
-  width: 42px;
-  height: 42px;
-  border-radius: 0;
-  border: 1px solid #ececec;
-  text-align: center;
-  margin: 0 4px;
-  font-weight: 500;
-  color: #131313;
-  padding: 0;
-  line-height: 41px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
-}
-.pagination .page-item .page-link:focus,
-.pagination .page-item .page-link:hover {
-  box-shadow: none;
-  background: #582456;
-  color: #fff;
-}
-.pagination .page-item:first-child .page-link,
-.pagination .page-item:last-child .page-link {
-  border-radius: 0;
-}
-.pagination .page-item.active .page-link {
-  background: #582456;
-  color: #fff;
-  border-color: #582456;
 }
 </style>
