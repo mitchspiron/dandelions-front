@@ -11,6 +11,8 @@ import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import VueAwesomePaginate from "vue-awesome-paginate";
+import "vue-awesome-paginate/dist/style.css";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -35,5 +37,6 @@ createApp(App)
   .use(router)
   .use(Countdown)
   .use(Toast)
+  .use(VueAwesomePaginate)
   .component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");
