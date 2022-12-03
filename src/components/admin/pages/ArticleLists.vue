@@ -106,7 +106,7 @@
             résultat trouvé
           </td>
         </tr>
-        <tr v-for="post in posts" :key="post.id">
+        <tr v-for="post in displayedPosts" :key="post.id">
           <td>{{ post.id }}</td>
           <td class="fw-bold">{{ post.titre }}</td>
           <td class="text-muted">{{ post.categorie_article.nomCategorie }}</td>
@@ -265,6 +265,13 @@
       </tbody>
     </table>
   </div>
+  <vue-awesome-paginate
+    class="d-flex justify-content-center mt-3"
+    :total-items="posts.length"
+    :items-per-page="perPage"
+    :max-pages-shown="3"
+    v-model="page"
+  />
 </template>
 <script>
 import { useToast } from "vue-toastification";
@@ -291,11 +298,16 @@ export default {
         searchEtat: "",
       },
       noPost: 0,
+      page: 1,
+      perPage: 10,
     };
   },
   computed: {
     me() {
       return this.$store.getters["userStore/me"];
+    },
+    displayedPosts() {
+      return this.paginate(this.posts);
     },
   },
   methods: {
@@ -372,6 +384,13 @@ export default {
             toast.error("Une erreur est survenue!");
           });
       }
+    },
+    paginate(posts) {
+      let page = this.page;
+      let perPage = this.perPage;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      return posts.slice(from, to);
     },
   },
   watch: {
