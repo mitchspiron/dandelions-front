@@ -58,7 +58,7 @@
             résultat trouvé
           </td>
         </tr>
-        <tr class="text-center" v-for="user in users" :key="user.id">
+        <tr class="text-center" v-for="user in displayedUsers" :key="user.id">
           <td>{{ user.id }}</td>
           <td>
             <img
@@ -108,6 +108,13 @@
       </tbody>
     </table>
   </div>
+  <vue-awesome-paginate
+    class="d-flex justify-content-center mt-3"
+    :total-items="users.length"
+    :items-per-page="perPage"
+    :max-pages-shown="3"
+    v-model="page"
+  />
 </template>
 <script>
 import { filterUsers, getUsers } from "../../../api/users";
@@ -120,13 +127,13 @@ export default {
     return {
       users: [],
       PROFIL_IMAGE: PROFIL_IMAGE,
-      /* searchkey: "",
-      role: "", */
       search: {
         searchkey: "",
         searchRole: "",
       },
       noUser: 0,
+      page: 1,
+      perPage: 10,
     };
   },
   methods: {
@@ -134,6 +141,18 @@ export default {
       getUsers().then((result) => {
         this.users = result.data;
       });
+    },
+    paginate(users) {
+      let page = this.page;
+      let perPage = this.perPage;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      return users.slice(from, to);
+    },
+  },
+  computed: {
+    displayedUsers() {
+      return this.paginate(this.users);
     },
   },
   watch: {
