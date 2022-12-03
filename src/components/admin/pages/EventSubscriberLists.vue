@@ -66,7 +66,7 @@ export default {
       search: "",
       noEventRegister: false,
       page: 1,
-      perPage: 1,
+      perPage: 10,
     };
   },
   computed: {
