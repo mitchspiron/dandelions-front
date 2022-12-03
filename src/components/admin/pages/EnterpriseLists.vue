@@ -50,7 +50,7 @@
             résultat trouvé
           </td>
         </tr>
-        <tr v-for="(enterprise, id) in enterprises" :key="id">
+        <tr v-for="(enterprise, id) in displayedEnterprises" :key="id">
           <td>{{ enterprise.id }}</td>
           <td class="fw-bold mb-1">{{ enterprise.nom }}</td>
           <td class="text-muted mb-0">{{ enterprise.email }}</td>
@@ -104,6 +104,13 @@
       </tbody>
     </table>
   </div>
+  <vue-awesome-paginate
+    class="d-flex justify-content-center mt-3"
+    :total-items="enterprises.length"
+    :items-per-page="perPage"
+    :max-pages-shown="3"
+    v-model="page"
+  />
 </template>
 <script>
 import { useToast } from "vue-toastification";
@@ -121,11 +128,16 @@ export default {
       switch: { abonnee: true || false },
       noEnterprise: false,
       search: "",
+      page: 1,
+      perPage: 10,
     };
   },
   computed: {
     me() {
       return this.$store.getters["userStore/me"];
+    },
+    displayedEnterprises() {
+      return this.paginate(this.enterprises);
     },
   },
   methods: {
@@ -159,6 +171,13 @@ export default {
             toast.error("Une erreur est survenue!");
           });
       }
+    },
+    paginate(enterprises) {
+      let page = this.page;
+      let perPage = this.perPage;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      return enterprises.slice(from, to);
     },
   },
   watch: {
