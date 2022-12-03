@@ -189,7 +189,6 @@ export default {
       PROFIL_IMAGE: PROFIL_IMAGE,
       page: 1,
       perPage: 6,
-      pages: [],
     };
   },
   methods: {
@@ -210,12 +209,6 @@ export default {
       let to = page * perPage;
       return articles.slice(from, to);
     },
-    setArticles() {
-      let numberOfPages = Math.ceil(this.articles.length / this.perPage);
-      for (let i = 1; i <= numberOfPages; i++) {
-        this.pages.push(i);
-      }
-    },
   },
   computed: {
     displayedPosts() {
@@ -235,9 +228,6 @@ export default {
           }
         });
       },
-    },
-    articles() {
-      this.setArticles();
     },
   },
   mounted() {
