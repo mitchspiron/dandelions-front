@@ -24,3 +24,13 @@ export const getEventRegistrationByEvent = (slug) => {
     },
   });
 };
+
+export const filterEventRegistrationByEvent = (slug, data) => {
+  const form = { searchkey: data };
+  return axios.post(`${URL}/filter/${slug}`, form, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

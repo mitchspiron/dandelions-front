@@ -11,6 +11,7 @@
           placeholder="Nom complet"
           aria-label="fullname"
           aria-describedby="basic-addon1"
+          v-model="search"
         />
       </div>
     </div>
@@ -27,7 +28,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(subscriber, id) in subscribers" :key="id">
+        <tr v-if="noEventRegister">
+          <td colspan="6">
+            <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Aucun
+            résultat trouvé
+          </td>
+        </tr>
+        <tr v-for="(subscriber, id) in displayedSubscribers" :key="id">
           <td>{{ id + 1 }}</td>
           <td class="text-muted">{{ subscriber.utilisateur.nom }}</td>
           <td class="text-muted">{{ subscriber.utilisateur.prenom }}</td>
@@ -37,22 +44,62 @@
       </tbody>
     </table>
   </div>
+  <vue-awesome-paginate
+    class="d-flex justify-content-center mt-3"
+    :total-items="subscribers.length"
+    :items-per-page="perPage"
+    :max-pages-shown="3"
+    v-model="page"
+  />
 </template>
 <script>
-import { getEventRegistrationByEvent } from "../../../api/event-register";
+import {
+  filterEventRegistrationByEvent,
+  getEventRegistrationByEvent,
+} from "../../../api/event-register";
 export default {
   name: "EventSubscriberLists",
   components: {},
   data() {
     return {
       subscribers: [],
+      search: "",
+      noEventRegister: false,
+      page: 1,
+      perPage: 1,
     };
+  },
+  computed: {
+    displayedSubscribers() {
+      return this.paginate(this.subscribers);
+    },
   },
   methods: {
     fetch() {
       getEventRegistrationByEvent(this.$route.params.slug).then((result) => {
         this.subscribers = result.data;
       });
+    },
+    paginate(subscribers) {
+      let page = this.page;
+      let perPage = this.perPage;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      return subscribers.slice(from, to);
+    },
+  },
+  watch: {
+    search() {
+      filterEventRegistrationByEvent(this.$route.params.slug, this.search).then(
+        (result) => {
+          this.subscribers = result.data;
+          if (result.data == "") {
+            this.noEventRegister = true;
+          } else {
+            this.noEventRegister = false;
+          }
+        }
+      );
     },
   },
   mounted() {
