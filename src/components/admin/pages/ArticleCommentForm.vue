@@ -13,14 +13,13 @@
           />
           <div class="comment-body">
             <div class="meta-data">
-              <Popper placement="auto" hover="true"
-                ><span class="commented-person-name"
-                  ><router-link to="/enterprise/name" class="text-dark">{{
-                    comment.utilisateur.prenom
-                  }}</router-link></span
-                >
+              <span class="commented-person-name"
+                ><router-link to="/enterprise/name" class="text-dark">{{
+                  comment.utilisateur.prenom
+                }}</router-link></span
+              >
 
-                <!-- <template #content>
+              <!--<Popper placement="auto" hover="true" <template #content>
                   <div class="card border-0 shadow-lg" style="max-width: 540px">
                     <div class="media">
                       <router-link
@@ -45,8 +44,7 @@
                       </router-link>
                     </div>
                   </div>
-                </template> -->
-              </Popper>
+                </template> </Popper>-->
               <span class="comment-hour d-block">{{
                 new Date(comment.createdAt).toLocaleDateString("Fr-fr", {
                   year: "numeric",
@@ -60,9 +58,13 @@
                 {{ comment.contenu }}
               </p>
             </div>
-            <form v-if="isLoggedIn" role="form" autocomplete="off">
+            <form
+              v-if="me.sub == comment.article.idRedacteur || me.roleUser == 1"
+              role="form"
+              autocomplete="off"
+            >
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                   <div class="form-group">
                     <textarea
                       @focus="checkIsLoggin"
@@ -103,7 +105,88 @@
           </div>
         </div>
         <!-- reponse -->
-        <ArticleReplyForm :idCommentaire="comment.id" />
+        <ul class="comments-reply">
+          <li v-for="reply in comment.reponse" :key="reply.id">
+            <!-- <li v-if="comment.id == reply.idCommentaire"></li> -->
+            <div class="comment">
+              <img
+                class="commented-person img-thumbnail rounded-circle"
+                alt=""
+                :src="PROFIL_IMAGE + reply.utilisateur.illustration"
+              />
+              <div class="comment-body">
+                <div class="meta-data">
+                  <span class="commented-person-name"
+                    ><router-link to="/enterprise/name" class="text-dark">{{
+                      reply.utilisateur.prenom
+                    }}</router-link></span
+                  >
+
+                  <!-- <Popper placement="auto" hover="true"> <template #content>
+                      <div
+                        class="card border-0 shadow-lg"
+                        style="max-width: 540px"
+                      >
+                        <div class="media">
+                          <router-link
+                            to="/enterprise/name"
+                            class="d-flex align-items-center"
+                          >
+                            <img
+                              loading="lazy"
+                              decoding="async"
+                              :src="comment.reply.img"
+                              alt="Post Thumbnail img-thumbnail border-0"
+                              class="w-100"
+                            />
+                            <div class="media-body">
+                              <h3 style="margin-top: -5px">
+                                {{ comment.reply.name }}
+                              </h3>
+                              <p class="mb-0 small text-dark">
+                                {{ comment.reply.content }}
+                              </p>
+                            </div>
+                          </router-link>
+                        </div>
+                      </div>
+                    </template></Popper> -->
+                  <span class="comment-hour d-block">{{
+                    new Date(reply.createdAt).toLocaleDateString("Fr-fr", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
+                  }}</span>
+                </div>
+                <div class="comment-content">
+                  <p>{{ reply.contenu }}</p>
+                </div>
+                <div
+                  v-if="
+                    me.sub == comment.article.idRedacteur || me.roleUser == 1
+                  "
+                  class="text-left d-flex gap-2 mt-0"
+                >
+                  <a
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalModifierReponse"
+                    @click="updateReply(reply.id, reply.contenu)"
+                    class="comment-reply"
+                    ><i class="bi bi-pen"></i
+                  ></a>
+                  <a
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalDeleteReponse"
+                    @click="initDeleteReply(reply.id)"
+                    class="comment-reply"
+                    ><i class="bi bi-trash"></i
+                  ></a>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
       </li>
     </ul>
   </div>
@@ -180,7 +263,7 @@
           <button
             type="button"
             data-bs-dismiss="modal"
-            ref="CloseModifier"
+            ref="CloseModifierCommentaire"
             class="btn bg-dark px-3"
           >
             <i class="fa-solid fa-xmark text-light"></i>
@@ -227,7 +310,7 @@
           <button
             type="button"
             data-bs-dismiss="modal"
-            ref="CloseDelete"
+            ref="CloseDeleteCommentaire"
             class="btn bg-dark px-3"
           >
             <i class="fa-solid fa-xmark text-light"></i>
@@ -237,10 +320,108 @@
     </div>
   </div>
   <!-- ------------------------------END MODAL DELETE COMMENTAIRE----------------------------------------------- -->
+  <!-- -----------------------------------MODAL UPDATE REPONSE------------------------------------------ -->
+  <div
+    class="modal fade"
+    id="modalModifierReponse"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    aria-labelledby="modalLabelModifierReponse"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <form
+        @submit.prevent="confirmUpdateReply"
+        class="modal-content border-0 bg-light text-dark"
+      >
+        <div class="modal-header mx-2">
+          <h4 class="modal-title text-dark" id="modalLabelModifierReponse">
+            Modifier la réponse
+          </h4>
+        </div>
+        <div class="modal-body">
+          <section class="row p-2">
+            <div class="col-12">
+              <textarea
+                class="form-control"
+                id="inputMessage"
+                rows="4"
+                required
+                v-model="formUpdateReply.contenu"
+                style="resize: none"
+              ></textarea>
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer mx-2">
+          <button type="submit" class="btn px-3" style="background: #582456">
+            <i class="fa-solid fa-check text-white"></i>
+          </button>
+          <button
+            type="button"
+            data-bs-dismiss="modal"
+            ref="CloseModifier"
+            class="btn bg-dark px-3"
+          >
+            <i class="fa-solid fa-xmark text-light"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- ------------------------------------END MODAL UPDATE REPONSE ------------------------------------ -->
+
+  <!-- ------------------------------MODAL DELETE REPONSE----------------------------------------------- -->
+  <div
+    class="modal fade"
+    id="modalDeleteReponse"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    aria-labelledby="modalLabelDeleteReponse"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 bg-light text-dark">
+        <div class="modal-header mx-2">
+          <h4 class="modal-title text-dark" id="modalLabelDeleteReponse">
+            Supprimer la réponse
+          </h4>
+        </div>
+        <div class="modal-body">
+          <section class="row p-2">
+            <div class="col-12">
+              Etes-vous sûr de vouloir supprimer cette réponse ?
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer mx-2">
+          <button
+            @click="deleteReply()"
+            type="submit"
+            class="btn px-3"
+            style="background: #582456"
+          >
+            <i class="fa-solid fa-check text-white"></i>
+          </button>
+          <button
+            type="button"
+            data-bs-dismiss="modal"
+            ref="CloseDelete"
+            class="btn bg-dark px-3"
+          >
+            <i class="fa-solid fa-xmark text-light"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------------END MODAL DELETE REPONSE----------------------------------------------- -->
 </template>
 <script>
 import { useToast } from "vue-toastification";
-import Popper from "vue3-popper";
+//import Popper from "vue3-popper";
 import { PROFIL_IMAGE } from "../../../configs";
 import { decodeToken } from "../../../utils/decodeToken";
 import {
@@ -249,15 +430,18 @@ import {
   getCommentByPost,
   updateCommentById,
 } from "../../../api/comment";
-import ArticleReplyForm from "./ArticleReplyForm.vue";
-import { createResponse } from "../../../api/reply";
+//import Reply from "./Reply.vue";
+import {
+  createResponse,
+  deleteResponseById,
+  updateResponseById,
+} from "../../../api/reply";
 
 export default {
-  name: "ArticleCommentForm",
-  props: ["idCommentaire"],
+  name: "Comment",
   components: {
-    Popper,
-    ArticleReplyForm,
+    /*  Popper, */
+    //Reply,
   },
   data() {
     return {
@@ -273,6 +457,8 @@ export default {
       PROFIL_IMAGE: PROFIL_IMAGE,
       formUpdateComment: { idSelectUpdate: 0, contenu: "" },
       idDeleteComment: 0,
+      formUpdateReply: { idSelectUpdate: 0, contenu: "" },
+      idDeleteReply: 0,
     };
   },
   computed: {
@@ -318,6 +504,12 @@ export default {
         contenu: comment,
       };
     },
+    updateReply(id, reply) {
+      this.formUpdateReply = {
+        idSelectUpdate: id,
+        contenu: reply,
+      };
+    },
     initDeleteComment(id) {
       this.idDeleteComment = id;
     },
@@ -326,7 +518,7 @@ export default {
         const toast = useToast();
         getCommentByPost(this.$route.params.slug).then((result) => {
           this.data = result.data;
-          this.$refs.CloseDelete.click();
+          this.$refs.CloseDeleteCommentaire.click();
           this.fetch();
           toast.success("Commentaire supprimé");
         });
@@ -337,9 +529,34 @@ export default {
         const toast = useToast();
         getCommentByPost(this.$route.params.slug).then((result) => {
           this.data = result.data;
-          this.$refs.CloseModifier.click();
+          this.$refs.CloseModifierCommentaire.click();
           this.fetch();
           toast.success("Commentaire modifié");
+        });
+      });
+    },
+    confirmUpdateReply() {
+      updateResponseById(this.formUpdateReply).then(() => {
+        const toast = useToast();
+        getCommentByPost(this.$route.params.slug).then((result) => {
+          this.data = result.data;
+          this.$refs.CloseModifier.click();
+          this.fetch();
+          toast.success("Réponse modifiée");
+        });
+      });
+    },
+    initDeleteReply(id) {
+      this.idDeleteReply = id;
+    },
+    deleteReply() {
+      deleteResponseById(this.idDeleteReply).then(() => {
+        const toast = useToast();
+        getCommentByPost(this.$route.params.slug).then((result) => {
+          this.data = result.data;
+          this.$refs.CloseDelete.click();
+          this.fetch();
+          toast.success("Réponse supprimée");
         });
       });
     },

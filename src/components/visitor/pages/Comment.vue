@@ -60,7 +60,7 @@
             </div>
             <form v-if="isLoggedIn" role="form" autocomplete="off">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                   <div class="form-group">
                     <textarea
                       @focus="checkIsLoggin"
