@@ -167,6 +167,18 @@ export default {
       });
     },
   },
+  async setup() {
+    const res = await skipFirstLastestPost();
+    const res2 = await takeFirstLastestPost();
+    const finalRes = await res.data;
+    const finalRes2 = await res2.data;
+    /* console.log("skipFirst", finalRes);
+    console.log("takeFirst", finalRes2); */
+
+    const latestArticle = [finalRes, finalRes2];
+    //console.log("latestArticle", latestArticle);
+    return latestArticle;
+  },
   mounted() {
     this.fetch();
     this.fetchFirst();

@@ -58,8 +58,11 @@
             </div>
           </div>
           <!-- --------- -->
-          <div v-if="loadPage" class="col-lg-12 mb-5 mb-lg-0">
-            <div class="row">
+          <div
+            v-if="loadPage"
+            class="col-lg-12 mt-5 mb-5 mb-lg-0 d-flex justify-content-center align-items-center"
+          >
+            <!-- <div class="row">
               <div class="col-md-4" v-for="i in 6" :key="i">
                 <div class="mb-4">
                   <article class="card article-card article-card-sm h-100">
@@ -96,6 +99,17 @@
                   </article>
                 </div>
               </div>
+            </div> -->
+            <div class="breeding-rhombus-spinner">
+              <div class="rhombus child-1"></div>
+              <div class="rhombus child-2"></div>
+              <div class="rhombus child-3"></div>
+              <div class="rhombus child-4"></div>
+              <div class="rhombus child-5"></div>
+              <div class="rhombus child-6"></div>
+              <div class="rhombus child-7"></div>
+              <div class="rhombus child-8"></div>
+              <div class="rhombus big"></div>
             </div>
           </div>
           <!-- --------- -->
@@ -214,11 +228,13 @@
 import { filterPostVisitor, getPublishedPost } from "../../../api/post";
 import { getPostCategory } from "../../../api/post-category";
 import { PROFIL_IMAGE } from "../../../configs";
-import { ContentLoader } from "vue-content-loader";
+//import { ContentLoader } from "vue-content-loader";
 
 export default {
   name: "ArticleListsComponent",
-  components: { ContentLoader },
+  components: {
+    /* ContentLoader */
+  },
   data() {
     return {
       articles: [],

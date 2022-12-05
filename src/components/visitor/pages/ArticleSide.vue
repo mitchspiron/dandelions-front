@@ -165,6 +165,21 @@ export default {
       });
     },
   },
+  async setup() {
+    const res = await getPostCategory();
+    const finalRes = await res.data;
+    const res2 = await getRecommandedPost();
+    const finalRes2 = await res2.data;
+    const res3 = await getTopPost();
+    const finalRes3 = await res3.data;
+    /* console.log("postCategory", finalRes);
+    console.log("recommanded", finalRes2);
+    console.log("top", finalRes3); */
+
+    const articleSide = [finalRes, finalRes2, finalRes3];
+    //console.log("articleSide", articleSide);
+    return articleSide;
+  },
   mounted() {
     this.fetch();
     this.fetchRecommandation();

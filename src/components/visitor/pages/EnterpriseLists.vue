@@ -34,7 +34,25 @@
             </div>
           </div>
           <!-- --------- -->
-          <div class="col-lg-12 mb-5 mb-lg-0">
+          <div
+            v-if="loadPage"
+            class="col-lg-12 mt-5 mb-5 mb-lg-0 d-flex justify-content-center align-items-center"
+          >
+            <div class="breeding-rhombus-spinner">
+              <div class="rhombus child-1"></div>
+              <div class="rhombus child-2"></div>
+              <div class="rhombus child-3"></div>
+              <div class="rhombus child-4"></div>
+              <div class="rhombus child-5"></div>
+              <div class="rhombus child-6"></div>
+              <div class="rhombus child-7"></div>
+              <div class="rhombus child-8"></div>
+              <div class="rhombus big"></div>
+            </div>
+          </div>
+          <!-- --------- -->
+          <!-- --------- -->
+          <div v-else class="col-lg-12 mb-5 mb-lg-0">
             <div class="row">
               <div
                 v-if="noEnterprise"
@@ -132,12 +150,15 @@ export default {
       PROFIL_IMAGE: PROFIL_IMAGE,
       page: 1,
       perPage: 6,
+      loadPage: false,
     };
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       getEnterprise().then((result) => {
         this.enterprises = result.data;
+        this.loadPage = false;
       });
     },
     paginate(enterprises) {
@@ -155,8 +176,10 @@ export default {
   },
   watch: {
     search() {
+      this.loadPage = true;
       filterEnterprise(this.search).then((result) => {
         this.enterprises = result.data;
+        this.loadPage = false;
         if (result.data == "") {
           this.noEnterprise = true;
         } else {

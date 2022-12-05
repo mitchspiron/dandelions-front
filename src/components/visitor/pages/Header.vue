@@ -127,6 +127,14 @@ export default {
       });
     },
   },
+  async setup() {
+    const res = await getEvenementOnHeader();
+    const finalRes = await res.data;
+    /* console.log("header", finalRes); */
+    const header = [finalRes];
+    //console.log("header", header);
+    return header;
+  },
   mounted() {
     this.fetch();
   },
