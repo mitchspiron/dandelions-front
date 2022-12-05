@@ -58,7 +58,48 @@
             </div>
           </div>
           <!-- --------- -->
-          <div class="col-lg-12 mb-5 mb-lg-0">
+          <div v-if="loadPage" class="col-lg-12 mb-5 mb-lg-0">
+            <div class="row">
+              <div class="col-md-4" v-for="i in 6" :key="i">
+                <div class="mb-4">
+                  <article class="card article-card article-card-sm h-100">
+                    <ContentLoader
+                      viewBox="0 0 450 400"
+                      backgroundColor="#f0f0f0"
+                      foregroundColor="#dedede"
+                    >
+                      <rect
+                        x="43"
+                        y="304"
+                        rx="4"
+                        ry="4"
+                        width="271"
+                        height="9"
+                      />
+                      <rect
+                        x="44"
+                        y="323"
+                        rx="3"
+                        ry="3"
+                        width="119"
+                        height="6"
+                      />
+                      <rect
+                        x="42"
+                        y="77"
+                        rx="10"
+                        ry="10"
+                        width="388"
+                        height="217"
+                      />
+                    </ContentLoader>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- --------- -->
+          <div v-else class="col-lg-12 mb-5 mb-lg-0">
             <div class="row">
               <div
                 v-if="noPost"
@@ -173,10 +214,11 @@
 import { filterPostVisitor, getPublishedPost } from "../../../api/post";
 import { getPostCategory } from "../../../api/post-category";
 import { PROFIL_IMAGE } from "../../../configs";
+import { ContentLoader } from "vue-content-loader";
 
 export default {
   name: "ArticleListsComponent",
-  components: {},
+  components: { ContentLoader },
   data() {
     return {
       articles: [],
@@ -189,6 +231,7 @@ export default {
       PROFIL_IMAGE: PROFIL_IMAGE,
       page: 1,
       perPage: 6,
+      loadPage: false,
     };
   },
   methods: {
@@ -198,8 +241,10 @@ export default {
       });
     },
     fetch() {
+      this.loadPage = true;
       getPublishedPost().then((result) => {
         this.articles = result.data;
+        this.loadPage = false;
       });
     },
     paginate(articles) {
@@ -219,8 +264,10 @@ export default {
     search: {
       deep: true,
       handler() {
+        this.loadPage = true;
         filterPostVisitor(this.search).then((result) => {
           this.articles = result.data;
+          this.loadPage = false;
           if (result.data == "") {
             this.noPost = true;
           } else {
