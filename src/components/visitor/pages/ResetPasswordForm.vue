@@ -61,7 +61,20 @@
                       </p>
                     </div>
                     <div class="mb-3 d-grid">
-                      <button class="btn btn-outline-dark" type="submit">
+                      <button
+                        v-if="loading"
+                        class="btn btn-outline-dark"
+                        type="button"
+                        disabled
+                      >
+                        <span
+                          class="spinner-grow spinner-grow-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Loading...
+                      </button>
+                      <button v-else class="btn btn-outline-dark" type="submit">
                         Reset Password
                       </button>
                     </div>
@@ -112,6 +125,7 @@ export default {
         motDePasse: "",
         confirmMotDePasse: "",
       },
+      loading: false,
     };
   },
   methods: {
@@ -126,8 +140,10 @@ export default {
       FormSchema.validate(this.form, { abortEarly: false })
         .then(() => {
           const toast = useToast();
+          this.loading = true;
           resetPassword(this.form, this.$route.params.token)
             .then(() => {
+              this.loading = false;
               this.$swal(
                 "Mot de passe changé avec succès!",
                 "Vous pouvez maintenant vous reconnecter",
@@ -136,6 +152,7 @@ export default {
               this.$router.push(`/se-connecter`);
             })
             .catch((e) => {
+              this.loading = false;
               toast.info(e.response.data.message);
             });
         })

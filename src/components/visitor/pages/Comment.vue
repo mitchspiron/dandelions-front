@@ -1,25 +1,42 @@
 <template>
-  <div id="comments" class="comments-block block">
-    <h3 class="news-title">
-      <span>{{ comments.length }} Commentaires</span>
-    </h3>
-    <ul class="all-comments">
-      <li v-for="(comment, i) in comments" :key="i">
-        <div class="comment">
-          <img
-            class="commented-person img-thumbnail rounded-circle"
-            alt=""
-            :src="PROFIL_IMAGE + comment.utilisateur.illustration"
-          />
-          <div class="comment-body">
-            <div class="meta-data">
-              <span class="commented-person-name"
-                ><router-link to="/enterprise/name" class="text-dark">{{
-                  comment.utilisateur.prenom
-                }}</router-link></span
-              >
+  <div
+    v-if="loadPage"
+    class="m-auto d-flex justify-content-center align-items-center vh-100"
+  >
+    <div class="breeding-rhombus-spinner">
+      <div class="rhombus child-1"></div>
+      <div class="rhombus child-2"></div>
+      <div class="rhombus child-3"></div>
+      <div class="rhombus child-4"></div>
+      <div class="rhombus child-5"></div>
+      <div class="rhombus child-6"></div>
+      <div class="rhombus child-7"></div>
+      <div class="rhombus child-8"></div>
+      <div class="rhombus big"></div>
+    </div>
+  </div>
+  <div v-else>
+    <div id="comments" class="comments-block block">
+      <h3 class="news-title">
+        <span>{{ comments.length }} Commentaires</span>
+      </h3>
+      <ul class="all-comments">
+        <li v-for="(comment, i) in comments" :key="i">
+          <div class="comment">
+            <img
+              class="commented-person img-thumbnail rounded-circle"
+              alt=""
+              :src="PROFIL_IMAGE + comment.utilisateur.illustration"
+            />
+            <div class="comment-body">
+              <div class="meta-data">
+                <span class="commented-person-name"
+                  ><router-link to="/enterprise/name" class="text-dark">{{
+                    comment.utilisateur.prenom
+                  }}</router-link></span
+                >
 
-              <!--<Popper placement="auto" hover="true" <template #content>
+                <!--<Popper placement="auto" hover="true" <template #content>
                   <div class="card border-0 shadow-lg" style="max-width: 540px">
                     <div class="media">
                       <router-link
@@ -45,27 +62,27 @@
                     </div>
                   </div>
                 </template> </Popper>-->
-              <span class="comment-hour d-block">{{
-                new Date(comment.createdAt).toLocaleDateString("Fr-fr", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })
-              }}</span>
-            </div>
-            <div class="comment-content">
-              <p>
-                {{ comment.contenu }}
-              </p>
-            </div>
-            <form v-if="isLoggedIn" role="form" autocomplete="off">
-              <div class="row">
+                <span class="comment-hour d-block">{{
+                  new Date(comment.createdAt).toLocaleDateString("Fr-fr", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                }}</span>
+              </div>
+              <div class="comment-content">
+                <p>
+                  {{ comment.contenu }}
+                </p>
+              </div>
+              <div v-if="isLoggedIn" role="form" autocomplete="off">
+                <!-- <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
                     <textarea
                       @focus="checkIsLoggin"
                       class="form-control required-field"
-                      id="message"
+                      id="reply"
                       rows="1"
                       placeholder="Réponse"
                       v-model.lazy="formReply.contenu"
@@ -74,53 +91,74 @@
                     ></textarea>
                   </div>
                 </div>
+              </div> -->
+                <div class="text-left d-flex gap-2 mt-2">
+                  <div>
+                    <!-- <button v-if="loading" class="comment-reply" disabled>
+                    <span
+                      class="spinner-grow spinner-grow-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    Répondre
+                  </button>
+                  <a
+                    @click="confirmReply(comment.id, formReply)"
+                    class="comment-reply"
+                    type="submit"
+                    ><i class="fa fa-reply"></i> Répondre</a
+                  > -->
+                    <a
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalAjout"
+                      @click="addReply(comment.id)"
+                      class="comment-reply"
+                      ><i class="fa fa-reply"></i
+                    ></a>
+                  </div>
+                  <div>
+                    <a
+                      v-if="(me.sub || me.id) == comment.utilisateur.id"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalModifier"
+                      @click="updateComment(comment.id, comment.contenu)"
+                      class="comment-reply"
+                      ><i class="bi bi-pen"></i
+                    ></a>
+                  </div>
+                  <div>
+                    <a
+                      v-if="(me.sub || me.id) == comment.utilisateur.id"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalDelete"
+                      @click="initDeleteComment(comment.id)"
+                      class="comment-reply"
+                      ><i class="bi bi-trash"></i
+                    ></a>
+                  </div>
+                </div>
               </div>
-              <div class="text-left d-flex gap-2 mt-2">
-                <a
-                  @click="confirmReply(comment.id, formReply)"
-                  class="comment-reply"
-                  type="submit"
-                  ><i class="fa fa-reply"></i> Répondre</a
-                >
-                <a
-                  v-if="(me.sub || me.id) == comment.utilisateur.id"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalModifier"
-                  @click="updateComment(comment.id, comment.contenu)"
-                  class="comment-reply"
-                  ><i class="bi bi-pen"></i
-                ></a>
-                <a
-                  v-if="(me.sub || me.id) == comment.utilisateur.id"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalDelete"
-                  @click="initDeleteComment(comment.id)"
-                  class="comment-reply"
-                  ><i class="bi bi-trash"></i
-                ></a>
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
-        <!-- reponse -->
-        <ul class="comments-reply">
-          <li v-for="reply in comment.reponse" :key="reply.id">
-            <!-- <li v-if="comment.id == reply.idCommentaire"></li> -->
-            <div class="comment">
-              <img
-                class="commented-person img-thumbnail rounded-circle"
-                alt=""
-                :src="PROFIL_IMAGE + reply.utilisateur.illustration"
-              />
-              <div class="comment-body">
-                <div class="meta-data">
-                  <span class="commented-person-name"
-                    ><router-link to="/enterprise/name" class="text-dark">{{
-                      reply.utilisateur.prenom
-                    }}</router-link></span
-                  >
+          <!-- reponse -->
+          <ul class="comments-reply">
+            <li v-for="reply in comment.reponse" :key="reply.id">
+              <!-- <li v-if="comment.id == reply.idCommentaire"></li> -->
+              <div class="comment">
+                <img
+                  class="commented-person img-thumbnail rounded-circle"
+                  alt=""
+                  :src="PROFIL_IMAGE + reply.utilisateur.illustration"
+                />
+                <div class="comment-body">
+                  <div class="meta-data">
+                    <span class="commented-person-name"
+                      ><router-link to="/enterprise/name" class="text-dark">{{
+                        reply.utilisateur.prenom
+                      }}</router-link></span
+                    >
 
-                  <!-- <Popper placement="auto" hover="true"> <template #content>
+                    <!-- <Popper placement="auto" hover="true"> <template #content>
                       <div
                         class="card border-0 shadow-lg"
                         style="max-width: 540px"
@@ -149,270 +187,418 @@
                         </div>
                       </div>
                     </template></Popper> -->
-                  <span class="comment-hour d-block">{{
-                    new Date(reply.createdAt).toLocaleDateString("Fr-fr", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })
-                  }}</span>
-                </div>
-                <div class="comment-content">
-                  <p>{{ reply.contenu }}</p>
-                </div>
-                <div class="text-left d-flex gap-2 mt-0">
-                  <a
-                    v-if="(me.sub || me.id) == reply.utilisateur.id"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalModifierReponse"
-                    @click="updateReply(reply.id, reply.contenu)"
-                    class="comment-reply"
-                    ><i class="bi bi-pen"></i
-                  ></a>
-                  <a
-                    v-if="(me.sub || me.id) == reply.utilisateur.id"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalDeleteReponse"
-                    @click="initDeleteReply(reply.id)"
-                    class="comment-reply"
-                    ><i class="bi bi-trash"></i
-                  ></a>
+                    <span class="comment-hour d-block">{{
+                      new Date(reply.createdAt).toLocaleDateString("Fr-fr", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    }}</span>
+                  </div>
+                  <div class="comment-content">
+                    <p>{{ reply.contenu }}</p>
+                  </div>
+                  <div class="text-left d-flex gap-2 mt-0">
+                    <a
+                      v-if="(me.sub || me.id) == reply.utilisateur.id"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalModifierReponse"
+                      @click="updateReply(reply.id, reply.contenu)"
+                      class="comment-reply"
+                      ><i class="bi bi-pen"></i
+                    ></a>
+                    <a
+                      v-if="(me.sub || me.id) == reply.utilisateur.id"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalDeleteReponse"
+                      @click="initDeleteReply(reply.id)"
+                      class="comment-reply"
+                      ><i class="bi bi-trash"></i
+                    ></a>
+                  </div>
                 </div>
               </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!-- ------------------------------COMMENT FORM------------------------------------- -->
+    <div class="comment-form">
+      <h3 class="title-normal">Laissez un commentaire</h3>
+      <p class="mb-3">Votre adresse email ne sera pas publié.</p>
+      <form @submit.prevent="confirmComment" role="form" autocomplete="off">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <textarea
+                @focus="checkIsLoggin"
+                class="form-control required-field"
+                id="comment"
+                placeholder="Commentaire"
+                autocomplete="off"
+                v-model="form.contenu"
+                required
+              ></textarea>
             </div>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-  <!-- ------------------------------COMMENT FORM------------------------------------- -->
-  <div class="comment-form">
-    <h3 class="title-normal">Laissez un commentaire</h3>
-    <p class="mb-3">Votre adresse email ne sera pas publié.</p>
-    <form @submit.prevent="confirmComment" role="form" autocomplete="off">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="form-group">
-            <textarea
-              @focus="checkIsLoggin"
-              class="form-control required-field"
-              id="message"
-              placeholder="Commentaire"
-              autocomplete="off"
-              v-model="form.contenu"
-              required
-            ></textarea>
+          </div>
+
+          <div class="col-md-12">
+            <button
+              v-if="loading"
+              class="comments-btn btn btn-sm btn-outline-secondary"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
+              class="comments-btn btn btn-sm btn-outline-primary"
+              type="submit"
+            >
+              Commenter
+            </button>
           </div>
         </div>
-
-        <div class="col-md-12">
-          <button
-            class="comments-btn btn btn-sm btn-outline-primary"
-            type="submit"
-          >
-            Commenter
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <!-- -----------------------------------MODAL UPDATE COMMENTAIRE------------------------------------------ -->
-  <div
-    class="modal fade"
-    id="modalModifier"
-    tabindex="-1"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    aria-labelledby="modalLabelModifier"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <form
-        @submit.prevent="confirmUpdateComment"
-        class="modal-content border-0 bg-light text-dark"
-      >
-        <div class="modal-header mx-2">
-          <h4 class="modal-title text-dark" id="modalLabelModifier">
-            Modifier le commentaire
-          </h4>
-        </div>
-        <div class="modal-body">
-          <section class="row p-2">
-            <div class="col-12">
-              <textarea
-                class="form-control"
-                id="inputMessage"
-                rows="4"
-                required
-                v-model="formUpdateComment.contenu"
-                style="resize: none"
-              ></textarea>
-            </div>
-          </section>
-        </div>
-        <div class="modal-footer mx-2">
-          <button type="submit" class="btn px-3" style="background: #582456">
-            <i class="fa-solid fa-check text-white"></i>
-          </button>
-          <button
-            type="button"
-            data-bs-dismiss="modal"
-            ref="CloseModifierCommentaire"
-            class="btn bg-dark px-3"
-          >
-            <i class="fa-solid fa-xmark text-light"></i>
-          </button>
-        </div>
       </form>
     </div>
-  </div>
-  <!-- ------------------------------------END MODAL UPDATE COMMENTAIRE ------------------------------------ -->
 
-  <!-- ------------------------------MODAL DELETE COMMENTAIRE----------------------------------------------- -->
-  <div
-    class="modal fade"
-    id="modalDelete"
-    tabindex="-1"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    aria-labelledby="modalLabelDelete"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content border-0 bg-light text-dark">
-        <div class="modal-header mx-2">
-          <h4 class="modal-title text-dark" id="modalLabelDelete">
-            Supprimer le commentaire
-          </h4>
-        </div>
-        <div class="modal-body">
-          <section class="row p-2">
-            <div class="col-12">
-              Etes-vous sûr de vouloir supprimer ce commentaire ?
-            </div>
-          </section>
-        </div>
-        <div class="modal-footer mx-2">
-          <button
-            @click="deleteComment()"
-            type="submit"
-            class="btn px-3"
-            style="background: #582456"
-          >
-            <i class="fa-solid fa-check text-white"></i>
-          </button>
-          <button
-            type="button"
-            data-bs-dismiss="modal"
-            ref="CloseDeleteCommentaire"
-            class="btn bg-dark px-3"
-          >
-            <i class="fa-solid fa-xmark text-light"></i>
-          </button>
+    <!------------------------------------- MODAL ADD REPONSE------------------------------------- -->
+    <div
+      class="modal fade"
+      id="modalAjout"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      aria-labelledby="modalLabelAjouter"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <form
+          @submit.prevent="confirmReply"
+          class="modal-content border-0 bg-light text-dark"
+        >
+          <div class="modal-header mx-2">
+            <h4 class="modal-title text-dark" id="modalLabelAjouter">
+              Ajouter une réponse
+            </h4>
+          </div>
+          <div class="modal-body">
+            <section class="row p-2">
+              <div class="col-12">
+                <textarea
+                  class="form-control"
+                  id="inputMessage"
+                  rows="4"
+                  required
+                  v-model="formReply.contenu"
+                  style="resize: none"
+                ></textarea>
+              </div>
+            </section>
+          </div>
+          <div class="modal-footer mx-2">
+            <button
+              v-if="loading"
+              type="submit"
+              class="btn px-3"
+              style="background: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm text-white"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            </button>
+            <button
+              v-else
+              type="submit"
+              class="btn px-3"
+              style="background: #582456"
+            >
+              <i class="fa-solid fa-check text-white"></i>
+            </button>
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              ref="CloseAjoutRéponse"
+              class="btn bg-dark px-3"
+            >
+              <i class="fa-solid fa-xmark text-light"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!----------------------------------- END MODAL ADD REPONSE -------------------------------------->
+
+    <!-- -----------------------------------MODAL UPDATE COMMENTAIRE------------------------------------------ -->
+    <div
+      class="modal fade"
+      id="modalModifier"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      aria-labelledby="modalLabelModifier"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <form
+          @submit.prevent="confirmUpdateComment"
+          class="modal-content border-0 bg-light text-dark"
+        >
+          <div class="modal-header mx-2">
+            <h4 class="modal-title text-dark" id="modalLabelModifier">
+              Modifier le commentaire
+            </h4>
+          </div>
+          <div class="modal-body">
+            <section class="row p-2">
+              <div class="col-12">
+                <textarea
+                  class="form-control"
+                  id="inputMessage"
+                  rows="4"
+                  required
+                  v-model="formUpdateComment.contenu"
+                  style="resize: none"
+                ></textarea>
+              </div>
+            </section>
+          </div>
+          <div class="modal-footer mx-2">
+            <button
+              v-if="loading"
+              type="submit"
+              class="btn px-3"
+              style="background: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm text-white"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            </button>
+            <button
+              v-else
+              type="submit"
+              class="btn px-3"
+              style="background: #582456"
+            >
+              <i class="fa-solid fa-check text-white"></i>
+            </button>
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              ref="CloseModifierCommentaire"
+              class="btn bg-dark px-3"
+            >
+              <i class="fa-solid fa-xmark text-light"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- ------------------------------------END MODAL UPDATE COMMENTAIRE ------------------------------------ -->
+
+    <!-- ------------------------------MODAL DELETE COMMENTAIRE----------------------------------------------- -->
+    <div
+      class="modal fade"
+      id="modalDelete"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      aria-labelledby="modalLabelDelete"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 bg-light text-dark">
+          <div class="modal-header mx-2">
+            <h4 class="modal-title text-dark" id="modalLabelDelete">
+              Supprimer le commentaire
+            </h4>
+          </div>
+          <div class="modal-body">
+            <section class="row p-2">
+              <div class="col-12">
+                Etes-vous sûr de vouloir supprimer ce commentaire ?
+              </div>
+            </section>
+          </div>
+          <div class="modal-footer mx-2">
+            <button
+              v-if="loading"
+              type="submit"
+              class="btn px-3"
+              style="background: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm text-white"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            </button>
+            <button
+              v-else
+              @click="deleteComment()"
+              type="submit"
+              class="btn px-3"
+              style="background: #582456"
+            >
+              <i class="fa-solid fa-check text-white"></i>
+            </button>
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              ref="CloseDeleteCommentaire"
+              class="btn bg-dark px-3"
+            >
+              <i class="fa-solid fa-xmark text-light"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- ------------------------------END MODAL DELETE COMMENTAIRE----------------------------------------------- -->
-  <!-- -----------------------------------MODAL UPDATE REPONSE------------------------------------------ -->
-  <div
-    class="modal fade"
-    id="modalModifierReponse"
-    tabindex="-1"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    aria-labelledby="modalLabelModifierReponse"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <form
-        @submit.prevent="confirmUpdateReply"
-        class="modal-content border-0 bg-light text-dark"
-      >
-        <div class="modal-header mx-2">
-          <h4 class="modal-title text-dark" id="modalLabelModifierReponse">
-            Modifier la réponse
-          </h4>
-        </div>
-        <div class="modal-body">
-          <section class="row p-2">
-            <div class="col-12">
-              <textarea
-                class="form-control"
-                id="inputMessage"
-                rows="4"
-                required
-                v-model="formUpdateReply.contenu"
-                style="resize: none"
-              ></textarea>
-            </div>
-          </section>
-        </div>
-        <div class="modal-footer mx-2">
-          <button type="submit" class="btn px-3" style="background: #582456">
-            <i class="fa-solid fa-check text-white"></i>
-          </button>
-          <button
-            type="button"
-            data-bs-dismiss="modal"
-            ref="CloseModifier"
-            class="btn bg-dark px-3"
-          >
-            <i class="fa-solid fa-xmark text-light"></i>
-          </button>
-        </div>
-      </form>
+    <!-- ------------------------------END MODAL DELETE COMMENTAIRE----------------------------------------------- -->
+    <!-- -----------------------------------MODAL UPDATE REPONSE------------------------------------------ -->
+    <div
+      class="modal fade"
+      id="modalModifierReponse"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      aria-labelledby="modalLabelModifierReponse"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <form
+          @submit.prevent="confirmUpdateReply"
+          class="modal-content border-0 bg-light text-dark"
+        >
+          <div class="modal-header mx-2">
+            <h4 class="modal-title text-dark" id="modalLabelModifierReponse">
+              Modifier la réponse
+            </h4>
+          </div>
+          <div class="modal-body">
+            <section class="row p-2">
+              <div class="col-12">
+                <textarea
+                  class="form-control"
+                  id="inputMessage"
+                  rows="4"
+                  required
+                  v-model="formUpdateReply.contenu"
+                  style="resize: none"
+                ></textarea>
+              </div>
+            </section>
+          </div>
+          <div class="modal-footer mx-2">
+            <button
+              v-if="loading"
+              type="submit"
+              class="btn px-3"
+              style="background: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm text-white"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            </button>
+            <button
+              v-else
+              type="submit"
+              class="btn px-3"
+              style="background: #582456"
+            >
+              <i class="fa-solid fa-check text-white"></i>
+            </button>
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              ref="CloseModifier"
+              class="btn bg-dark px-3"
+            >
+              <i class="fa-solid fa-xmark text-light"></i>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
-  <!-- ------------------------------------END MODAL UPDATE REPONSE ------------------------------------ -->
+    <!-- ------------------------------------END MODAL UPDATE REPONSE ------------------------------------ -->
 
-  <!-- ------------------------------MODAL DELETE REPONSE----------------------------------------------- -->
-  <div
-    class="modal fade"
-    id="modalDeleteReponse"
-    tabindex="-1"
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    aria-labelledby="modalLabelDeleteReponse"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content border-0 bg-light text-dark">
-        <div class="modal-header mx-2">
-          <h4 class="modal-title text-dark" id="modalLabelDeleteReponse">
-            Supprimer la réponse
-          </h4>
-        </div>
-        <div class="modal-body">
-          <section class="row p-2">
-            <div class="col-12">
-              Etes-vous sûr de vouloir supprimer cette réponse ?
-            </div>
-          </section>
-        </div>
-        <div class="modal-footer mx-2">
-          <button
-            @click="deleteReply()"
-            type="submit"
-            class="btn px-3"
-            style="background: #582456"
-          >
-            <i class="fa-solid fa-check text-white"></i>
-          </button>
-          <button
-            type="button"
-            data-bs-dismiss="modal"
-            ref="CloseDelete"
-            class="btn bg-dark px-3"
-          >
-            <i class="fa-solid fa-xmark text-light"></i>
-          </button>
+    <!-- ------------------------------MODAL DELETE REPONSE----------------------------------------------- -->
+    <div
+      class="modal fade"
+      id="modalDeleteReponse"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      aria-labelledby="modalLabelDeleteReponse"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 bg-light text-dark">
+          <div class="modal-header mx-2">
+            <h4 class="modal-title text-dark" id="modalLabelDeleteReponse">
+              Supprimer la réponse
+            </h4>
+          </div>
+          <div class="modal-body">
+            <section class="row p-2">
+              <div class="col-12">
+                Etes-vous sûr de vouloir supprimer cette réponse ?
+              </div>
+            </section>
+          </div>
+          <div class="modal-footer mx-2">
+            <button
+              v-if="loading"
+              type="submit"
+              class="btn px-3"
+              style="background: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm text-white"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            </button>
+            <button
+              v-else
+              @click="deleteReply()"
+              type="submit"
+              class="btn px-3"
+              style="background: #582456"
+            >
+              <i class="fa-solid fa-check text-white"></i>
+            </button>
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              ref="CloseDelete"
+              class="btn bg-dark px-3"
+            >
+              <i class="fa-solid fa-xmark text-light"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
+    <!-- ------------------------------END MODAL DELETE REPONSE----------------------------------------------- -->
   </div>
-  <!-- ------------------------------END MODAL DELETE REPONSE----------------------------------------------- -->
 </template>
 <script>
 import { useToast } from "vue-toastification";
@@ -425,7 +611,7 @@ import {
   getCommentByPost,
   updateCommentById,
 } from "../../../api/comment";
-//import Reply from "./Reply.vue";
+//import { useRoute } from "vue-router";
 import {
   createResponse,
   deleteResponseById,
@@ -436,7 +622,6 @@ export default {
   name: "Comment",
   components: {
     /*  Popper, */
-    //Reply,
   },
   data() {
     return {
@@ -454,6 +639,9 @@ export default {
       idDeleteComment: 0,
       formUpdateReply: { idSelectUpdate: 0, contenu: "" },
       idDeleteReply: 0,
+      idAddReply: 0,
+      loading: false,
+      loadPage: false,
     };
   },
   computed: {
@@ -466,7 +654,9 @@ export default {
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       getCommentByPost(this.$route.params.slug).then((result) => {
+        this.loadPage = false;
         this.comments = result.data;
       });
     },
@@ -481,15 +671,18 @@ export default {
       }
     },
     confirmComment() {
+      this.loading = true;
       const toast = useToast();
       this.form.idUtilisateur = this.me.sub || this.me.id;
       createComment(this.$route.params.slug, this.form)
         .then(() => {
+          this.loading = false;
           toast.success("Commentaire ajouté");
           this.form.contenu = "";
           this.fetch();
         })
         .catch((e) => {
+          this.loading = false;
           toast.info(e.response.data.message);
         });
     },
@@ -509,10 +702,12 @@ export default {
       this.idDeleteComment = id;
     },
     deleteComment() {
+      this.loading = true;
       deleteCommentById(this.idDeleteComment).then(() => {
         const toast = useToast();
         getCommentByPost(this.$route.params.slug).then((result) => {
           this.data = result.data;
+          this.loading = false;
           this.$refs.CloseDeleteCommentaire.click();
           this.fetch();
           toast.success("Commentaire supprimé");
@@ -520,10 +715,12 @@ export default {
       });
     },
     confirmUpdateComment() {
+      this.loading = true;
       updateCommentById(this.formUpdateComment).then(() => {
         const toast = useToast();
         getCommentByPost(this.$route.params.slug).then((result) => {
           this.data = result.data;
+          this.loading = false;
           this.$refs.CloseModifierCommentaire.click();
           this.fetch();
           toast.success("Commentaire modifié");
@@ -531,10 +728,12 @@ export default {
       });
     },
     confirmUpdateReply() {
+      this.loading = true;
       updateResponseById(this.formUpdateReply).then(() => {
         const toast = useToast();
         getCommentByPost(this.$route.params.slug).then((result) => {
           this.data = result.data;
+          this.loading = false;
           this.$refs.CloseModifier.click();
           this.fetch();
           toast.success("Réponse modifiée");
@@ -545,31 +744,50 @@ export default {
       this.idDeleteReply = id;
     },
     deleteReply() {
+      this.loading = true;
       deleteResponseById(this.idDeleteReply).then(() => {
         const toast = useToast();
         getCommentByPost(this.$route.params.slug).then((result) => {
           this.data = result.data;
+          this.loading = false;
           this.$refs.CloseDelete.click();
           this.fetch();
           toast.success("Réponse supprimée");
         });
       });
     },
-    confirmReply(id, form) {
+    addReply(id) {
+      this.idAddReply = id;
+    },
+    confirmReply() {
+      this.loading = true;
       const toast = useToast();
       this.formReply.idUtilisateur = this.me.sub || this.me.id;
-      form = this.formReply;
-      createResponse(id, form)
+      createResponse(this.idAddReply, this.formReply)
         .then(() => {
+          this.loading = false;
+          /* if (this.formReply.contenu == "") {
+            toast.info("Veuillez ajouté une contenu");
+          } */
           toast.success("Réponse ajouté");
           this.formReply.contenu = "";
+          this.$refs.CloseAjoutRéponse.click();
           this.fetch();
         })
         .catch((e) => {
+          this.loading = false;
           toast.info(e.response.data.message);
         });
     },
   },
+  /* async setup() {
+    const route = useRoute();
+    const res = await getCommentByPost(route.params.slug);
+    const finalRes = await res.data;
+
+    const comment = finalRes;
+    return comment;
+  }, */
   mounted() {
     this.fetch();
   },

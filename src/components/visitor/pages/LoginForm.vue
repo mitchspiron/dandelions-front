@@ -59,7 +59,19 @@
                     >
                   </p>
                   <div class="d-grid">
-                    <button class="btn btn-outline-dark" type="submit">
+                    <button
+                      v-if="loading"
+                      class="comments-btn btn btn-sm btn-outline-secondary"
+                      disabled
+                    >
+                      <span
+                        class="spinner-grow spinner-grow-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Loading...
+                    </button>
+                    <button v-else class="btn btn-outline-dark" type="submit">
                       Login
                     </button>
                   </div>
@@ -107,6 +119,7 @@ export default {
         email: "",
         motDePasse: "",
       },
+      loading: false,
     };
   },
   methods: {
@@ -121,8 +134,10 @@ export default {
       LoginFormSchema.validate(this.form, { abortEarly: false })
         .then(() => {
           const toast = useToast();
+          this.loading = true;
           signin(this.form)
             .then((result) => {
+              this.loading = false;
               localStorage.setItem(
                 "dandelions_token",
                 result.data[1].access_token
@@ -140,6 +155,7 @@ export default {
               this.$router.go(-1 || "/");
             })
             .catch((e) => {
+              this.loading = false;
               toast.info(e.response.data.message);
             });
         })

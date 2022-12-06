@@ -161,7 +161,7 @@
                       disabled
                     >
                       <span
-                        class="spinner-border spinner-border-sm"
+                        class="spinner-grow spinner-grow-sm"
                         role="status"
                         aria-hidden="true"
                       ></span>

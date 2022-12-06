@@ -1,60 +1,93 @@
 <template>
-  <div class="col-lg-12 mb-5 mb-lg-0">
-    <article>
-      <img
-        loading="lazy"
-        decoding="async"
-        :src="illustration"
-        alt="Post Thumbnail"
-        class="w-100"
-        style=""
-      />
-      <ul class="post-meta mb-2 mt-4 d-flex">
-        <li class="me-auto">
-          <i class="bi bi-calendar-plus"></i>
-          <span> {{ createdAt }}</span>
-        </li>
-        <li>
-          <i class="bi bi-calendar-x text-danger"></i>
-          <span class="text-danger"> {{ deadline }}</span>
-        </li>
-      </ul>
-      <h1 class="my-3">{{ evenements.titre }}</h1>
-      <div class="content text-left">
-        <div v-html="evenements.contenu"></div>
-      </div>
-    </article>
-  </div>
-  <form
-    @submit.prevent="confirm"
-    v-if="evenements.onSubscribe == true"
-    class="d-grid gap-2 col-6 mx-auto"
+  <div
+    v-if="loadPage"
+    class="m-auto d-flex justify-content-center align-items-center vh-100"
   >
-    <button
-      v-if="loading"
-      class="btn btn-md btn-outline-secondary"
-      type="button"
-      disabled
+    <div class="breeding-rhombus-spinner">
+      <div class="rhombus child-1"></div>
+      <div class="rhombus child-2"></div>
+      <div class="rhombus child-3"></div>
+      <div class="rhombus child-4"></div>
+      <div class="rhombus child-5"></div>
+      <div class="rhombus child-6"></div>
+      <div class="rhombus child-7"></div>
+      <div class="rhombus child-8"></div>
+      <div class="rhombus big"></div>
+    </div>
+  </div>
+  <div v-else>
+    <div class="col-lg-12 mb-5 mb-lg-0">
+      <article>
+        <img
+          loading="lazy"
+          decoding="async"
+          :src="PROFIL_IMAGE + evenements.illustration"
+          alt="Post Thumbnail"
+          class="w-100"
+          style=""
+        />
+        <ul class="post-meta mb-2 mt-4 d-flex">
+          <li class="me-auto">
+            <i class="bi bi-calendar-plus me-1"></i>
+            <span>
+              {{
+                new Date(evenements.createdAt).toLocaleDateString("Fr-fr", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }}</span
+            >
+          </li>
+          <li>
+            <i class="bi bi-calendar-x text-danger me-1"></i>
+            <span class="text-danger">
+              {{
+                new Date(evenements.deadline).toLocaleDateString("Fr-fr", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }}</span
+            >
+          </li>
+        </ul>
+        <h1 class="my-3">{{ evenements.titre }}</h1>
+        <div class="content text-left">
+          <div v-html="evenements.contenu"></div>
+        </div>
+      </article>
+    </div>
+    <form
+      @submit.prevent="confirm"
+      v-if="evenements.onSubscribe == true"
+      class="d-grid gap-2 col-6 mx-auto"
     >
-      <span
-        class="spinner-border spinner-border-sm"
-        role="status"
-        aria-hidden="true"
-      ></span>
-      Loading...
-    </button>
-    <button
-      v-else
-      @click="checkIsLoggin"
-      class="btn btn-md btn-outline-primary"
-      type="submit"
-    >
-      Register
-    </button>
-  </form>
+      <button
+        v-if="loading"
+        class="btn btn-md btn-outline-secondary"
+        type="button"
+        disabled
+      >
+        <span
+          class="spinner-grow spinner-grow-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        Loading...
+      </button>
+      <button
+        v-else
+        @click="checkIsLoggin"
+        class="btn btn-md btn-outline-primary"
+        type="submit"
+      >
+        Register
+      </button>
+    </form>
 
-  <!-- Modal -->
-  <!-- <div
+    <!-- Modal -->
+    <!-- <div
     class="modal fade"
     id="EventModal"
     tabindex="-1"
@@ -117,6 +150,7 @@
       </div>
     </div>
   </div> -->
+  </div>
 </template>
 
 <script>
@@ -135,6 +169,8 @@ export default {
       createdAt: Date.now(),
       deadline: Date.now(),
       illustration: "",
+      PROFIL_IMAGE: PROFIL_IMAGE,
+      loadPage: false,
       form: {
         idEvenement: null,
         idUtilisateur: null,
@@ -154,26 +190,18 @@ export default {
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       getEvenementBySlug(this.$route.params.slug).then((result) => {
+        this.loadPage = false;
         this.evenements = result.data;
-        this.illustration = PROFIL_IMAGE + result.data.illustration;
-        let options = {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        };
-        const dateCreation = new Date(result.data.createdAt);
-        this.createdAt = dateCreation.toLocaleDateString("Fr-fr", options);
-        const dateExpiration = new Date(result.data.deadline);
-        this.deadline = dateExpiration.toLocaleDateString("Fr-fr", options);
       });
     },
     confirm() {
+      this.loading = true;
       getEvenementBySlug(this.$route.params.slug).then((result) => {
         const toast = useToast();
         this.form.idEvenement = result.data.id;
         this.form.idUtilisateur = this.me.sub || this.me.id;
-        this.loading = true;
         createEventRegistration(this.form)
           .then(() => {
             this.loading = false;

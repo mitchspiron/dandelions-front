@@ -1,5 +1,21 @@
 <template>
-  <div class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
+  <div
+    v-if="loadPage"
+    class="m-auto d-flex justify-content-center align-items-center vh-100"
+  >
+    <div class="breeding-rhombus-spinner">
+      <div class="rhombus child-1"></div>
+      <div class="rhombus child-2"></div>
+      <div class="rhombus child-3"></div>
+      <div class="rhombus child-4"></div>
+      <div class="rhombus child-5"></div>
+      <div class="rhombus child-6"></div>
+      <div class="rhombus child-7"></div>
+      <div class="rhombus child-8"></div>
+      <div class="rhombus big"></div>
+    </div>
+  </div>
+  <div v-else class="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div v-for="(slide, i) in slides" :key="i">
@@ -118,22 +134,17 @@ export default {
     return {
       slides: [],
       PROFIL_IMAGE: PROFIL_IMAGE,
+      loadPage: false,
     };
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       getEvenementOnHeader().then((result) => {
+        this.loadPage = false;
         this.slides = result.data;
       });
     },
-  },
-  async setup() {
-    const res = await getEvenementOnHeader();
-    const finalRes = await res.data;
-    /* console.log("header", finalRes); */
-    const header = [finalRes];
-    //console.log("header", header);
-    return header;
   },
   mounted() {
     this.fetch();

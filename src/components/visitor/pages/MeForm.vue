@@ -52,6 +52,20 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Modifification l'illustration de profile</h4>
             <button
+              v-if="loading"
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
@@ -137,6 +151,20 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Modifification information</h4>
             <button
+              v-if="loadingInfo"
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
@@ -221,6 +249,20 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Modifification mot de passe</h4>
             <button
+              v-if="loadingPwd"
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
@@ -270,6 +312,9 @@ export default {
   components: {},
   data() {
     return {
+      loading: false,
+      loadingInfo: false,
+      loadingPwd: false,
       infos: {
         nom: "",
         prenom: "",
@@ -333,9 +378,11 @@ export default {
       });
     },
     confirmInfo() {
+      this.loadingInfo = true;
       const toast = useToast();
       updateUsersInfoById(this.me.sub || this.me.id, this.infos)
         .then((result) => {
+          this.loadingInfo = false;
           localStorage.setItem("dandelions_token", result.data[1].access_token);
           const decodeV = decodeToken(result.data[1].access_token);
           this.$store.dispatch("userStore/setUser", decodeV);
@@ -347,6 +394,7 @@ export default {
           this.$router.push(this.$route.query.redirect || "/mon-espace");
         })
         .catch((e) => {
+          this.loadingInfo = false;
           toast.info(e.response.data.message);
         });
     },
@@ -354,8 +402,10 @@ export default {
       PasswordFormSchema.validate(this.password, { abortEarly: false })
         .then(() => {
           const toast = useToast();
+          this.loadingPwd = true;
           updateUsersPasswordById(this.me.sub || this.me.id, this.password)
             .then(() => {
+              this.loadingPwd = false;
               toast.success("Modification mot de passe réussi");
               this.password.ancienMotDePasse = "";
               this.password.nouveauMotDePasse = "";
@@ -363,6 +413,7 @@ export default {
               this.$router.push(this.$route.query.redirect || "/mon-espace");
             })
             .catch((e) => {
+              this.loadingPwd = false;
               toast.info(e.response.data.message);
             });
         })
@@ -383,8 +434,10 @@ export default {
       uploadedFile(formData)
         .then((result) => {
           this.image.illustration = result.data.filename;
+          this.loading = true;
           updateIllustrationById(this.me.sub || this.me.id, this.image)
             .then((res) => {
+              this.loading = false;
               localStorage.setItem(
                 "dandelions_token",
                 res.data[1].access_token
@@ -396,6 +449,7 @@ export default {
               this.$router.push(this.$route.query.redirect || "/mon-espace");
             })
             .catch((e) => {
+              this.loading = false;
               toast.info(e.response.data.message);
             });
         })

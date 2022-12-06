@@ -1,76 +1,27 @@
 <template>
-  <div class="col-12 mb-4">
-    <article
-      v-for="article in first_article"
-      :key="article.id"
-      class="card article-card"
-    >
-      <router-link
-        :to="{
-          name: 'ArticleBySlug',
-          params: { slug: article.slug },
-        }"
-      >
-        <div class="card-image">
-          <div class="post-info">
-            <span class="text-uppercase">{{
-              new Date(article.createdAt).toLocaleDateString("Fr-fr", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
-            }}</span>
-          </div>
-          <img
-            loading="lazy"
-            decoding="async"
-            :src="PROFIL_IMAGE + article.illustration"
-            alt="Post Thumbnail"
-            class="first-take w-100"
-          />
-        </div>
-      </router-link>
-      <div class="card-body px-0 pb-1">
-        <ul class="post-meta mb-2">
-          <li>
-            <router-link
-              :to="{
-                name: 'ArticleListByCategory',
-                params: { slug: article.categorie_article.slug },
-              }"
-              >{{ article.categorie_article.nomCategorie }}</router-link
-            >
-          </li>
-        </ul>
-        <h2 class="h1">
-          <router-link
-            :to="{
-              name: 'ArticleBySlug',
-              params: { slug: article.slug },
-            }"
-            class="post-title"
-            >{{ article.titre }}</router-link
-          >
-        </h2>
-        <p class="card-text">
-          {{ article.description }}
-        </p>
-        <div class="content">
-          <router-link
-            :to="{
-              name: 'ArticleBySlug',
-              params: { slug: article.slug },
-            }"
-            class="read-more-btn"
-            >Read Full Article</router-link
-          >
-        </div>
-      </div>
-    </article>
+  <div
+    v-if="loadPage"
+    class="m-auto d-flex justify-content-center align-items-center vh-100"
+  >
+    <div class="breeding-rhombus-spinner">
+      <div class="rhombus child-1"></div>
+      <div class="rhombus child-2"></div>
+      <div class="rhombus child-3"></div>
+      <div class="rhombus child-4"></div>
+      <div class="rhombus child-5"></div>
+      <div class="rhombus child-6"></div>
+      <div class="rhombus child-7"></div>
+      <div class="rhombus child-8"></div>
+      <div class="rhombus big"></div>
+    </div>
   </div>
-  <div class="row">
-    <div class="col-md-6 mb-4" v-for="article in articles" :key="article.id">
-      <article class="card article-card article-card-sm h-100">
+  <div v-else>
+    <div class="col-12 mb-4">
+      <article
+        v-for="article in first_article"
+        :key="article.id"
+        class="card article-card"
+      >
         <router-link
           :to="{
             name: 'ArticleBySlug',
@@ -92,11 +43,11 @@
               decoding="async"
               :src="PROFIL_IMAGE + article.illustration"
               alt="Post Thumbnail"
-              class="img-thumbnail"
+              class="first-take w-100"
             />
           </div>
         </router-link>
-        <div class="card-body px-0 pb-0">
+        <div class="card-body px-0 pb-1">
           <ul class="post-meta mb-2">
             <li>
               <router-link
@@ -108,7 +59,7 @@
               >
             </li>
           </ul>
-          <h2>
+          <h2 class="h1">
             <router-link
               :to="{
                 name: 'ArticleBySlug',
@@ -118,7 +69,7 @@
               >{{ article.titre }}</router-link
             >
           </h2>
-          <p class="card-text description">
+          <p class="card-text">
             {{ article.description }}
           </p>
           <div class="content">
@@ -134,11 +85,78 @@
         </div>
       </article>
     </div>
-  </div>
-  <div class="d-grid gap-2 col-6 mx-auto">
-    <router-link to="/article" class="btn btn-sm btn-outline-primary"
-      >Show More</router-link
-    >
+    <div class="row">
+      <div class="col-md-6 mb-4" v-for="article in articles" :key="article.id">
+        <article class="card article-card article-card-sm h-100">
+          <router-link
+            :to="{
+              name: 'ArticleBySlug',
+              params: { slug: article.slug },
+            }"
+          >
+            <div class="card-image">
+              <div class="post-info">
+                <span class="text-uppercase">{{
+                  new Date(article.createdAt).toLocaleDateString("Fr-fr", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
+                }}</span>
+              </div>
+              <img
+                loading="lazy"
+                decoding="async"
+                :src="PROFIL_IMAGE + article.illustration"
+                alt="Post Thumbnail"
+                class="img-thumbnail"
+              />
+            </div>
+          </router-link>
+          <div class="card-body px-0 pb-0">
+            <ul class="post-meta mb-2">
+              <li>
+                <router-link
+                  :to="{
+                    name: 'ArticleListByCategory',
+                    params: { slug: article.categorie_article.slug },
+                  }"
+                  >{{ article.categorie_article.nomCategorie }}</router-link
+                >
+              </li>
+            </ul>
+            <h2>
+              <router-link
+                :to="{
+                  name: 'ArticleBySlug',
+                  params: { slug: article.slug },
+                }"
+                class="post-title"
+                >{{ article.titre }}</router-link
+              >
+            </h2>
+            <p class="card-text description">
+              {{ article.description }}
+            </p>
+            <div class="content">
+              <router-link
+                :to="{
+                  name: 'ArticleBySlug',
+                  params: { slug: article.slug },
+                }"
+                class="read-more-btn"
+                >Read Full Article</router-link
+              >
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="d-grid gap-2 col-6 mx-auto">
+      <router-link to="/article" class="btn btn-sm btn-outline-primary"
+        >Show More</router-link
+      >
+    </div>
   </div>
 </template>
 
@@ -153,31 +171,24 @@ export default {
       articles: [],
       PROFIL_IMAGE: PROFIL_IMAGE,
       first_article: [],
+      loadPage: false,
     };
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       skipFirstLastestPost().then((result) => {
+        this.loadPage = false;
         this.articles = result.data;
       });
     },
     fetchFirst() {
+      this.loadPage = true;
       takeFirstLastestPost().then((result) => {
+        this.loadPage = false;
         this.first_article = result.data;
       });
     },
-  },
-  async setup() {
-    const res = await skipFirstLastestPost();
-    const res2 = await takeFirstLastestPost();
-    const finalRes = await res.data;
-    const finalRes2 = await res2.data;
-    /* console.log("skipFirst", finalRes);
-    console.log("takeFirst", finalRes2); */
-
-    const latestArticle = [finalRes, finalRes2];
-    //console.log("latestArticle", latestArticle);
-    return latestArticle;
   },
   mounted() {
     this.fetch();

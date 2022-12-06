@@ -1,5 +1,21 @@
 <template>
-  <div class="widget-blocks">
+  <div
+    v-if="loadPage"
+    class="m-auto d-flex justify-content-center align-items-center vh-100"
+  >
+    <div class="breeding-rhombus-spinner">
+      <div class="rhombus child-1"></div>
+      <div class="rhombus child-2"></div>
+      <div class="rhombus child-3"></div>
+      <div class="rhombus child-4"></div>
+      <div class="rhombus child-5"></div>
+      <div class="rhombus child-6"></div>
+      <div class="rhombus child-7"></div>
+      <div class="rhombus child-8"></div>
+      <div class="rhombus big"></div>
+    </div>
+  </div>
+  <div v-else class="widget-blocks">
     <div class="row">
       <div class="col-lg-12">
         <div class="widget">
@@ -7,7 +23,7 @@
             <img
               loading="lazy"
               decoding="async"
-              :src="illustration"
+              :src="PROFIL_IMAGE + illustration"
               alt="About Me"
               class="w-100 author-thumb-sm img-thumbnail d-block"
             />
@@ -79,6 +95,8 @@ export default {
       descriptionA: "",
       illustration: "",
       events: [],
+      PROFIL_IMAGE: PROFIL_IMAGE,
+      loadPage: false,
     };
   },
   mounted() {
@@ -87,15 +105,19 @@ export default {
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       getEvenementBySlug(this.$route.params.slug).then((result) => {
+        this.loadPage = false;
         this.nom = result.data.entreprise.nom;
         this.slug = result.data.entreprise.slug;
         this.descriptionA = result.data.entreprise.descriptionA;
-        this.illustration = PROFIL_IMAGE + result.data.entreprise.illustration;
+        this.illustration = result.data.entreprise.illustration;
       });
     },
     fetchFourLastEvent() {
+      this.loadPage = true;
       getFourLastEvenement().then((result) => {
+        this.loadPage = false;
         this.events = result.data;
       });
     },

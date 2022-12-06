@@ -1,5 +1,21 @@
 <template>
-  <div class="widget-blocks">
+  <div
+    v-if="loadPage"
+    class="m-auto d-flex justify-content-center align-items-center vh-100"
+  >
+    <div class="breeding-rhombus-spinner">
+      <div class="rhombus child-1"></div>
+      <div class="rhombus child-2"></div>
+      <div class="rhombus child-3"></div>
+      <div class="rhombus child-4"></div>
+      <div class="rhombus child-5"></div>
+      <div class="rhombus child-6"></div>
+      <div class="rhombus child-7"></div>
+      <div class="rhombus child-8"></div>
+      <div class="rhombus big"></div>
+    </div>
+  </div>
+  <div v-else class="widget-blocks">
     <div class="row">
       <div class="col-lg-12">
         <div class="widget">
@@ -146,39 +162,31 @@ export default {
       recommandations: [],
       tops: [],
       PROFIL_IMAGE: PROFIL_IMAGE,
+      loadPage: false,
     };
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       getPostCategory().then((result) => {
+        this.loadPage = false;
         this.categories = result.data;
       });
     },
     fetchRecommandation() {
+      this.loadPage = true;
       getRecommandedPost().then((result) => {
+        this.loadPage = false;
         this.recommandations = result.data;
       });
     },
     fetchTop() {
+      this.loadPage = true;
       getTopPost().then((result) => {
+        this.loadPage = true;
         this.tops = result.data;
       });
     },
-  },
-  async setup() {
-    const res = await getPostCategory();
-    const finalRes = await res.data;
-    const res2 = await getRecommandedPost();
-    const finalRes2 = await res2.data;
-    const res3 = await getTopPost();
-    const finalRes3 = await res3.data;
-    /* console.log("postCategory", finalRes);
-    console.log("recommanded", finalRes2);
-    console.log("top", finalRes3); */
-
-    const articleSide = [finalRes, finalRes2, finalRes3];
-    //console.log("articleSide", articleSide);
-    return articleSide;
   },
   mounted() {
     this.fetch();

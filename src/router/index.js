@@ -142,6 +142,7 @@ const routes = [
     component: Me,
     meta: {
       title: "Espace personnel",
+      noAccessNotLoggedIn: true,
     },
   },
   {
