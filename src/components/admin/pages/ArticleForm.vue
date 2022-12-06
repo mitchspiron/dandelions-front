@@ -204,7 +204,6 @@ export default {
     },
     confirm() {
       const toast = useToast();
-      this.loading = true;
       let formData = new FormData();
       formData.append("file", this.file);
       uploadedFile(formData)
@@ -212,6 +211,7 @@ export default {
           this.form.idRedacteur = this.me.sub || this.me.id;
           this.form.illustration = result.data.filename;
           this.form.idCategorie = Number(this.form.idCategorie);
+          this.loading = true;
           createPost(this.form)
             .then(() => {
               this.loading = false;

@@ -157,7 +157,7 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Modification de l'article</h4>
             <button
-              v-if="loading"
+              v-if="loadingInfo"
               class="btn btn-primary btn-md ms-auto border-0"
               disabled
               style="background-color: #582456"
@@ -212,6 +212,7 @@ export default {
         illustration: "",
       },
       loading: false,
+      loadingInfo: false,
     };
   },
   setup: () => {
@@ -273,16 +274,19 @@ export default {
       uploadedFile(formData)
         .then((result) => {
           this.image.illustration = result.data.filename;
+          this.loading = true;
           updateIllustrationBySlug(
             this.$route.params.slug,
             this.me.sub || this.me.id,
             this.image
           )
             .then(() => {
+              this.loading = false;
               toast.success("Modification illustration d'article réussi");
               this.$router.push(this.$route.query.redirect || "/admin/article");
             })
             .catch((e) => {
+              this.loading = false;
               toast.info(e.response.data.message);
             });
         })
@@ -291,6 +295,7 @@ export default {
         });
     },
     confirm() {
+      this.loadingInfo = true;
       const toast = useToast();
       updatePostBySlug(
         this.$route.params.slug,
@@ -298,10 +303,12 @@ export default {
         this.form
       )
         .then(() => {
+          this.loadingInfo = false;
           toast.success("Modification article réussi");
           this.$router.push(this.$route.query.redirect || "/admin/article");
         })
         .catch((e) => {
+          this.loadingInfo = false;
           toast.info(e.response.data.message);
         });
     },

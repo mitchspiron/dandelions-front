@@ -165,6 +165,20 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Ajout entreprise</h4>
             <button
+              v-if="loading"
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >

@@ -39,7 +39,20 @@
       ></router-link>
     </div>
   </div>
-  <div class="card border-0 shadow-sm mt-3">
+  <div v-if="loadPage" class="mt-5 mb-5 d-flex justify-content-center">
+    <div class="breeding-rhombus-spinner">
+      <div class="rhombus child-1"></div>
+      <div class="rhombus child-2"></div>
+      <div class="rhombus child-3"></div>
+      <div class="rhombus child-4"></div>
+      <div class="rhombus child-5"></div>
+      <div class="rhombus child-6"></div>
+      <div class="rhombus child-7"></div>
+      <div class="rhombus child-8"></div>
+      <div class="rhombus big"></div>
+    </div>
+  </div>
+  <div v-else class="card border-0 shadow-sm mt-3">
     <table class="table align-middle mb-0 bg-white">
       <thead class="bg-light text-center">
         <tr>
@@ -93,12 +106,12 @@
           </td>
           <td>
             <div class="d-flex justify-content-center gap-4">
-              <a type="button">
+              <!-- <a type="button">
                 <i class="fa-regular fa-eye"></i>
               </a>
               <a type="button">
                 <i class="fa-regular fa-pen-to-square"></i>
-              </a>
+              </a> -->
               <a type="button">
                 <i class="bi bi-trash"></i>
               </a>
@@ -134,11 +147,14 @@ export default {
       noUser: 0,
       page: 1,
       perPage: 10,
+      loadPage: false,
     };
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       getUsers().then((result) => {
+        this.loadPage = false;
         this.users = result.data;
       });
     },
@@ -159,7 +175,9 @@ export default {
     search: {
       deep: true,
       handler() {
+        this.loadPage = true;
         filterUsers(this.search).then((result) => {
+          this.loadPage = false;
           this.users = result.data;
           if (result.data == "") {
             this.noUser = true;

@@ -53,10 +53,24 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Modification de l'illustration coming-soon</h4>
             <button
+              v-if="loading"
+              class="btn btn-primary btn-md ms-auto border-0"
+              disabled
+              style="background-color: #582456"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
-              Modifier
+              Mofifier
             </button>
           </div>
         </div>
@@ -166,12 +180,26 @@
       <div class="card-footer py-2 px-3">
         <div class="col-md-12">
           <div class="d-flex align-items-center">
-            <h4 class="mb-0">Ajout événement</h4>
+            <h4 class="mb-0">Modification de l'événement</h4>
             <button
+              v-if="loadingInfo"
+              class="btn btn-primary btn-md ms-auto border-0"
+              disabled
+              style="background-color: #582456"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
-              Ajouter
+              Modifier
             </button>
           </div>
         </div>
@@ -210,6 +238,7 @@ export default {
         illustration: "",
       },
       loading: false,
+      loadingInfo: false,
     };
   },
   setup: () => {
@@ -271,18 +300,21 @@ export default {
       uploadedFile(formData)
         .then((result) => {
           this.image.illustration = result.data.filename;
+          this.loading = true;
           updateIllustrationBySlug(
             this.$route.params.slug,
             this.me.sub || this.me.id,
             this.image
           )
             .then(() => {
+              this.loading = false;
               toast.success("Modification illustration du coming-soon réussi");
               this.$router.push(
                 this.$route.query.redirect || "/admin/evenement"
               );
             })
             .catch((e) => {
+              this.loading = false;
               toast.info(e.response.data.message);
             });
         })
@@ -291,6 +323,7 @@ export default {
         });
     },
     confirm() {
+      this.loadingInfo = true;
       const toast = useToast();
       updateEvenementBySlug(
         this.$route.params.slug,
@@ -298,10 +331,12 @@ export default {
         this.form
       )
         .then(() => {
+          this.loadingInfo = false;
           toast.success("Modification coming-soon réussi");
           this.$router.push(this.$route.query.redirect || "/admin/evenement");
         })
         .catch((e) => {
+          this.loadingInfo = false;
           toast.info(e.response.data.message);
         });
     },

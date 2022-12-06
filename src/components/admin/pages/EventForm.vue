@@ -136,6 +136,20 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Ajout événement</h4>
             <button
+              v-if="loading"
+              class="btn btn-primary btn-md ms-auto border-0"
+              disabled
+              style="background-color: #582456"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
@@ -217,12 +231,12 @@ export default {
     },
     confirm() {
       const toast = useToast();
-      this.loading = true;
       let formData = new FormData();
       formData.append("file", this.file);
       uploadedFile(formData)
         .then((result) => {
           this.form.illustration = result.data.filename;
+          this.loading = true;
           createEvenement(this.form)
             .then(() => {
               this.loading = false;

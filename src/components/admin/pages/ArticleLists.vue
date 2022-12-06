@@ -85,7 +85,20 @@
       ></router-link>
     </div>
   </div>
-  <div class="card border-0 shadow-sm mt-3">
+  <div v-if="loadPage" class="mt-5 mb-5 d-flex justify-content-center">
+    <div class="breeding-rhombus-spinner">
+      <div class="rhombus child-1"></div>
+      <div class="rhombus child-2"></div>
+      <div class="rhombus child-3"></div>
+      <div class="rhombus child-4"></div>
+      <div class="rhombus child-5"></div>
+      <div class="rhombus child-6"></div>
+      <div class="rhombus child-7"></div>
+      <div class="rhombus child-8"></div>
+      <div class="rhombus big"></div>
+    </div>
+  </div>
+  <div v-else class="card border-0 shadow-sm mt-3">
     <table class="table align-middle mb-0 bg-white text-center">
       <thead class="bg-light">
         <tr>
@@ -95,7 +108,7 @@
           <th>Top</th>
           <th>Recommandé</th>
           <th>Etat</th>
-          <th>Nb.Commentaire</th>
+          <!-- <th>Nb.Commentaire</th> -->
           <th>Actions</th>
         </tr>
       </thead>
@@ -199,7 +212,7 @@
               >{{ post.etat_article.nomEtat }}</span
             >
           </td>
-          <td class="text-muted">5</td>
+          <!-- <td class="text-muted">5</td> -->
           <td>
             <div class="d-flex justify-content-center gap-4">
               <router-link
@@ -300,15 +313,8 @@ export default {
       noPost: 0,
       page: 1,
       perPage: 10,
+      loadPage: false,
     };
-  },
-  computed: {
-    me() {
-      return this.$store.getters["userStore/me"];
-    },
-    displayedPosts() {
-      return this.paginate(this.posts);
-    },
   },
   methods: {
     fetchCategory() {
@@ -317,19 +323,24 @@ export default {
       });
     },
     fetch() {
+      this.loadPage = true;
       getPost(this.me.sub || this.me.id).then((result) => {
         this.posts = result.data;
+        this.loadPage = false;
       });
     },
     updateStatus(slug, etat) {
       const toast = useToast();
       etat = this.article;
+      this.loadPage = true;
       updateStateBySlug(slug, etat)
         .then((result) => {
           toast.success("Article " + result.data.etat_article.nomEtat);
           this.fetch();
+          this.loadPage = false;
         })
         .catch(() => {
+          this.loadPage = false;
           toast.error("Une erreur est survenue!");
         });
     },
@@ -393,12 +404,22 @@ export default {
       return posts.slice(from, to);
     },
   },
+  computed: {
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+    displayedPosts() {
+      return this.paginate(this.posts);
+    },
+  },
   watch: {
     search: {
       deep: true,
       handler() {
+        this.loadPage = true;
         filterPost(this.me.sub || this.me.id, this.search).then((result) => {
           this.posts = result.data;
+          this.loadPage = false;
           if (result.data == "") {
             this.noPost = true;
           } else {

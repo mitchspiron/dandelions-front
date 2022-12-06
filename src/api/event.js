@@ -50,7 +50,7 @@ export const getEvenementOnHeader = () => {
   });
 };
 
-export const getFourLastEvenement = () => {
+export const getThreeLastEvenement = () => {
   return axios.get(`${URL}/four-last`, {
     withCredentials: true,
     headers: {

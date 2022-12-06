@@ -50,7 +50,7 @@
                 >
                   <div class="media-body">
                     <h3 style="margin-top: -5px">
-                      {{ event.title }}
+                      {{ event.titre }}
                     </h3>
                     <p class="mb-0 small description">
                       {{ event.description }}
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { getEvenementBySlug, getFourLastEvenement } from "../../../api/event";
+import { getEvenementBySlug, getThreeLastEvenement } from "../../../api/event";
 import { PROFIL_IMAGE } from "../../../configs";
 export default {
   name: "ArticleSide",
@@ -101,7 +101,7 @@ export default {
   },
   mounted() {
     this.fetch();
-    this.fetchFourLastEvent();
+    this.fetchThreeLastEvent();
   },
   methods: {
     fetch() {
@@ -114,9 +114,9 @@ export default {
         this.illustration = result.data.entreprise.illustration;
       });
     },
-    fetchFourLastEvent() {
+    fetchThreeLastEvent() {
       this.loadPage = true;
-      getFourLastEvenement().then((result) => {
+      getThreeLastEvenement().then((result) => {
         this.loadPage = false;
         this.events = result.data;
       });

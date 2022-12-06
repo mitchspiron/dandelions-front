@@ -29,6 +29,20 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Ajout catégorie</h4>
             <button
+              v-if="loading"
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
@@ -48,6 +62,7 @@ export default {
   components: {},
   data() {
     return {
+      loading: false,
       form: {
         nomCategorie: "",
       },
@@ -55,15 +70,18 @@ export default {
   },
   methods: {
     confirm() {
+      this.loading = true;
       const toast = useToast();
       createPostCategory(this.form)
         .then(() => {
+          this.loading = false;
           toast.success("Catégorie d'article ajouté");
           this.$router.push(
             this.$route.query.redirect || "/admin/article/categorie"
           );
         })
         .catch((e) => {
+          this.loading = false;
           toast.info(e.response.data.message);
         });
     },

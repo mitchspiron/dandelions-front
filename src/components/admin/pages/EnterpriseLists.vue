@@ -14,10 +14,7 @@
         />
       </div>
     </div>
-    <div
-      v-if="(me.roleUser || me.role) == 2 && enterprises.length == 1"
-      class=""
-    >
+    <div v-if="(me.roleUser || me.role) == 2 && enterprises.length == 1">
       <router-link
         to="/admin/entreprise/nouveau"
         class="visually-hidden btn btn-outline-secondary"
@@ -32,7 +29,20 @@
       ></router-link>
     </div>
   </div>
-  <div class="card border-0 shadow-sm mt-3">
+  <div v-if="loadPage" class="mt-5 mb-5 d-flex justify-content-center">
+    <div class="breeding-rhombus-spinner">
+      <div class="rhombus child-1"></div>
+      <div class="rhombus child-2"></div>
+      <div class="rhombus child-3"></div>
+      <div class="rhombus child-4"></div>
+      <div class="rhombus child-5"></div>
+      <div class="rhombus child-6"></div>
+      <div class="rhombus child-7"></div>
+      <div class="rhombus child-8"></div>
+      <div class="rhombus big"></div>
+    </div>
+  </div>
+  <div v-else class="card border-0 shadow-sm mt-3">
     <table class="table align-middle mb-0 bg-white text-center">
       <thead class="bg-light">
         <tr>
@@ -130,6 +140,7 @@ export default {
       search: "",
       page: 1,
       perPage: 10,
+      loadPage: false,
     };
   },
   computed: {
@@ -142,8 +153,10 @@ export default {
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       getEnterpriseAdmin(this.me.sub || this.me.id).then((result) => {
         this.enterprises = result.data;
+        this.loadPage = false;
       });
     },
     switchToAbonnee(slug, etat, event) {
@@ -182,9 +195,11 @@ export default {
   },
   watch: {
     search() {
+      this.loadPage = true;
       filterEnterpriseAdmin(this.me.sub || this.me.id, this.search).then(
         (result) => {
           this.enterprises = result.data;
+          this.loadPage = false;
           if (result.data == "") {
             this.noEnterprise = true;
           } else {

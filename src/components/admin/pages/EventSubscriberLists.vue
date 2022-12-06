@@ -16,7 +16,20 @@
       </div>
     </div>
   </div>
-  <div class="card border-0 shadow-sm mt-3">
+  <div v-if="loadPage" class="mt-5 mb-5 d-flex justify-content-center">
+    <div class="breeding-rhombus-spinner">
+      <div class="rhombus child-1"></div>
+      <div class="rhombus child-2"></div>
+      <div class="rhombus child-3"></div>
+      <div class="rhombus child-4"></div>
+      <div class="rhombus child-5"></div>
+      <div class="rhombus child-6"></div>
+      <div class="rhombus child-7"></div>
+      <div class="rhombus child-8"></div>
+      <div class="rhombus big"></div>
+    </div>
+  </div>
+  <div v-else class="card border-0 shadow-sm mt-3">
     <table class="table align-middle mb-0 bg-white text-center">
       <thead class="bg-light">
         <tr>
@@ -67,6 +80,7 @@ export default {
       noEventRegister: false,
       page: 1,
       perPage: 10,
+      loadPage: false,
     };
   },
   computed: {
@@ -76,8 +90,10 @@ export default {
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       getEventRegistrationByEvent(this.$route.params.slug).then((result) => {
         this.subscribers = result.data;
+        this.loadPage = false;
       });
     },
     paginate(subscribers) {
@@ -90,9 +106,11 @@ export default {
   },
   watch: {
     search() {
+      this.loadPage = true;
       filterEventRegistrationByEvent(this.$route.params.slug, this.search).then(
         (result) => {
           this.subscribers = result.data;
+          this.loadPage = false;
           if (result.data == "") {
             this.noEventRegister = true;
           } else {

@@ -159,6 +159,20 @@
           <div class="d-flex align-items-center">
             <h4>Ajout utilisateur</h4>
             <button
+              v-if="loading"
+              class="btn btn-primary btn-md ms-auto border-0"
+              disabled
+              style="background-color: #582456"
+            >
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
@@ -210,6 +224,7 @@ export default {
   components: {},
   data() {
     return {
+      loading: false,
       errors: {
         nom: "",
         prenom: "",
@@ -244,8 +259,10 @@ export default {
       UserFormSchema.validate(this.form, { abortEarly: false })
         .then(() => {
           const toast = useToast();
+          this.loading = true;
           createUsers(this.form)
             .then((result) => {
+              this.loading = false;
               if (result) {
                 toast.success(
                   result.data.nom + " " + result.data.prenom + " ajouté"
@@ -256,6 +273,7 @@ export default {
               }
             })
             .catch((e) => {
+              this.loading = false;
               toast.info(e.response.data.message);
             });
         })

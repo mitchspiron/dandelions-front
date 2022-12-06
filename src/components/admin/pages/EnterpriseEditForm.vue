@@ -53,6 +53,20 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Modification de l'illustration</h4>
             <button
+              v-if="loading"
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
@@ -195,6 +209,20 @@
           <div class="d-flex align-items-center">
             <h4 class="mb-0">Modification de l'information</h4>
             <button
+              v-if="loadingInfo"
+              class="btn btn-primary btn-md ms-auto border-0"
+              style="background-color: #582456"
+              disabled
+            >
+              <span
+                class="spinner-grow spinner-grow-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              Loading...
+            </button>
+            <button
+              v-else
               class="btn btn-primary btn-md ms-auto border-0"
               style="background-color: #582456"
             >
@@ -236,6 +264,7 @@ export default {
         illustration: "",
       },
       loading: false,
+      loadingInfo: false,
     };
   },
   computed: {
@@ -276,18 +305,21 @@ export default {
       uploadedFile(formData)
         .then((result) => {
           this.image.illustration = result.data.filename;
+          this.loading = true;
           updateIllustrationById(
             this.$route.params.slug,
             this.me.sub || this.me.id,
             this.image
           )
             .then(() => {
+              this.loading = false;
               toast.success("Modification illustration d'entreprise réussi");
               this.$router.push(
                 this.$route.query.redirect || "/admin/entreprise"
               );
             })
             .catch((e) => {
+              this.loading = false;
               toast.info(e.response.data.message);
             });
         })
@@ -296,6 +328,7 @@ export default {
         });
     },
     confirm() {
+      this.loadingInfo = true;
       const toast = useToast();
       updateEnterpriseBySlug(
         this.$route.params.slug,
@@ -303,10 +336,12 @@ export default {
         this.form
       )
         .then(() => {
+          this.loadingInfo = false;
           toast.success("Modification entreprise réussi");
           this.$router.push(this.$route.query.redirect || "/admin/entreprise");
         })
         .catch((e) => {
+          this.loadingInfo = false;
           toast.info(e.response.data.message);
         });
     },

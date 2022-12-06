@@ -183,7 +183,7 @@ export default {
     fetchTop() {
       this.loadPage = true;
       getTopPost().then((result) => {
-        this.loadPage = true;
+        this.loadPage = false;
         this.tops = result.data;
       });
     },
