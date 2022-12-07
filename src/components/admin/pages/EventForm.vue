@@ -230,13 +230,13 @@ export default {
       this.file = file;
     },
     confirm() {
+      this.loading = true;
       const toast = useToast();
       let formData = new FormData();
       formData.append("file", this.file);
       uploadedFile(formData)
         .then((result) => {
           this.form.illustration = result.data.filename;
-          this.loading = true;
           createEvenement(this.form)
             .then(() => {
               this.loading = false;

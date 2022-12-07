@@ -245,7 +245,7 @@
 
           <div class="col-md-12">
             <button
-              v-if="loading"
+              v-if="loadingComment"
               class="comments-btn btn btn-sm btn-outline-secondary"
               disabled
             >
@@ -641,6 +641,7 @@ export default {
       idDeleteReply: 0,
       idAddReply: 0,
       loading: false,
+      loadingComment: false,
       loadPage: false,
     };
   },
@@ -671,18 +672,18 @@ export default {
       }
     },
     confirmComment() {
-      this.loading = true;
+      this.loadingComment = true;
       const toast = useToast();
       this.form.idUtilisateur = this.me.sub || this.me.id;
       createComment(this.$route.params.slug, this.form)
         .then(() => {
-          this.loading = false;
+          this.loadingComment = false;
           toast.success("Commentaire ajouté");
           this.form.contenu = "";
           this.fetch();
         })
         .catch((e) => {
-          this.loading = false;
+          this.loadingComment = false;
           toast.info(e.response.data.message);
         });
     },

@@ -268,13 +268,13 @@ export default {
       this.file = file;
     },
     confirmIllustration() {
+      this.loading = true;
       const toast = useToast();
       let formData = new FormData();
       formData.append("file", this.file);
       uploadedFile(formData)
         .then((result) => {
           this.image.illustration = result.data.filename;
-          this.loading = true;
           updateIllustrationBySlug(
             this.$route.params.slug,
             this.me.sub || this.me.id,

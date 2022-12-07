@@ -243,8 +243,8 @@ export default {
       this.file = file;
     },
     confirm() {
-      const toast = useToast();
       this.loading = true;
+      const toast = useToast();
       let formData = new FormData();
       formData.append("file", this.file);
       uploadedFile(formData)

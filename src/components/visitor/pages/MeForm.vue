@@ -383,6 +383,7 @@ export default {
       updateUsersInfoById(this.me.sub || this.me.id, this.infos)
         .then((result) => {
           this.loadingInfo = false;
+          this.$router.push(this.$route.query.redirect || "/mon-espace");
           localStorage.setItem("dandelions_token", result.data[1].access_token);
           const decodeV = decodeToken(result.data[1].access_token);
           this.$store.dispatch("userStore/setUser", decodeV);
@@ -391,7 +392,6 @@ export default {
             this.me.illustrationUser || this.me.illustration;
           this.$store.dispatch("userStore/setUser", result.data[0]);
           this.$store.dispatch("userStore/setConnected");
-          this.$router.push(this.$route.query.redirect || "/mon-espace");
         })
         .catch((e) => {
           this.loadingInfo = false;
@@ -399,18 +399,18 @@ export default {
         });
     },
     confirmPassword() {
+      this.loadingPwd = true;
       PasswordFormSchema.validate(this.password, { abortEarly: false })
         .then(() => {
           const toast = useToast();
-          this.loadingPwd = true;
           updateUsersPasswordById(this.me.sub || this.me.id, this.password)
             .then(() => {
               this.loadingPwd = false;
+              this.$router.push(this.$route.query.redirect || "/mon-espace");
               toast.success("Modification mot de passe réussi");
               this.password.ancienMotDePasse = "";
               this.password.nouveauMotDePasse = "";
               this.password.confirmMotDePasse = "";
-              this.$router.push(this.$route.query.redirect || "/mon-espace");
             })
             .catch((e) => {
               this.loadingPwd = false;
@@ -428,16 +428,17 @@ export default {
       this.file = file;
     },
     confirmIllustration() {
+      this.loading = true;
       const toast = useToast();
       let formData = new FormData();
       formData.append("file", this.file);
       uploadedFile(formData)
         .then((result) => {
           this.image.illustration = result.data.filename;
-          this.loading = true;
           updateIllustrationById(this.me.sub || this.me.id, this.image)
             .then((res) => {
               this.loading = false;
+              this.$router.push(this.$route.query.redirect || "/mon-espace");
               localStorage.setItem(
                 "dandelions_token",
                 res.data[1].access_token
@@ -446,7 +447,6 @@ export default {
               this.$store.dispatch("userStore/setUser", decodeV);
               this.$store.dispatch("userStore/setConnected");
               toast.success("Modification illustration profil réussi");
-              this.$router.push(this.$route.query.redirect || "/mon-espace");
             })
             .catch((e) => {
               this.loading = false;
