@@ -51,10 +51,52 @@
     </article>
   </div>
   <!-- -------------------- -->
+  <div v-if="isLoggedIn && (me.sub || me.id) == 1" class="dropdown d-grid">
+    <button
+      class="btn block dropdown-toggle text-white"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      style="background: #582456"
+    >
+      Définir l'état de l'article
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <a
+          class="btn dropdown-item"
+          @click="updateStatus(posts.slug, (posts.etat = 2))"
+          >en cours d'éxamen</a
+        >
+      </li>
+      <li>
+        <a
+          class="btn dropdown-item"
+          @click="updateStatus(posts.slug, (posts.etat = 3))"
+          >à corriger</a
+        >
+      </li>
+      <li>
+        <a
+          class="btn dropdown-item"
+          @click="updateStatus(posts.slug, (posts.etat = 4))"
+          >réfusé</a
+        >
+      </li>
+      <li>
+        <a
+          class="btn dropdown-item"
+          @click="updateStatus(posts.slug, (posts.etat = 5))"
+          >publié</a
+        >
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
-import { getPostBySlug } from "../../../api/post";
+import { useToast } from "vue-toastification";
+import { getPostBySlug, updateStateBySlug } from "../../../api/post";
 import { PROFIL_IMAGE } from "../../../configs";
 export default {
   name: "ArticleContent",
@@ -67,6 +109,14 @@ export default {
       loadPage: false,
     };
   },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters["userStore/isLoggedIn"];
+    },
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+  },
   mounted() {
     this.fetch();
   },
@@ -78,6 +128,22 @@ export default {
         this.posts = result.data;
         this.categorie_article = result.data.categorie_article.nomCategorie;
       });
+    },
+    updateStatus(slug, etat) {
+      const toast = useToast();
+      etat = this.posts;
+      this.loadPage = true;
+      updateStateBySlug(slug, etat)
+        .then((result) => {
+          toast.success("Article " + result.data.etat_article.nomEtat);
+          this.fetch();
+          this.loadPage = false;
+          this.$router.push("/admin/article");
+        })
+        .catch(() => {
+          this.loadPage = false;
+          toast.error("Une erreur est survenue!");
+        });
     },
   },
 };
@@ -129,7 +195,7 @@ a:focus {
 }
 
 a:hover {
-  color: #13ae6f;
+  color: #582456;
 }
 
 p {

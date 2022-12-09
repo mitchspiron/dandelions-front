@@ -16,7 +16,7 @@
     </div>
   </div>
   <div v-else>
-    <div id="comments" class="comments-block block">
+    <div v-if="etat == 5" id="comments" class="comments-block block">
       <h3 class="news-title">
         <span>{{ comments.length }} Commentaires</span>
       </h3>
@@ -224,7 +224,7 @@
       </ul>
     </div>
     <!-- ------------------------------COMMENT FORM------------------------------------- -->
-    <div class="comment-form">
+    <div v-if="etat == 5" class="comment-form">
       <h3 class="title-normal">Laissez un commentaire</h3>
       <p class="mb-3">Votre adresse email ne sera pas publié.</p>
       <form @submit.prevent="confirmComment" role="form" autocomplete="off">
@@ -617,6 +617,7 @@ import {
   deleteResponseById,
   updateResponseById,
 } from "../../../api/reply";
+import { getPostBySlug } from "../../../api/post";
 
 export default {
   name: "Comment",
@@ -643,6 +644,7 @@ export default {
       loading: false,
       loadingComment: false,
       loadPage: false,
+      etat: false,
     };
   },
   computed: {
@@ -659,6 +661,14 @@ export default {
       getCommentByPost(this.$route.params.slug).then((result) => {
         this.loadPage = false;
         this.comments = result.data;
+      });
+    },
+    fetchPostState() {
+      this.loadPage = true;
+      getPostBySlug(this.$route.params.slug).then((result) => {
+        this.loadPage = false;
+        this.etat = result.data.etat_article.id;
+        console.log(this.etat);
       });
     },
     checkIsLoggin() {
@@ -791,6 +801,7 @@ export default {
   }, */
   mounted() {
     this.fetch();
+    this.fetchPostState();
   },
 };
 </script>

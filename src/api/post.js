@@ -48,6 +48,15 @@ export const getPublishedPost = () => {
   });
 };
 
+export const getUnseenPost = (id) => {
+  return axios.get(`${URL}/unseen/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const takeFirstLastestPost = () => {
   return axios.get(`${URL}/take-first-post`, {
     withCredentials: true,
@@ -159,8 +168,8 @@ export const updatePostBySlug = (slug, id, data) => {
   });
 };
 
-export const updateStateBySlug = (slug, data) => {
-  return axios.put(`${URL}/state/${slug}`, data, {
+export const updateStateBySlug = async (slug, data) => {
+  return await axios.put(`${URL}/state/${slug}`, data, {
     withCredentials: true,
     headers: {
       Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
@@ -179,6 +188,15 @@ export const switchToRecommandedBySlug = (slug, data) => {
 
 export const switchTopBySlug = (slug, data) => {
   return axios.put(`${URL}/switch-top/${slug}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const updatePostToSeen = async (slug) => {
+  return await axios.put(`${URL}/to-seen/${slug}`, slug, {
     withCredentials: true,
     headers: {
       Authorization: "Bearer " + localStorage.getItem("dandelions_token"),

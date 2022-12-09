@@ -25,6 +25,24 @@ export const getResponseByComment = (id) => {
   });
 };
 
+export const getUnseenResponse = (id) => {
+  return axios.get(`${URL}/unseen/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const updateResponseToSeen = (id) => {
+  return axios.put(`${URL}/to-seen/${id}`, id, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const updateResponseById = (data) => {
   const form = { contenu: data.contenu };
   return axios.put(`${URL}/${data.idSelectUpdate}`, form, {

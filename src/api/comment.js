@@ -34,6 +34,24 @@ export const getCommentById = (id) => {
   });
 };
 
+export const getUnseenComment = (id) => {
+  return axios.get(`${URL}/unseen/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const updateCommentToSeen = (id) => {
+  return axios.put(`${URL}/to-seen/${id}`, id, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const updateCommentById = (data) => {
   const form = { contenu: data.contenu };
   return axios.put(`${URL}/${data.idSelectUpdate}`, form, {
