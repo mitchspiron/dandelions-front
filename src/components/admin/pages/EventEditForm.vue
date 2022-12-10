@@ -309,9 +309,7 @@ export default {
             .then(() => {
               this.loading = false;
               toast.success("Modification illustration du coming-soon réussi");
-              this.$router.push(
-                this.$route.query.redirect || "/admin/evenement"
-              );
+              this.$router.go(-1);
             })
             .catch((e) => {
               this.loading = false;
@@ -333,7 +331,7 @@ export default {
         .then(() => {
           this.loadingInfo = false;
           toast.success("Modification coming-soon réussi");
-          this.$router.push(this.$route.query.redirect || "/admin/evenement");
+          this.$router.go(-1);
         })
         .catch((e) => {
           this.loadingInfo = false;
