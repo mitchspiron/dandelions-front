@@ -41,7 +41,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-if="noEventRegister">
+        <tr v-if="subscribers.length == 0">
           <td colspan="6">
             <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Aucun
             résultat trouvé
@@ -77,7 +77,6 @@ export default {
     return {
       subscribers: [],
       search: "",
-      noEventRegister: false,
       page: 1,
       perPage: 10,
       loadPage: false,
@@ -107,17 +106,19 @@ export default {
   watch: {
     search() {
       this.loadPage = true;
-      filterEventRegistrationByEvent(this.$route.params.slug, this.search).then(
-        (result) => {
-          this.subscribers = result.data;
-          this.loadPage = false;
-          if (result.data == "") {
-            this.noEventRegister = true;
-          } else {
-            this.noEventRegister = false;
-          }
+      getEventRegistrationByEvent(this.$route.params.slug).then((result) => {
+        this.subscribers = result.data;
+        if (this.subscribers.length !== 0) {
+          filterEventRegistrationByEvent(
+            this.$route.params.slug,
+            this.search
+          ).then((result) => {
+            this.subscribers = result.data;
+            this.loadPage = false;
+          });
         }
-      );
+        this.loadPage = false;
+      });
     },
   },
   mounted() {

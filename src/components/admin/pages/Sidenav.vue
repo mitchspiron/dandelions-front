@@ -26,6 +26,12 @@
         </router-link>
       </li>
       <li class="nav-item">
+        <router-link to="/admin/evenement/archive" class="nav-link collapsed">
+          <i class="bi bi-card-heading"></i>
+          <span>Archives</span>
+        </router-link>
+      </li>
+      <li class="nav-item">
         <router-link to="/admin/article/categorie" class="nav-link collapsed">
           <i class="bi bi-tags"></i>
           <span>Categories</span>

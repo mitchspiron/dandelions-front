@@ -12,9 +12,28 @@ export const getEvenementAdmin = (id) => {
   });
 };
 
+export const getEvenementArchivedAdmin = (id) => {
+  return axios.get(`${URL}/archived/admin/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
 export const filterEvenementAdmin = (id, data) => {
   const form = { searchkey: data };
   return axios.post(`${URL}/admin/filter/${id}`, form, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const filterEvenementArchivedAdmin = (id, data) => {
+  const form = { searchkey: data };
+  return axios.post(`${URL}/archived/admin/filter/${id}`, form, {
     withCredentials: true,
     headers: {
       Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
@@ -125,6 +144,24 @@ export const switchOnHeaderBySlug = (slug, data) => {
 
 export const switchOnSubscribeBySlug = (slug, data) => {
   return axios.put(`${URL}/switch-subscribed/${slug}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const switchIsArchivedBySlug = (slug, data) => {
+  return axios.put(`${URL}/switch-archived/${slug}`, data, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};
+
+export const updateArchivedById = () => {
+  return axios.put(`${URL}/archived-deadline`, {
     withCredentials: true,
     headers: {
       Authorization: "Bearer " + localStorage.getItem("dandelions_token"),

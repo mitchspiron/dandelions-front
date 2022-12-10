@@ -60,7 +60,7 @@
                         event.entreprise.nom
                       }}</small>
                       <small
-                        class="text-light rounded-pill d-inline col-4 text-center"
+                        class="text-light rounded-pill d-inline col-5 text-center"
                         style="background: #582456; opacity: 0.6"
                         >{{
                           new Date(event.deadline).toLocaleDateString("Fr-fr", {

@@ -55,7 +55,7 @@
           <div v-else class="col-lg-12 mb-5 mb-lg-0">
             <div class="row">
               <div
-                v-if="noEnterprise"
+                v-if="enterprises.length == 0"
                 class="col-md-12 d-flex justify-content-center align-items-center"
               >
                 <h2>
@@ -146,7 +146,6 @@ export default {
     return {
       enterprises: [],
       search: "",
-      noEnterprise: 0,
       PROFIL_IMAGE: PROFIL_IMAGE,
       page: 1,
       perPage: 6,
@@ -177,14 +176,15 @@ export default {
   watch: {
     search() {
       this.loadPage = true;
-      filterEnterprise(this.search).then((result) => {
+      getEnterprise().then((result) => {
         this.enterprises = result.data;
-        this.loadPage = false;
-        if (result.data == "") {
-          this.noEnterprise = true;
-        } else {
-          this.noEnterprise = false;
+        if (this.enterprises.length !== 0) {
+          filterEnterprise(this.search).then((result) => {
+            this.enterprises = result.data;
+            this.loadPage = false;
+          });
         }
+        this.loadPage = false;
       });
     },
   },

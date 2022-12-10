@@ -206,7 +206,6 @@ export default {
     fetchEnterprise() {
       getEnterpriseAdmin(this.me.sub || this.me.id).then((result) => {
         this.enterprises = result.data;
-        console.log("company", result.data);
       });
     },
     avatar() {

@@ -113,7 +113,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="text-center" v-if="noPost">
+        <tr class="text-center" v-if="posts.length == 0">
           <td colspan="12">
             <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Aucun
             résultat trouvé
@@ -310,7 +310,6 @@ export default {
         searchCategory: "",
         searchEtat: "",
       },
-      noPost: 0,
       page: 1,
       perPage: 10,
       loadPage: false,
@@ -417,14 +416,17 @@ export default {
       deep: true,
       handler() {
         this.loadPage = true;
-        filterPost(this.me.sub || this.me.id, this.search).then((result) => {
+        getPost(this.me.sub || this.me.id).then((result) => {
           this.posts = result.data;
-          this.loadPage = false;
-          if (result.data == "") {
-            this.noPost = true;
-          } else {
-            this.noPost = false;
+          if (this.posts.length !== 0) {
+            filterPost(this.me.sub || this.me.id, this.search).then(
+              (result) => {
+                this.posts = result.data;
+                this.loadPage = false;
+              }
+            );
           }
+          this.loadPage = false;
         });
       },
     },

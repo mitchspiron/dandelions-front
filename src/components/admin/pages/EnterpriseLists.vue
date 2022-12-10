@@ -54,7 +54,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-if="noEnterprise">
+        <tr v-if="enterprises.length == 0">
           <td colspan="6">
             <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Aucun
             résultat trouvé
@@ -136,7 +136,6 @@ export default {
     return {
       enterprises: [],
       switch: { abonnee: true || false },
-      noEnterprise: false,
       search: "",
       page: 1,
       perPage: 10,
@@ -196,17 +195,18 @@ export default {
   watch: {
     search() {
       this.loadPage = true;
-      filterEnterpriseAdmin(this.me.sub || this.me.id, this.search).then(
-        (result) => {
-          this.enterprises = result.data;
-          this.loadPage = false;
-          if (result.data == "") {
-            this.noEnterprise = true;
-          } else {
-            this.noEnterprise = false;
-          }
+      getEnterpriseAdmin(this.me.sub || this.me.id).then((result) => {
+        this.enterprises = result.data;
+        if (this.enterprises.length !== 0) {
+          filterEnterpriseAdmin(this.me.sub || this.me.id, this.search).then(
+            (result) => {
+              this.enterprises = result.data;
+              this.loadPage = false;
+            }
+          );
         }
-      );
+        this.loadPage = false;
+      });
     },
   },
   mounted() {

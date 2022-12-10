@@ -8,7 +8,7 @@
               class="mb-4 d-inline-block"
               style="border-bottom: 1px solid #582456"
             >
-              {{ titre }}
+              {{ category.nomCategorie }}
             </h1>
           </div>
           <!-- --------- -->
@@ -34,10 +34,26 @@
             </div>
           </div>
           <!-- --------- -->
-          <div class="col-lg-8 mb-5 mb-lg-0">
+          <div
+            v-if="loadPage"
+            class="col-lg-12 mt-5 mb-5 mb-lg-0 d-flex justify-content-center align-items-center"
+          >
+            <div class="breeding-rhombus-spinner">
+              <div class="rhombus child-1"></div>
+              <div class="rhombus child-2"></div>
+              <div class="rhombus child-3"></div>
+              <div class="rhombus child-4"></div>
+              <div class="rhombus child-5"></div>
+              <div class="rhombus child-6"></div>
+              <div class="rhombus child-7"></div>
+              <div class="rhombus child-8"></div>
+              <div class="rhombus big"></div>
+            </div>
+          </div>
+          <div v-else class="col-lg-8 mb-5 mb-lg-0">
             <div class="row">
               <div
-                v-if="noPost"
+                v-if="articles.length == 0"
                 class="col-md-12 d-flex justify-content-center align-items-center"
               >
                 <h2>
@@ -139,6 +155,7 @@ import {
   filterPublishedPostBySlug,
   getPublishedPostBySlug,
 } from "../../../api/post";
+import { getCategoryBySlug } from "../../../api/post-category";
 import { PROFIL_IMAGE } from "../../../configs";
 import ArticleSide from "./ArticleSide.vue";
 export default {
@@ -149,19 +166,28 @@ export default {
   data() {
     return {
       articles: [],
+      category: {},
       titre: "",
       search: "",
-      noPost: 0,
       PROFIL_IMAGE: PROFIL_IMAGE,
       page: 1,
       perPage: 6,
+      loadPage: false,
     };
   },
   methods: {
     fetch() {
+      this.loadPage = true;
       getPublishedPostBySlug(this.$route.params.slug).then((result) => {
         this.articles = result.data;
-        this.titre = result.data[0].categorie_article.nomCategorie;
+        this.loadPage = false;
+      });
+    },
+    fetchCategoryName() {
+      this.loadPage = true;
+      getCategoryBySlug(this.$route.params.slug).then((result) => {
+        this.category = result.data;
+        this.loadPage = false;
       });
     },
     paginate(articles) {
@@ -179,20 +205,24 @@ export default {
   },
   watch: {
     search() {
-      filterPublishedPostBySlug(this.$route.params.slug, this.search).then(
-        (result) => {
-          this.articles = result.data;
-          if (result.data == "") {
-            this.noPost = true;
-          } else {
-            this.noPost = false;
-          }
+      this.loadPage = true;
+      getPublishedPostBySlug(this.$route.params.slug).then((result) => {
+        this.articles = result.data;
+        if (this.articles.length !== 0) {
+          filterPublishedPostBySlug(this.$route.params.slug, this.search).then(
+            (result) => {
+              this.articles = result.data;
+              this.loadPage = false;
+            }
+          );
         }
-      );
+        this.loadPage = false;
+      });
     },
   },
   mounted() {
     this.fetch();
+    this.fetchCategoryName();
   },
 };
 </script>

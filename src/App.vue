@@ -4,11 +4,18 @@
   </div>
 </template>
 <script>
+import { updateArchivedById } from "./api/event";
 //import { isLoggedIn } from "./api/auth-user";
 export default {
   name: "App",
   components: {},
+  methods: {
+    verifyEventDeadline() {
+      updateArchivedById();
+    },
+  },
   mounted() {
+    this.verifyEventDeadline();
     /* isLoggedIn()
       .then(() => {
         console.log("Vous êtes connecté");

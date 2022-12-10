@@ -54,7 +54,7 @@
           <div v-else class="col-lg-12 mb-5 mb-lg-0">
             <div class="row">
               <div
-                v-if="noEvent"
+                v-if="events.length == 0"
                 class="col-md-12 d-flex justify-content-center align-items-center"
               >
                 <h2>
@@ -86,7 +86,7 @@
                           event.entreprise.nom
                         }}</small>
                         <small
-                          class="text-light rounded-pill d-inline col-4 text-center"
+                          class="text-light rounded-pill d-inline col-5 text-center"
                           style="background: #582456; opacity: 0.6"
                           >{{
                             new Date(event.deadline).toLocaleDateString(
@@ -137,7 +137,6 @@ export default {
     return {
       events: [],
       search: "",
-      noEvent: 0,
       page: 1,
       perPage: 6,
       loadPage: false,
@@ -167,14 +166,15 @@ export default {
   watch: {
     search() {
       this.loadPage = true;
-      filterEvenement(this.search).then((result) => {
+      getEvenement().then((result) => {
         this.events = result.data;
-        this.loadPage = false;
-        if (result.data == "") {
-          this.noEvent = true;
-        } else {
-          this.noEvent = false;
+        if (this.events.length !== 0) {
+          filterEvenement(this.search).then((result) => {
+            this.events = result.data;
+            this.loadPage = false;
+          });
         }
+        this.loadPage = false;
       });
     },
   },

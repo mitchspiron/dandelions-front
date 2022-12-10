@@ -40,7 +40,7 @@
       <h1 class="my-3">{{ posts.titre }}</h1>
       <ul class="post-meta mb-4">
         <li>
-          <router-link to="/article/categorie">{{
+          <router-link :to="{ path: '/article/categorie/' + slug_category }">{{
             categorie_article
           }}</router-link>
         </li>
@@ -105,6 +105,7 @@ export default {
     return {
       posts: [],
       categorie_article: "",
+      slug_category: "",
       PROFIL_IMAGE: PROFIL_IMAGE,
       loadPage: false,
     };
@@ -127,6 +128,7 @@ export default {
         this.loadPage = false;
         this.posts = result.data;
         this.categorie_article = result.data.categorie_article.nomCategorie;
+        this.slug_category = result.data.categorie_article.slug;
       });
     },
     updateStatus(slug, etat) {

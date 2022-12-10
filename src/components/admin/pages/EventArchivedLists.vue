@@ -14,26 +14,6 @@
         />
       </div>
     </div>
-    <!--  <div class="col-2 card border shadow-sm">
-      <div class="form-check form-switch m-auto">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="flexSwitchCheckDefault"
-        />
-        <label class="form-check-label" for="flexSwitchCheckDefault"
-          >Header</label
-        >
-      </div>
-    </div> -->
-    <div class="">
-      <router-link
-        to="/admin/evenement/nouveau"
-        class="btn btn-outline-secondary"
-        ><i class="fa-solid fa-plus"></i
-      ></router-link>
-    </div>
   </div>
   <div v-if="loadPage" class="mt-5 mb-5 d-flex justify-content-center">
     <div class="breeding-rhombus-spinner">
@@ -54,8 +34,7 @@
         <tr>
           <th>ID</th>
           <th>Titre</th>
-          <th>Header</th>
-          <th>Inscription</th>
+          <th>Archivage</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -76,33 +55,16 @@
                 disabled
                 class="form-check-input"
                 type="checkbox"
-                :checked="evenement.onHeader"
+                :checked="evenement.isArchived"
               />
               <input
                 v-else
                 class="form-check-input"
                 type="checkbox"
-                :checked="evenement.onHeader"
+                :checked="evenement.isArchived"
                 @input="(event) => (text = event.target.checked)"
                 @change="
-                  switchOnHeader(evenement.slug, evenement.onHeader, $event)
-                "
-              />
-            </div>
-          </td>
-          <td>
-            <div class="form-check form-switch d-flex justify-content-center">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                :checked="evenement.onSubscribe"
-                @input="(event) => (text = event.target.checked)"
-                @change="
-                  switchOnSubscribe(
-                    evenement.slug,
-                    evenement.onSubscribe,
-                    $event
-                  )
+                  switchIsArchived(evenement.slug, evenement.isArchived, $event)
                 "
               />
             </div>
@@ -149,10 +111,9 @@
 <script>
 import { useToast } from "vue-toastification";
 import {
-  filterEvenementAdmin,
-  getEvenementAdmin,
-  switchOnHeaderBySlug,
-  switchOnSubscribeBySlug,
+  filterEvenementArchivedAdmin,
+  getEvenementArchivedAdmin,
+  switchIsArchivedBySlug,
 } from "../../../api/event";
 export default {
   name: "EventLists",
@@ -160,7 +121,7 @@ export default {
   data() {
     return {
       evenements: [],
-      switch: { onHeader: true || false, onSubscribe: true || false },
+      switch: { isArchived: true || false },
       search: "",
       page: 1,
       perPage: 10,
@@ -178,56 +139,30 @@ export default {
   methods: {
     fetch() {
       this.loadPage = true;
-      getEvenementAdmin(this.me.sub || this.me.id).then((result) => {
+      getEvenementArchivedAdmin(this.me.sub || this.me.id).then((result) => {
         this.evenements = result.data;
         this.loadPage = false;
       });
     },
-    switchOnHeader(slug, etat, event) {
+    switchIsArchived(slug, etat, event) {
       const toast = useToast();
       if (event.target.checked) {
-        this.switch.onHeader = true;
+        this.switch.isArchived = true;
         etat = this.switch;
-        switchOnHeaderBySlug(slug, etat)
+        switchIsArchivedBySlug(slug, etat)
           .then(() => {
-            toast.success("L'évenement est à l'header");
+            toast.success("L'évenement est archivé");
             this.fetch();
           })
           .catch(() => {
             toast.error("Une erreur est survenue!");
           });
       } else {
-        this.switch.onHeader = false;
+        this.switch.isArchived = false;
         etat = this.switch;
-        switchOnHeaderBySlug(slug, etat)
+        switchIsArchivedBySlug(slug, etat)
           .then(() => {
-            toast.success("L'évenement n'est plus à l'header");
-            this.fetch();
-          })
-          .catch(() => {
-            toast.error("Une erreur est survenue!");
-          });
-      }
-    },
-    switchOnSubscribe(slug, etat, event) {
-      const toast = useToast();
-      if (event.target.checked) {
-        this.switch.onSubscribe = true;
-        etat = this.switch;
-        switchOnSubscribeBySlug(slug, etat)
-          .then(() => {
-            toast.success("L'évenement est ouvert à une inscription");
-            this.fetch();
-          })
-          .catch(() => {
-            toast.error("Une erreur est survenue!");
-          });
-      } else {
-        this.switch.onSubscribe = false;
-        etat = this.switch;
-        switchOnSubscribeBySlug(slug, etat)
-          .then(() => {
-            toast.success("L'évenement est fermé à une inscription");
+            toast.success("L'évenement n'est plus archivé");
             this.fetch();
           })
           .catch(() => {
@@ -246,15 +181,16 @@ export default {
   watch: {
     search() {
       this.loadPage = true;
-      getEvenementAdmin(this.me.sub || this.me.id).then((result) => {
+      getEvenementArchivedAdmin(this.me.sub || this.me.id).then((result) => {
         this.evenements = result.data;
         if (this.evenements.length !== 0) {
-          filterEvenementAdmin(this.me.sub || this.me.id, this.search).then(
-            (result) => {
-              this.evenements = result.data;
-              this.loadPage = false;
-            }
-          );
+          filterEvenementArchivedAdmin(
+            this.me.sub || this.me.id,
+            this.search
+          ).then((result) => {
+            this.evenements = result.data;
+            this.loadPage = false;
+          });
         }
         this.loadPage = false;
       });

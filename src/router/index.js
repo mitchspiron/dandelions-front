@@ -23,6 +23,7 @@ import Users from "../views/admin/Users.vue";
 import Articles from "../views/admin/Articles.vue";
 import ArticleComment from "../views/admin/ArticleComment.vue";
 import Events from "../views/admin/Events.vue";
+import Archive from "../views/admin/Archive.vue";
 import EventNew from "../views/admin/EventNew.vue";
 import EventEdit from "../views/admin/EventEdit.vue";
 import EventSubscribers from "../views/admin/EventSubscribers.vue";
@@ -159,6 +160,7 @@ const routes = [
     name: "HomeAdmin",
     component: HomeAdmin,
     meta: {
+      title: "Dashboard",
       noAccessNotLoggedIn: true,
     },
   },
@@ -167,6 +169,7 @@ const routes = [
     name: "Articles",
     component: Articles,
     meta: {
+      title: "Liste des articles",
       noAccessNotLoggedIn: true,
     },
   },
@@ -175,6 +178,7 @@ const routes = [
     name: "ArticleNew",
     component: ArticleNew,
     meta: {
+      title: "Ajout article",
       noAccessNotLoggedIn: true,
     },
   },
@@ -183,6 +187,7 @@ const routes = [
     name: "ArticleEdit",
     component: ArticleEdit,
     meta: {
+      title: "Modification article",
       noAccessNotLoggedIn: true,
     },
   },
@@ -191,6 +196,7 @@ const routes = [
     name: "ArticleComment",
     component: ArticleComment,
     meta: {
+      title: "Gestion des commentaires",
       noAccessNotLoggedIn: true,
     },
   },
@@ -199,6 +205,16 @@ const routes = [
     name: "Events",
     component: Events,
     meta: {
+      title: "Liste des évenements",
+      noAccessNotLoggedIn: true,
+    },
+  },
+  {
+    path: "/admin/evenement/archive",
+    name: "Archive",
+    component: Archive,
+    meta: {
+      title: "Liste des évenements archivés",
       noAccessNotLoggedIn: true,
     },
   },
@@ -207,6 +223,7 @@ const routes = [
     name: "EventSubscribers",
     component: EventSubscribers,
     meta: {
+      title: "Liste des inscrits à un évenement",
       noAccessNotLoggedIn: true,
     },
   },
@@ -215,6 +232,7 @@ const routes = [
     name: "EventNew",
     component: EventNew,
     meta: {
+      title: "Ajout évenement",
       noAccessNotLoggedIn: true,
     },
   },
@@ -223,6 +241,7 @@ const routes = [
     name: "EventEdit",
     component: EventEdit,
     meta: {
+      title: "Modification évenement",
       noAccessNotLoggedIn: true,
     },
   },
@@ -231,6 +250,7 @@ const routes = [
     name: "Users",
     component: Users,
     meta: {
+      title: "Liste des utilisateurs",
       noAccessNotLoggedIn: true,
     },
   },
@@ -239,6 +259,7 @@ const routes = [
     name: "UserNew",
     component: UserNew,
     meta: {
+      title: "Ajout utilisateur",
       noAccessNotLoggedIn: true,
     },
   },
@@ -247,6 +268,7 @@ const routes = [
     name: "Categories",
     component: Categories,
     meta: {
+      title: "Liste des catégories d'articles",
       noAccessNotLoggedIn: true,
     },
   },
@@ -255,6 +277,7 @@ const routes = [
     name: "CategoryNew",
     component: CategoryNew,
     meta: {
+      title: "Ajout nouveau catégorie d'article",
       noAccessNotLoggedIn: true,
     },
   },
@@ -263,6 +286,7 @@ const routes = [
     name: "CategoryEdit",
     component: CategoryEdit,
     meta: {
+      title: "Modification d'un catégorie d'article",
       noAccessNotLoggedIn: true,
     },
   },
@@ -271,6 +295,7 @@ const routes = [
     name: "EnterprisesAdmin",
     component: EnterprisesAdmin,
     meta: {
+      title: "Liste des entreprises",
       noAccessNotLoggedIn: true,
     },
   },
@@ -279,6 +304,7 @@ const routes = [
     name: "EnterpriseNew",
     component: EnterpriseNew,
     meta: {
+      title: "Ajout entreprise",
       noAccessNotLoggedIn: true,
     },
   },
@@ -287,6 +313,7 @@ const routes = [
     name: "EnterpriseEdit",
     component: EnterpriseEdit,
     meta: {
+      title: "Modification d'un entreprise",
       noAccessNotLoggedIn: true,
     },
   },

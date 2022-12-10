@@ -668,7 +668,6 @@ export default {
       getPostBySlug(this.$route.params.slug).then((result) => {
         this.loadPage = false;
         this.etat = result.data.etat_article.id;
-        console.log(this.etat);
       });
     },
     checkIsLoggin() {

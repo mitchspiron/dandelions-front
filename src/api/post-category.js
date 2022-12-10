@@ -41,3 +41,12 @@ export const getPostCategoryById = (id) => {
     },
   });
 };
+
+export const getCategoryBySlug = (slug) => {
+  return axios.get(`${URL}/post/${slug}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

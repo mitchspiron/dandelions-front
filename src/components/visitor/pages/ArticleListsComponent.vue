@@ -116,7 +116,7 @@
           <div v-else class="col-lg-12 mb-5 mb-lg-0">
             <div class="row">
               <div
-                v-if="noPost"
+                v-if="articles.length == 0"
                 class="col-md-12 d-flex justify-content-center align-items-center"
               >
                 <h2>
@@ -243,7 +243,6 @@ export default {
         searchkey: "",
         searchCategory: "",
       },
-      noPost: 0,
       PROFIL_IMAGE: PROFIL_IMAGE,
       page: 1,
       perPage: 6,
@@ -281,14 +280,15 @@ export default {
       deep: true,
       handler() {
         this.loadPage = true;
-        filterPostVisitor(this.search).then((result) => {
+        getPublishedPost().then((result) => {
           this.articles = result.data;
-          this.loadPage = false;
-          if (result.data == "") {
-            this.noPost = true;
-          } else {
-            this.noPost = false;
+          if (this.articles.length !== 0) {
+            filterPostVisitor(this.search).then((result) => {
+              this.articles = result.data;
+              this.loadPage = false;
+            });
           }
+          this.loadPage = false;
         });
       },
     },

@@ -65,7 +65,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="text-center" v-if="noUser">
+        <tr class="text-center" v-if="users.length == 0">
           <td colspan="6">
             <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Aucun
             résultat trouvé
@@ -144,7 +144,6 @@ export default {
         searchkey: "",
         searchRole: "",
       },
-      noUser: 0,
       page: 1,
       perPage: 10,
       loadPage: false,
@@ -176,14 +175,15 @@ export default {
       deep: true,
       handler() {
         this.loadPage = true;
-        filterUsers(this.search).then((result) => {
-          this.loadPage = false;
+        getUsers().then((result) => {
           this.users = result.data;
-          if (result.data == "") {
-            this.noUser = true;
-          } else {
-            this.noUser = false;
+          if (this.users.length !== 0) {
+            filterUsers(this.search).then((result) => {
+              this.users = result.data;
+              this.loadPage = false;
+            });
           }
+          this.loadPage = false;
         });
       },
     },
