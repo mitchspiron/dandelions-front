@@ -2,7 +2,7 @@
   <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
       <li class="nav-item">
-        <router-link to="/" class="nav-link collapsed">
+        <router-link to="/admin" class="nav-link collapsed">
           <i class="bi bi-speedometer2"></i>
           <span>Dashboard</span>
         </router-link>
