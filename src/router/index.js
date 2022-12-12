@@ -20,6 +20,7 @@ import ResetPassword from "../views/visitor/ResetPassword.vue";
 /* admin */
 import HomeAdmin from "../views/admin/HomeAdmin.vue";
 import Users from "../views/admin/Users.vue";
+import Requests from "../views/admin/Requests.vue";
 import Articles from "../views/admin/Articles.vue";
 import ArticleComment from "../views/admin/ArticleComment.vue";
 import Events from "../views/admin/Events.vue";
@@ -251,6 +252,15 @@ const routes = [
     component: Users,
     meta: {
       title: "Liste des utilisateurs",
+      noAccessNotLoggedIn: true,
+    },
+  },
+  {
+    path: "/demande-redacteur",
+    name: "Requests",
+    component: Requests,
+    meta: {
+      title: "Liste des demandes redacteurs",
       noAccessNotLoggedIn: true,
     },
   },

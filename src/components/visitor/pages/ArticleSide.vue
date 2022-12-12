@@ -27,17 +27,46 @@
               alt="About Me"
               class="w-100 author-thumb-sm img-thumbnail d-block"
             />
-            <h2 class="widget-title my-3">Hootan Safiyari</h2>
-            <p class="mb-3 pb-2">
-              Hello, I’m Hootan Safiyari. A Content writter, Developer and Story
-              teller. Working as a Content writter at CoolTech Agency. Quam
-              nihil …
+            <h2 class="widget-title my-3 text-center">
+              Représentez-vous une entreprise ?
+            </h2>
+            <p class="mb-3 pb-2 text-center">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione
+              excepturi laboriosam eius distinctio vel natus quia quaerat
+              placeat, magni voluptates soluta maxime atque consectetur totam
+              eos numquam asperiores explicabo quod.
             </p>
-            <router-link
-              to="/article/slug"
-              class="btn btn-sm btn-outline-primary"
-              >Know More</router-link
-            >
+            <form @submit.prevent="confirm" class="d-grid gap-2 mx-auto">
+              <!-- <a
+                v-if="loading"
+                class="btn btn-sm btn-outline-primary d-flex justify-content-center"
+                ><div class="spinner-grow spinner-grow-sm me-1" role="status">
+                  <span class="visually-hidden">Chargement...</span>
+                </div>
+                Chargement...</a
+              > -->
+              <a
+                v-if="loading"
+                class="btn btn-md btn-outline-primary d-flex justify-content-center"
+                type="button"
+                disabled
+              >
+                <span
+                  class="spinner-grow spinner-grow-sm me-1"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Chargement...
+              </a>
+              <button
+                v-else
+                @click="checkIsLoggin"
+                class="btn btn-md btn-outline-primary d-flex justify-content-center"
+                type="submit"
+              >
+                Rejoignez-nous
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -150,9 +179,12 @@
 </template>
 
 <script>
+import { useToast } from "vue-toastification";
 import { getRecommandedPost, getTopPost } from "../../../api/post";
 import { getPostCategory } from "../../../api/post-category";
+import { createWriterRequest } from "../../../api/writer-request";
 import { PROFIL_IMAGE } from "../../../configs";
+import { decodeToken } from "../../../utils/decodeToken";
 export default {
   name: "ArticleSide",
   components: {},
@@ -162,8 +194,20 @@ export default {
       recommandations: [],
       tops: [],
       PROFIL_IMAGE: PROFIL_IMAGE,
+      loading: false,
       loadPage: false,
+      form: {
+        idUtilisateur: null,
+      },
     };
+  },
+  computed: {
+    me() {
+      return this.$store.getters["userStore/me"];
+    },
+    isLoggedIn() {
+      return this.$store.getters["userStore/isLoggedIn"];
+    },
   },
   methods: {
     fetch() {
@@ -186,6 +230,35 @@ export default {
         this.loadPage = false;
         this.tops = result.data;
       });
+    },
+    confirm() {
+      const toast = useToast();
+      this.form.idUtilisateur = this.me.sub || this.me.id;
+      createWriterRequest(this.form)
+        .then(() => {
+          this.loading = false;
+          this.$swal(
+            "Demande envoyé",
+            "Nous vous informerons de la suite par email",
+            "success"
+          );
+        })
+        .catch((e) => {
+          this.loading = false;
+          toast.info(e.response.data.message);
+        });
+    },
+    checkIsLoggin() {
+      const toast = useToast();
+      try {
+        const decodeV = decodeToken(localStorage.getItem("dandelions_token"));
+        if (decodeV) {
+          //console.log("ok visiteur");
+        }
+      } catch (err) {
+        toast.info("Vous devez être connecté!");
+        this.$router.push(`/se-connecter`);
+      }
     },
   },
   mounted() {

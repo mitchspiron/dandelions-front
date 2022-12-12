@@ -13,6 +13,12 @@
           <span>Utilisateurs</span>
         </router-link>
       </li>
+      <li v-if="(me.roleUser || me.role) == 1" class="nav-item">
+        <router-link to="/demande-redacteur" class="nav-link collapsed">
+          <i class="bi bi-person-plus"></i>
+          <span>Demandes</span>
+        </router-link>
+      </li>
       <li class="nav-item">
         <router-link to="/admin/article" class="nav-link collapsed">
           <i class="bi bi-newspaper"></i>
