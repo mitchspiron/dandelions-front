@@ -618,6 +618,7 @@ import {
   updateResponseById,
 } from "../../../api/reply";
 import { getPostBySlug } from "../../../api/post";
+import { socket } from "../../../api/socket";
 
 export default {
   name: "Comment",
@@ -685,11 +686,13 @@ export default {
       const toast = useToast();
       this.form.idUtilisateur = this.me.sub || this.me.id;
       createComment(this.$route.params.slug, this.form)
-        .then(() => {
+        .then((result) => {
           this.loadingComment = false;
           toast.success("Commentaire ajouté");
           this.form.contenu = "";
-          this.fetch();
+          //this.fetch();
+          socket.emit("change-comment", result.data);
+          socket.emit("send-notif", result.data);
         })
         .catch((e) => {
           this.loadingComment = false;
@@ -719,8 +722,10 @@ export default {
           this.data = result.data;
           this.loading = false;
           this.$refs.CloseDeleteCommentaire.click();
-          this.fetch();
+          //this.fetch();
           toast.success("Commentaire supprimé");
+          socket.emit("change-comment", result.data);
+          socket.emit("send-notif", result.data);
         });
       });
     },
@@ -732,8 +737,10 @@ export default {
           this.data = result.data;
           this.loading = false;
           this.$refs.CloseModifierCommentaire.click();
-          this.fetch();
+          //this.fetch();
           toast.success("Commentaire modifié");
+          socket.emit("change-comment", result.data);
+          socket.emit("send-notif", result.data);
         });
       });
     },
@@ -745,8 +752,10 @@ export default {
           this.data = result.data;
           this.loading = false;
           this.$refs.CloseModifier.click();
-          this.fetch();
+          //this.fetch();
           toast.success("Réponse modifiée");
+          socket.emit("change-comment", result.data);
+          socket.emit("send-notif", result.data);
         });
       });
     },
@@ -761,8 +770,10 @@ export default {
           this.data = result.data;
           this.loading = false;
           this.$refs.CloseDelete.click();
-          this.fetch();
+          //this.fetch();
           toast.success("Réponse supprimée");
+          socket.emit("change-comment", result.data);
+          socket.emit("send-notif", result.data);
         });
       });
     },
@@ -774,7 +785,7 @@ export default {
       const toast = useToast();
       this.formReply.idUtilisateur = this.me.sub || this.me.id;
       createResponse(this.idAddReply, this.formReply)
-        .then(() => {
+        .then((result) => {
           this.loading = false;
           /* if (this.formReply.contenu == "") {
             toast.info("Veuillez ajouté une contenu");
@@ -782,7 +793,9 @@ export default {
           toast.success("Réponse ajouté");
           this.formReply.contenu = "";
           this.$refs.CloseAjoutRéponse.click();
-          this.fetch();
+          //this.fetch();
+          socket.emit("change-comment", result.data);
+          socket.emit("send-notif", result.data);
         })
         .catch((e) => {
           this.loading = false;
@@ -801,6 +814,11 @@ export default {
   mounted() {
     this.fetch();
     this.fetchPostState();
+    socket.on("arrival-comment", () => {
+      getCommentByPost(this.$route.params.slug).then((result) => {
+        this.comments = result.data;
+      });
+    });
   },
 };
 </script>
