@@ -296,6 +296,7 @@ import {
   updateStateBySlug,
 } from "../../../api/post";
 import { getPostCategory } from "../../../api/post-category";
+import { socket } from "../../../api/socket";
 export default {
   name: "ArticleLists",
   components: {},
@@ -337,6 +338,7 @@ export default {
           toast.success("Article " + result.data.etat_article.nomEtat);
           this.fetch();
           this.loadPage = false;
+          socket.emit("send-notif", result.data);
         })
         .catch(() => {
           this.loadPage = false;

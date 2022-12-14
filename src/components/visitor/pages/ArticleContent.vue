@@ -98,6 +98,7 @@
 import { useToast } from "vue-toastification";
 import { getPostBySlug, updateStateBySlug } from "../../../api/post";
 import { PROFIL_IMAGE } from "../../../configs";
+import { socket } from "../../../api/socket";
 export default {
   name: "ArticleContent",
   components: {},
@@ -138,9 +139,10 @@ export default {
       updateStateBySlug(slug, etat)
         .then((result) => {
           toast.success("Article " + result.data.etat_article.nomEtat);
-          this.fetch();
+          //this.fetch();
           this.loadPage = false;
           this.$router.push("/admin/article");
+          socket.emit("send-notif", result.data);
         })
         .catch(() => {
           this.loadPage = false;

@@ -143,6 +143,7 @@ import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { useToast } from "vue-toastification";
 import { createPost, uploadedFile } from "../../../api/post";
 import { getPostCategory } from "../../../api/post-category";
+import { socket } from "../../../api/socket";
 export default {
   name: "ArticleForm",
   components: { QuillEditor },
@@ -213,7 +214,7 @@ export default {
           this.form.illustration = result.data.filename;
           this.form.idCategorie = Number(this.form.idCategorie);
           createPost(this.form)
-            .then(() => {
+            .then((result) => {
               this.loading = false;
               this.$store.dispatch("userStore/setConnected");
               this.$swal(
@@ -222,6 +223,7 @@ export default {
                 "success"
               );
               this.$router.push(this.$route.query.redirect || "/admin/article");
+              socket.emit("send-notif", result.data);
             })
             .catch((e) => {
               this.loading = false;

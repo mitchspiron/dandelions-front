@@ -194,6 +194,7 @@ import {
   uploadedFile,
 } from "../../../api/post";
 import { getPostCategory } from "../../../api/post-category";
+import { socket } from "../../../api/socket";
 export default {
   name: "ArticleForm",
   components: { QuillEditor },
@@ -302,10 +303,11 @@ export default {
         this.me.sub || this.me.id,
         this.form
       )
-        .then(() => {
+        .then((result) => {
           this.loadingInfo = false;
           toast.success("Modification article réussi");
           this.$router.push(this.$route.query.redirect || "/admin/article");
+          socket.emit("send-notif", result.data);
         })
         .catch((e) => {
           this.loadingInfo = false;

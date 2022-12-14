@@ -413,6 +413,7 @@ import {
 } from "../../../api/post";
 import { getUnseenResponse, updateResponseToSeen } from "../../../api/reply";
 import { PROFIL_IMAGE } from "../../../configs";
+import { socket } from "../../../api/socket";
 export default {
   name: "Navbar",
   components: {},
@@ -489,8 +490,9 @@ export default {
       updateStateBySlug(slug, etat)
         .then((result) => {
           toast.success("Article " + result.data.etat_article.nomEtat);
-          this.fetchUnseenPost();
+          //this.fetchUnseenPost();
           this.loadPage = false;
+          socket.emit("send-notif", result.data);
         })
         .catch((e) => {
           this.loadPage = false;
@@ -510,6 +512,21 @@ export default {
     this.fetchUnseenPost();
     this.fetchUnseenComment();
     this.fetchUnseenResponse();
+    socket.on("arrival-notif", () => {
+      getUnseenPost(this.me.sub || this.me.id).then((result) => {
+        this.posts = result.data;
+      });
+    });
+    socket.on("arrival-notif", () => {
+      getUnseenComment(this.me.sub || this.me.id).then((result) => {
+        this.comments = result.data;
+      });
+    });
+    socket.on("arrival-notif", () => {
+      getUnseenResponse(this.me.sub || this.me.id).then((result) => {
+        this.replies = result.data;
+      });
+    });
   },
 };
 </script>
