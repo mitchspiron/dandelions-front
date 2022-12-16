@@ -13,6 +13,7 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import VueAwesomePaginate from "vue-awesome-paginate";
 import "vue-awesome-paginate/dist/style.css";
+import VueApexCharts from "vue3-apexcharts";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -38,5 +39,7 @@ createApp(App)
   .use(Countdown)
   .use(Toast)
   .use(VueAwesomePaginate)
+  .use(VueApexCharts)
+  .component("apexchart", VueApexCharts)
   .component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");
