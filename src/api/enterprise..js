@@ -109,3 +109,12 @@ export const isAbonneeBySlug = (slug, data) => {
     },
   });
 };
+
+export const deleteEnterpriseBySlug = (slug, id) => {
+  return axios.delete(`${URL}/${slug}/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

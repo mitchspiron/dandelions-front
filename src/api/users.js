@@ -86,3 +86,12 @@ export const updateIllustrationById = (id, data) => {
     },
   });
 };
+
+export const deleteUsersById = (id) => {
+  return axios.delete(`${URL}/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

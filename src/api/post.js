@@ -203,3 +203,12 @@ export const updatePostToSeen = async (slug) => {
     },
   });
 };
+
+export const deletePostBySlug = (slug, id) => {
+  return axios.delete(`${URL}/${slug}/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

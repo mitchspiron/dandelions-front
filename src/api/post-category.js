@@ -50,3 +50,12 @@ export const getCategoryBySlug = (slug) => {
     },
   });
 };
+
+export const deletePostCategoryById = (id) => {
+  return axios.delete(`${URL}/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

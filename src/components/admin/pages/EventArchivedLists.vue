@@ -32,7 +32,7 @@
     <table class="table align-middle mb-0 bg-white text-center">
       <thead class="bg-light">
         <tr>
-          <th>ID</th>
+          <th>N°</th>
           <th>Titre</th>
           <th>Archivage</th>
           <th>Action</th>
@@ -45,8 +45,8 @@
             résultat trouvé
           </td>
         </tr>
-        <tr v-for="evenement in displayedEvents" :key="evenement.id">
-          <td>{{ evenement.id }}</td>
+        <tr v-for="(evenement, i) in displayedEvents" :key="i">
+          <td>{{ i + 1 }}</td>
           <td class="text-muted">{{ evenement.titre }}</td>
           <td>
             <div class="form-check form-switch d-flex justify-content-center">

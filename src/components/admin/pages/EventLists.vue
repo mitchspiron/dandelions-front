@@ -52,7 +52,7 @@
     <table class="table align-middle mb-0 bg-white text-center">
       <thead class="bg-light">
         <tr>
-          <th>ID</th>
+          <th>N°</th>
           <th>Titre</th>
           <th>Header</th>
           <th>Inscription</th>
@@ -66,8 +66,8 @@
             résultat trouvé
           </td>
         </tr>
-        <tr v-for="evenement in displayedEvents" :key="evenement.id">
-          <td>{{ evenement.id }}</td>
+        <tr v-for="(evenement, i) in displayedEvents" :key="i">
+          <td>{{ i + 1 }}</td>
           <td class="text-muted">{{ evenement.titre }}</td>
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
@@ -129,7 +129,11 @@
               >
                 <i class="fa-regular fa-pen-to-square"></i>
               </router-link>
-              <a type="button">
+              <a
+                data-bs-toggle="modal"
+                data-bs-target="#modalDelete"
+                @click="initDelete(evenement.slug)"
+              >
                 <i class="bi bi-trash"></i>
               </a>
             </div>
@@ -145,10 +149,71 @@
     :max-pages-shown="3"
     v-model="page"
   />
+  <!-- ------------------------------MODAL DELETE EVENT----------------------------------------------- -->
+  <div
+    class="modal fade"
+    id="modalDelete"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    aria-labelledby="modalLabelDelete"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 bg-light text-dark">
+        <div class="modal-header mx-2">
+          <h4 class="modal-title text-dark" id="modalLabelDelete">
+            Supprimer un Coming-Soon
+          </h4>
+        </div>
+        <div class="modal-body">
+          <section class="row p-2">
+            <div class="col-12">
+              Etes-vous sûr de vouloir supprimer ce Coming-Soon ?
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer mx-2">
+          <button
+            v-if="loading"
+            type="submit"
+            class="btn px-3"
+            style="background: #582456"
+            disabled
+          >
+            <span
+              class="spinner-grow spinner-grow-sm text-white"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          </button>
+          <button
+            v-else
+            @click="deleteEvent()"
+            type="submit"
+            class="btn px-3"
+            style="background: #582456"
+          >
+            <i class="fa-solid fa-check text-white"></i>
+          </button>
+          <button
+            type="button"
+            data-bs-dismiss="modal"
+            ref="CloseDelete"
+            class="btn bg-dark px-3"
+          >
+            <i class="fa-solid fa-xmark text-light"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------------END MODAL DELETE EVENT----------------------------------------------- -->
 </template>
 <script>
 import { useToast } from "vue-toastification";
 import {
+  deleteEvenementBySlug,
   filterEvenementAdmin,
   getEvenementAdmin,
   switchOnHeaderBySlug,
@@ -165,6 +230,8 @@ export default {
       page: 1,
       perPage: 10,
       loadPage: false,
+      loading: false,
+      slugDelete: "",
     };
   },
   computed: {
@@ -241,6 +308,24 @@ export default {
       let from = page * perPage - perPage;
       let to = page * perPage;
       return evenements.slice(from, to);
+    },
+    initDelete(slug) {
+      this.slugDelete = slug;
+    },
+    deleteEvent() {
+      this.loading = true;
+      const toast = useToast();
+      deleteEvenementBySlug(this.slugDelete, this.me.sub || this.me.id)
+        .then(() => {
+          this.loading = false;
+          this.$refs.CloseDelete.click();
+          this.fetch();
+          toast.success("Coming-Soon supprimé");
+        })
+        .catch((e) => {
+          this.loading = false;
+          toast.error(e.response.data.message);
+        });
     },
   },
   watch: {

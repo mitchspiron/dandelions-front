@@ -16,7 +16,7 @@
     <table class="table align-middle mb-0 bg-white">
       <thead class="bg-light text-center">
         <tr>
-          <th>ID</th>
+          <th>N°</th>
           <th>Nom Complet</th>
           <th>Email</th>
           <th>Actions</th>

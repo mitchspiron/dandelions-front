@@ -56,7 +56,7 @@
     <table class="table align-middle mb-0 bg-white">
       <thead class="bg-light text-center">
         <tr>
-          <th>ID</th>
+          <th>N°</th>
           <th>Profil</th>
           <th>Nom Complet</th>
           <th>Email</th>
@@ -71,8 +71,8 @@
             résultat trouvé
           </td>
         </tr>
-        <tr class="text-center" v-for="user in displayedUsers" :key="user.id">
-          <td>{{ user.id }}</td>
+        <tr class="text-center" v-for="(user, i) in displayedUsers" :key="i">
+          <td>{{ i + 1 }}</td>
           <td>
             <img
               :src="PROFIL_IMAGE + user.illustration"
@@ -112,7 +112,11 @@
               <a type="button">
                 <i class="fa-regular fa-pen-to-square"></i>
               </a> -->
-              <a type="button">
+              <a
+                data-bs-toggle="modal"
+                data-bs-target="#modalDelete"
+                @click="initDelete(user.id)"
+              >
                 <i class="bi bi-trash"></i>
               </a>
             </div>
@@ -128,9 +132,70 @@
     :max-pages-shown="3"
     v-model="page"
   />
+  <!-- ------------------------------MODAL DELETE USER----------------------------------------------- -->
+  <div
+    class="modal fade"
+    id="modalDelete"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    aria-labelledby="modalLabelDelete"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 bg-light text-dark">
+        <div class="modal-header mx-2">
+          <h4 class="modal-title text-dark" id="modalLabelDelete">
+            Supprimer un utilisateur
+          </h4>
+        </div>
+        <div class="modal-body">
+          <section class="row p-2">
+            <div class="col-12">
+              Etes-vous sûr de vouloir supprimer ce compte ?
+            </div>
+          </section>
+        </div>
+        <div class="modal-footer mx-2">
+          <button
+            v-if="loading"
+            type="submit"
+            class="btn px-3"
+            style="background: #582456"
+            disabled
+          >
+            <span
+              class="spinner-grow spinner-grow-sm text-white"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          </button>
+          <button
+            v-else
+            @click="deleteUser()"
+            type="submit"
+            class="btn px-3"
+            style="background: #582456"
+          >
+            <i class="fa-solid fa-check text-white"></i>
+          </button>
+          <button
+            type="button"
+            data-bs-dismiss="modal"
+            ref="CloseDelete"
+            class="btn bg-dark px-3"
+          >
+            <i class="fa-solid fa-xmark text-light"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ------------------------------END MODAL DELETE USER----------------------------------------------- -->
 </template>
 <script>
-import { filterUsers, getUsers } from "../../../api/users";
+import { useToast } from "vue-toastification";
+import { deleteUsersById, filterUsers, getUsers } from "../../../api/users";
 import { PROFIL_IMAGE } from "../../../configs";
 
 export default {
@@ -147,6 +212,8 @@ export default {
       page: 1,
       perPage: 10,
       loadPage: false,
+      loading: false,
+      idDelete: 0,
     };
   },
   methods: {
@@ -163,6 +230,19 @@ export default {
       let from = page * perPage - perPage;
       let to = page * perPage;
       return users.slice(from, to);
+    },
+    initDelete(id) {
+      this.idDelete = id;
+    },
+    deleteUser() {
+      this.loading = true;
+      deleteUsersById(this.idDelete).then(() => {
+        const toast = useToast();
+        this.loading = false;
+        this.$refs.CloseDelete.click();
+        this.fetch();
+        toast.success("Compte supprimé");
+      });
     },
   },
   computed: {

@@ -25,7 +25,6 @@ export const createWriterRequest = (data) => {
 };
 
 export const acceptWriterRequest = (id, user) => {
-  console.log("identifiant", id + " et " + user);
   return axios.put(`${URL}/${id}/${user}`, [id, user], {
     withCredentials: true,
     headers: {

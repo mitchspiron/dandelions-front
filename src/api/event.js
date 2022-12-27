@@ -168,3 +168,12 @@ export const updateArchivedById = () => {
     },
   });
 };
+
+export const deleteEvenementBySlug = (slug, id) => {
+  return axios.delete(`${URL}/${slug}/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("dandelions_token"),
+    },
+  });
+};

@@ -6,7 +6,7 @@
         <nav>
           <ol class="breadcrumb">
             <li class="breadcrumb-item">Evénement</li>
-            <li class="breadcrumb-item">Event-Name</li>
+            <li class="breadcrumb-item">{{ event.titre }}</li>
             <li class="breadcrumb-item active">Liste inscrit</li>
           </ol>
         </nav>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { getEvenementBySlug } from "../../api/event";
 import AdminLayout from "../../components/admin/layouts/AdminLayout.vue";
 import EventSubscriberLists from "../../components/admin/pages/EventSubscriberLists.vue";
 export default {
@@ -24,6 +25,23 @@ export default {
   components: {
     AdminLayout,
     EventSubscriberLists,
+  },
+  data() {
+    return {
+      event: {},
+    };
+  },
+  methods: {
+    fetchEventName() {
+      this.loadPage = true;
+      getEvenementBySlug(this.$route.params.slug).then((result) => {
+        this.event = result.data;
+        this.loadPage = false;
+      });
+    },
+  },
+  mounted() {
+    this.fetchEventName();
   },
 };
 </script>

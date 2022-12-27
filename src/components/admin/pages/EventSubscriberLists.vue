@@ -33,7 +33,7 @@
     <table class="table align-middle mb-0 bg-white text-center">
       <thead class="bg-light">
         <tr>
-          <th>ID</th>
+          <th>N°</th>
           <th>Nom</th>
           <th>Prénom</th>
           <th>E-mail</th>

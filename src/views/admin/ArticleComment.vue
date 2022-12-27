@@ -6,7 +6,7 @@
         <nav>
           <ol class="breadcrumb">
             <li class="breadcrumb-item">Article</li>
-            <li class="breadcrumb-item">Article-Name</li>
+            <li class="breadcrumb-item">{{ post.titre }}</li>
             <li class="breadcrumb-item active">Commentaires</li>
           </ol>
         </nav>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { getPostBySlug } from "../../api/post";
 import AdminLayout from "../../components/admin/layouts/AdminLayout.vue";
 import ArticleCommentForm from "../../components/admin/pages/ArticleCommentForm.vue";
 export default {
@@ -27,7 +28,21 @@ export default {
     ArticleCommentForm,
   },
   data() {
-    return {};
+    return {
+      post: {},
+    };
+  },
+  methods: {
+    fetchPostName() {
+      this.loadPage = true;
+      getPostBySlug(this.$route.params.slug).then((result) => {
+        this.post = result.data;
+        this.loadPage = false;
+      });
+    },
+  },
+  mounted() {
+    this.fetchPostName();
   },
 };
 </script>
