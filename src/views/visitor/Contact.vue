@@ -5,7 +5,7 @@
       data-wow-delay="0.1s"
     >
       <div class="container py-5">
-        <h1 class="display-4 animated slideInDown mb-4">Contact us</h1>
+        <h1 class="display-4 animated slideInDown mb-4">Contact</h1>
       </div>
     </div>
     <ContactForm />
