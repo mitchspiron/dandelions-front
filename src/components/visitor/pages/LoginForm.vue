@@ -21,8 +21,12 @@
 
               <div class="col-lg-5">
                 <form @submit.prevent="submit" class="mb-3 mt-md-4">
-                  <h2 class="fw-bold mb-2 text-uppercase">Lorem ipsum</h2>
-                  <p class="mb-3">Please enter your login and password!</p>
+                  <h3 class="fw-bold mb-2 text-uppercase">
+                    Connectez-vous à Dandelions
+                  </h3>
+                  <p class="mb-3">
+                    Veuillez saisir votre adresse email et votre mot de passe !
+                  </p>
                   <div class="col-12 form-floating mb-3">
                     <input
                       type="email"
@@ -33,7 +37,7 @@
                       @blur="validate('email')"
                       @keypress="validate('email')"
                     />
-                    <label for="email" class="form-label">Email address</label>
+                    <label for="email" class="form-label">Adresse email</label>
                     <p class="text-danger" v-if="!!errors.email">
                       {{ errors.email }}
                     </p>
@@ -48,14 +52,16 @@
                       @blur="validate('motDePasse')"
                       @keypress="validate('motDePasse')"
                     />
-                    <label for="firstname" class="form-label">Password</label>
+                    <label for="firstname" class="form-label"
+                      >Mot de passe</label
+                    >
                     <p class="text-danger" v-if="!!errors.motDePasse">
                       {{ errors.motDePasse }}
                     </p>
                   </div>
                   <p class="small">
                     <a class="text-primary" @click="showForgotPassword()"
-                      >Forgot password?</a
+                      >Mot de passe oublié ?</a
                     >
                   </p>
                   <div class="d-grid">
@@ -69,18 +75,18 @@
                         role="status"
                         aria-hidden="true"
                       ></span>
-                      Loading...
+                      Chargement...
                     </button>
                     <button v-else class="btn btn-outline-dark" type="submit">
-                      Login
+                      Se connecter
                     </button>
                   </div>
                 </form>
                 <div>
                   <p class="mb-0 text-center">
-                    Don't have an account?
+                    Vous n'avez pas de compte ?
                     <a class="text-primary fw-bold" @click="showRegister()"
-                      >Sign Up</a
+                      >S'inscrire</a
                     >
                   </p>
                 </div>

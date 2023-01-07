@@ -102,7 +102,7 @@ const routes = [
     name: "Login",
     component: Login,
     meta: {
-      title: "Login",
+      title: "Se connecter",
       noAccessTo: true,
     },
   },
@@ -332,6 +332,9 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL === "production"),
   routes,
+  scrollBehavior: () => {
+    window.scrollTo(0, 0);
+  },
 });
 
 router.afterEach((from) => {

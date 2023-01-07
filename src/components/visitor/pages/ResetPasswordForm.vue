@@ -22,8 +22,10 @@
               <div class="col-lg-5">
                 <div class="mb-3 mt-md-4">
                   <div class="mb-4">
-                    <h2 class="fw-bold mb-2 text-uppercase">Lorem ipsum</h2>
-                    <p class="mb-2">Enter your new password to reset it</p>
+                    <h3 class="fw-bold mb-2 text-uppercase">
+                      Modifier votre nouveau mot de passe
+                    </h3>
+                    <p class="mb-2">Entrez votre nouveau mot de passe</p>
                   </div>
                   <form @submit.prevent="submit">
                     <div class="col-12 form-floating mb-3">
@@ -54,7 +56,7 @@
                         @keypress="validate('confirmMotDePasse')"
                       />
                       <label for="confirm-password" class="form-label"
-                        >Confirmer nouveau mot de passe</label
+                        >Confirmer votre nouveau mot de passe</label
                       >
                       <p class="text-danger" v-if="!!errors.confirmMotDePasse">
                         {{ errors.confirmMotDePasse }}
@@ -72,10 +74,10 @@
                           role="status"
                           aria-hidden="true"
                         ></span>
-                        Loading...
+                        Chargement...
                       </button>
                       <button v-else class="btn btn-outline-dark" type="submit">
-                        Reset Password
+                        Changer
                       </button>
                     </div>
                   </form>

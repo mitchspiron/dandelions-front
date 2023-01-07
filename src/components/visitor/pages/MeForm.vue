@@ -50,7 +50,7 @@
       <div class="card-footer bg-white py-2 px-3">
         <div class="col-md-12">
           <div class="d-flex align-items-center">
-            <h4 class="mb-0">Modifification l'illustration de profile</h4>
+            <h4 class="mb-0">Modification l'illustration de profile</h4>
             <button
               v-if="loading"
               class="btn btn-primary btn-md ms-auto border-0"
@@ -149,7 +149,7 @@
       <div class="card-footer bg-white py-2 px-3">
         <div class="col-md-12">
           <div class="d-flex align-items-center">
-            <h4 class="mb-0">Modifification information</h4>
+            <h4 class="mb-0">Modification information</h4>
             <button
               v-if="loadingInfo"
               class="btn btn-primary btn-md ms-auto border-0"
@@ -247,7 +247,7 @@
       <div class="card-footer py-2 px-3 bg-white">
         <div class="col-md-12">
           <div class="d-flex align-items-center">
-            <h4 class="mb-0">Modifification mot de passe</h4>
+            <h4 class="mb-0">Modification mot de passe</h4>
             <button
               v-if="loadingPwd"
               class="btn btn-primary btn-md ms-auto border-0"

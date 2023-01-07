@@ -8,7 +8,7 @@
               class="mb-4 d-inline-block"
               style="border-bottom: 1px solid #582456"
             >
-              All ours articles
+              Tous nos articles
             </h1>
           </div>
           <!-- --------- -->
@@ -193,7 +193,7 @@
                         }"
                         class="read-more-btn"
                         href=""
-                        >Read Full Article</router-link
+                        >En savoir plus en détail</router-link
                       >
                     </div>
                   </div>

@@ -8,7 +8,7 @@
               class="mb-4 d-inline-block"
               style="border-bottom: 1px solid #582456"
             >
-              Latest article
+              Nos derniers articles
             </h1>
           </div>
           <div class="col-lg-8 mb-5 mb-lg-0">

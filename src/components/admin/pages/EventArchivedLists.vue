@@ -29,6 +29,10 @@
     </div>
   </div>
   <div v-else class="card border-0 shadow-sm mt-3">
+    <p class="text-muted">
+      NB: Avant de désarchiver un évènement, veuillez à ce la date limite de
+      celui-ci soit modifier
+    </p>
     <table class="table align-middle mb-0 bg-white text-center">
       <thead class="bg-light">
         <tr>

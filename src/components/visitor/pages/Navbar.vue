@@ -2,36 +2,45 @@
   <nav
     class="navbar navbar-expand-lg bg-white navbar-light sticky-top px-4 px-lg-5"
   >
-    <router-link to="/" class="navbar-brand d-flex align-items-center">
-      <h1 class="m-0">
-        <!-- <img
-          class="img-fluid me-3"
-          src="../../../assets/img/DAlt2.png"
-          alt=""
-        /> -->Dandelions
-      </h1>
-    </router-link>
-    <button
+    <!-- <button
       type="button"
       class="navbar-toggler"
       data-bs-toggle="collapse"
       data-bs-target="#navbarCollapse"
     >
       <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
+    </button> -->
+    <a
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarCollapse"
+      class="btn text-light navbar-toggler"
+      style="background-color: #582456"
+    >
+      <i class="bi bi-list"></i>
+    </a>
+    <router-link to="/" class="navbar-brand d-flex align-items-center">
+      <h1 class="m-0">
+        <img
+          class="img-fluid"
+          src="../../../assets/img/Dandelions-logo-cropped.svg"
+          alt=""
+          width="200"
+        /><!-- Dandelions -->
+      </h1>
+    </router-link>
+    <div class="collapse navbar-collapse me-  uto" id="navbarCollapse">
       <div class="navbar-nav mx-auto bg-light rounded pe-4 py-3 py-lg-0">
         <router-link to="/" href="#" class="nav-item nav-link active"
-          >Home</router-link
+          >Accueil</router-link
         >
         <router-link to="/article" class="nav-item nav-link"
-          >Articles</router-link
+          >Article</router-link
         >
         <router-link to="/evenement" class="nav-item nav-link"
-          >Evénements</router-link
+          >Coming-Soon</router-link
         >
         <router-link to="/entreprise" class="nav-item nav-link"
-          >Enterprises</router-link
+          >Entreprise</router-link
         >
         <router-link to="/contact" class="nav-item nav-link"
           >Contact</router-link
@@ -57,7 +66,7 @@
       class="btn text-light"
       style="background-color: #582456"
     >
-      Login
+      <i class="fa-solid fa-right-to-bracket"></i>
     </router-link>
     <a
       v-if="isLoggedIn"
@@ -148,7 +157,7 @@ a {
 }
 
 .navbar .navbar-nav .nav-link {
-  margin-left: 25px;
+  margin-left: 30px;
   padding: 10px 0;
   color: #696e77;
   font-weight: 500;

@@ -40,7 +40,7 @@
       </div>
       <div class="col-lg-12 col-md-6">
         <div class="widget">
-          <h2 class="section-title mb-3">Latest Coming-Soon</h2>
+          <h2 class="section-title mb-3">Récent Coming-Soon</h2>
           <div class="widget-body">
             <div class="widget-list">
               <div class="media" v-for="(event, i) in events" :key="i">

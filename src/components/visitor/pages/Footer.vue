@@ -1,18 +1,18 @@
 <template>
-  <div class="container-fluid footer mt-5 pt-5 fadeIn" data-wow-delay="0.1s">
+  <div class="container-fluid footer mt-5 pt-1 fadeIn" data-wow-delay="0.1s">
     <div class="container py-5">
       <div class="row g-5">
         <div class="col-lg-3 col-md-6">
           <h1 class="text-white mb-4">
-            <!-- <img
-              class="img-fluid me-3"
-              src="../../../assets/img/icon/icon-02-light.png"
+            <img
+              class="img-fluid me-3 w-50"
+              src="../../../assets/img/D-white-cropped.svg"
               alt=""
-            /> -->Dandelions
+            /><!-- Dandelions -->
           </h1>
           <p>
-            Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat
-            ipsum et lorem et sit, sed stet lorem sit clita
+            La plateforme qui vous partage les meilleurs événements, les
+            programmes intéressants et les bons plans
           </p>
           <div class="d-flex pt-2">
             <a class="btn btn-square me-1" href=""
@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="col-lg-3 col-md-6">
-          <h5 class="text-light mb-4">Address</h5>
+          <h5 class="text-light mb-4">Adresse</h5>
           <p>
             <i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA
           </p>
@@ -38,20 +38,20 @@
           <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
         </div>
         <div class="col-lg-3 col-md-6">
-          <h5 class="text-light mb-4">Quick Links</h5>
-          <router-link to="/" class="btn btn-link" href="">Home</router-link>
-          <router-link to="/article" class="btn btn-link">Articles</router-link>
+          <h5 class="text-light mb-4">Menu</h5>
+          <router-link to="/" class="btn btn-link" href="">Accueil</router-link>
+          <router-link to="/article" class="btn btn-link">Article</router-link>
           <router-link to="/evenement" class="btn btn-link"
-            >Evénements</router-link
+            >Coming-Soon</router-link
           >
           <router-link to="/entreprise" class="btn btn-link"
-            >Enterprises</router-link
+            >Entreprise</router-link
           >
           <router-link to="/contact" class="btn btn-link" href=""
             >Contact</router-link
           >
-          <a class="btn btn-link" href="">Terms & Condition</a>
-          <a class="btn btn-link" href="">Support</a>
+          <a class="btn btn-link" href="">Conditions Générales </a>
+          <router-link to="/contact" class="btn btn-link">Support</router-link>
         </div>
         <div class="col-lg-3 col-md-3">
           <h5 class="text-light mb-4">Newsletter</h5>
@@ -74,9 +74,12 @@
     </div>
     <div class="container-fluid copyright">
       <div class="container">
-        <div class="row">
-          <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-            &copy; <a href="#">Dandelions</a>, All Right Reserved.
+        <div class="d-flex justify-content-center">
+          <div
+            class="col-md-3 text-center text-md-start mb-3 mb-md-0 text-white"
+          >
+            &copy; <a style="text-decoration: none" href="#">Dandelions</a>,
+            Tous droits réservés.
           </div>
         </div>
       </div>

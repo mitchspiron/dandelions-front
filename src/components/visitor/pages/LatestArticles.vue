@@ -79,7 +79,7 @@
                 params: { slug: article.slug },
               }"
               class="read-more-btn"
-              >Read Full Article</router-link
+              >En savoir plus en détail</router-link
             >
           </div>
         </div>
@@ -145,7 +145,7 @@
                   params: { slug: article.slug },
                 }"
                 class="read-more-btn"
-                >Read Full Article</router-link
+                >En savoir plus en détail</router-link
               >
             </div>
           </div>
@@ -154,7 +154,7 @@
     </div>
     <div class="d-grid gap-2 col-6 mx-auto">
       <router-link to="/article" class="btn btn-sm btn-outline-primary"
-        >Show More</router-link
+        >Afficher plus</router-link
       >
     </div>
   </div>

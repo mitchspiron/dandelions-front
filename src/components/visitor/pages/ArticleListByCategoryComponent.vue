@@ -116,7 +116,7 @@
                           params: { slug: article.slug },
                         }"
                         class="read-more-btn"
-                        >Read Full Article</router-link
+                        >En savoir plus en détail</router-link
                       >
                     </div>
                   </div>

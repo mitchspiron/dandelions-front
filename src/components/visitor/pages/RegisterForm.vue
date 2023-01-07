@@ -21,8 +21,11 @@
 
               <div class="col-lg-6">
                 <form class="mb-3 mt-md-4" @submit.prevent="submit">
-                  <h2 class="fw-bold text-uppercase">Lorem ipsum</h2>
-                  <p class="mb-3">Please enter your login and password!</p>
+                  <h3 class="fw-bold text-uppercase">Créer votre compte</h3>
+                  <p class="mb-3">
+                    Nous protégerons vos informations personnelles et ne les
+                    divulguerons pas
+                  </p>
                   <div class="d-flex justify-content-center mb-3 gap-2">
                     <div class="col-6 form-floating">
                       <input
@@ -34,9 +37,7 @@
                         @blur="validate('prenom')"
                         @keypress="validate('prenom')"
                       />
-                      <label for="firstname" class="form-label"
-                        >Firstname</label
-                      >
+                      <label for="firstname" class="form-label">Prénom</label>
                       <p class="text-danger" v-if="!!errors.prenom">
                         {{ errors.prenom }}
                       </p>
@@ -51,7 +52,7 @@
                         @blur="validate('nom')"
                         @keypress="validate('nom')"
                       />
-                      <label for="lastname" class="form-label">Lastname</label>
+                      <label for="lastname" class="form-label">Nom</label>
                       <p class="text-danger" v-if="!!errors.nom">
                         {{ errors.nom }}
                       </p>
@@ -69,7 +70,7 @@
                         @keypress="validate('email')"
                       />
                       <label for="email" class="form-label"
-                        >Email address</label
+                        >Adresse email</label
                       >
                       <p class="text-danger" v-if="!!errors.email">
                         {{ errors.email }}
@@ -85,7 +86,7 @@
                         @blur="validate('telephone')"
                         @keypress="validate('telephone')"
                       />
-                      <label for="phone" class="form-label">Number phone</label>
+                      <label for="phone" class="form-label">Téléphone</label>
                       <p class="text-danger" v-if="!!errors.telephone">
                         {{ errors.telephone }}
                       </p>
@@ -104,7 +105,7 @@
                           @keypress="validate('motDePasse')"
                         />
                         <label for="password" class="form-label"
-                          >Password</label
+                          >Mot de passe</label
                         >
                         <p class="text-danger" v-if="!!errors.motDePasse">
                           {{ errors.motDePasse }}
@@ -121,7 +122,7 @@
                           @keypress="validate('confirmMotDePasse')"
                         />
                         <label for="password-repeat" class="form-label"
-                          >Password repeat</label
+                          >Répéter le mot de passe</label
                         >
                         <p
                           class="text-danger"
@@ -145,7 +146,7 @@
                         <label
                           for="example-text-input"
                           class="form-control-label"
-                          >About me</label
+                          >À propos de moi</label
                         >
                         <p class="text-danger" v-if="!!errors.aPropos">
                           {{ errors.aPropos }}
@@ -165,18 +166,18 @@
                         role="status"
                         aria-hidden="true"
                       ></span>
-                      Loading...
+                      Chargement...
                     </button>
                     <button v-else class="btn btn-outline-dark" type="submit">
-                      Register
+                      S'inscrire
                     </button>
                   </div>
                 </form>
                 <div>
                   <p class="mb-0 text-center">
-                    Do you have an account?
+                    Avez-vous un compte ?
                     <a class="text-primary fw-bold" @click="showLogin()"
-                      >Sign In</a
+                      >Se connecter</a
                     >
                   </p>
                 </div>

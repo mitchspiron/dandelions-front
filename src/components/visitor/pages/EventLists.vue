@@ -8,7 +8,7 @@
               class="mb-4 d-inline-block"
               style="border-bottom: 1px solid #582456"
             >
-              Coming-Soon
+              Nos Coming-Soon
             </h1>
           </div>
           <!-- --------- -->

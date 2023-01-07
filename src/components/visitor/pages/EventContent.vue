@@ -82,7 +82,7 @@
         class="btn btn-md btn-outline-primary"
         type="submit"
       >
-        Register
+        S'inscrire
       </button>
     </form>
 

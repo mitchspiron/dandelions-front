@@ -22,9 +22,12 @@
               <div class="col-lg-5">
                 <div class="mb-3 mt-md-4">
                   <div class="mb-4">
-                    <h2 class="fw-bold mb-2 text-uppercase">Lorem ipsum</h2>
+                    <h3 class="fw-bold mb-2 text-uppercase">
+                      Retrouvez votre compte
+                    </h3>
                     <p class="mb-2">
-                      Enter your registered email ID to reset the password
+                      Entrez votre email enregistré pour réinitialiser le mot de
+                      passe
                     </p>
                   </div>
                   <form @submit.prevent="confirm">
@@ -39,7 +42,7 @@
                         @keypress="validate('email')"
                       />
                       <label for="email" class="form-label"
-                        >Email address</label
+                        >Adresse email</label
                       >
                       <p class="text-danger" v-if="!!errors.email">
                         {{ errors.email }}
@@ -57,19 +60,19 @@
                           role="status"
                           aria-hidden="true"
                         ></span>
-                        Loading...
+                        Chargement...
                       </button>
                       <button v-else class="btn btn-outline-dark" type="submit">
-                        Reset Password
+                        Envoyer
                       </button>
                     </div>
                   </form>
                 </div>
                 <div>
                   <p class="mb-0 text-center">
-                    Do you have an account?
+                    Avez-vous un compte ?
                     <a class="text-primary fw-bold" @click="showLogin()"
-                      >Sign In</a
+                      >Se connecter</a
                     >
                   </p>
                 </div>
