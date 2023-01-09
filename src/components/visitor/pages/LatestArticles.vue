@@ -59,7 +59,7 @@
               >
             </li>
           </ul>
-          <h2 class="h1">
+          <h2 class="h1 line-titre">
             <router-link
               :to="{
                 name: 'ArticleBySlug',
@@ -125,7 +125,7 @@
                 >
               </li>
             </ul>
-            <h2>
+            <h2 class="line-titre">
               <router-link
                 :to="{
                   name: 'ArticleBySlug',
@@ -201,6 +201,12 @@ export default {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.line-titre {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
 .btn-outline-primary {

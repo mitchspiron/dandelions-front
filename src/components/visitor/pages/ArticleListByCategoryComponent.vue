@@ -96,7 +96,7 @@
                     </div>
                   </router-link>
                   <div class="card-body px-0 pb-0">
-                    <h2>
+                    <h2 class="line-titre">
                       <router-link
                         :to="{
                           name: 'ArticleBySlug',
@@ -244,7 +244,12 @@ export default {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
-
+.line-titre {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
 p {
   font-weight: 400;
   color: #333;

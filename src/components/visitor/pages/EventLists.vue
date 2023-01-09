@@ -71,7 +71,7 @@
                 <div class="row g-0">
                   <div class="col-md-12">
                     <div class="card-body">
-                      <h3>
+                      <h3 class="line-titre">
                         <router-link
                           :to="{ path: '/evenement/' + event.slug }"
                           class="post-title fw-bold"
@@ -198,6 +198,12 @@ export default {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+.line-titre {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
 .post-title {

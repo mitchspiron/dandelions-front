@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import "@popperjs/core";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "jquery/src/jquery.js";
 import "bootstrap/dist/js/bootstrap.min.js";
 import Countdown from "vue3-flip-countdown";

@@ -40,7 +40,7 @@
                   />
                 </div>
                 <p class="text-muted mb-0">
-                  Allowed JPG, GIF or PNG. Max size of 800K
+                  Autorise JPG ou PNG. Taille maximale de 800K
                 </p>
               </div>
             </div>
@@ -63,9 +63,7 @@
                     {{ enterprise.nom }}
                   </option>
                 </select>
-                <label for="floatingSelect"
-                  >Séléctionner la catégorie de l'article</label
-                >
+                <label for="floatingSelect">Séléctionner une entreprise</label>
               </div>
               <div class="col-3 form-floating">
                 <input

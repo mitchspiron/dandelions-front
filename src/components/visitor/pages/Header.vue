@@ -37,6 +37,12 @@
                         {{ slide.description }}
                       </p>
                       <vue3-flip-countdown
+                        :labels="{
+                          days: 'Jours',
+                          hours: 'Heures',
+                          minutes: 'Minutes',
+                          seconds: 'Secondes',
+                        }"
                         :deadline="slide.deadline.split('T')[0]"
                         mainColor="white"
                         secondFlipColor="white"
@@ -50,7 +56,7 @@
                           class="btn btn-lg mt-4 text-light"
                           style="background-color: #582456"
                         >
-                          More Details
+                          Plus de Détails
                           <i class="fa fa-solid fa-arrow-right"></i>
                         </router-link>
                       </div>
@@ -78,6 +84,12 @@
                         {{ slide.description }}
                       </p>
                       <vue3-flip-countdown
+                        :labels="{
+                          days: 'Jours',
+                          hours: 'Heures',
+                          minutes: 'Minutes',
+                          seconds: 'Secondes',
+                        }"
                         :deadline="slide.deadline.split('T')[0]"
                         mainColor="white"
                         secondFlipColor="white"
@@ -91,7 +103,7 @@
                           class="btn btn-lg mt-4 text-light"
                           style="background-color: #582456"
                         >
-                          More Details
+                          Plus de Détails
                           <i class="fa fa-solid fa-arrow-right"></i>
                         </router-link>
                       </div>

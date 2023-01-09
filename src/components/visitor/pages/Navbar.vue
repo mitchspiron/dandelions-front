@@ -28,7 +28,7 @@
         /><!-- Dandelions -->
       </h1>
     </router-link>
-    <div class="collapse navbar-collapse me-  uto" id="navbarCollapse">
+    <div class="collapse navbar-collapse me- uto" id="navbarCollapse">
       <div class="navbar-nav mx-auto bg-light rounded pe-4 py-3 py-lg-0">
         <router-link to="/" href="#" class="nav-item nav-link active"
           >Accueil</router-link
