@@ -114,7 +114,7 @@
             />
           </div>
         </div>
-        <div class="col-2 card border shadow-sm py-2">
+        <!-- <div class="col-2 card border shadow-sm py-2">
           <div class="form-check form-switch m-auto">
             <input
               class="form-check-input"
@@ -127,7 +127,7 @@
               >Avec inscription</label
             >
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="card-footer py-2 px-3">
         <div class="col-md-12">

@@ -144,7 +144,7 @@ const routes = [
     component: Me,
     meta: {
       title: "Espace personnel",
-      noAccessNotLoggedIn: true,
+      noAccessNotLoggedInVisitor: true,
     },
   },
   {
@@ -360,6 +360,18 @@ router.beforeEach((to, from, next) => {
       (store.getters["userStore/me"].roleUser ||
         store.getters["userStore/me"].role) !== 3
     ) {
+      next();
+      return;
+    }
+    next("/se-connecter");
+  } else {
+    next();
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.noAccessNotLoggedInVisitor)) {
+    if (store.getters["userStore/isLoggedIn"]) {
       next();
       return;
     }
